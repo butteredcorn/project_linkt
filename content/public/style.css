@@ -1,0 +1,15 @@
+html {
+    scroll-behavior: smooth;
+}
+
+main {
+    margin-top: 8em;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+main > * {
+    padding-top: 4em;
+}
