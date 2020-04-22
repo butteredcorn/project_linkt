@@ -175,48 +175,72 @@ const resetDatabase = () => {
 }
 
 const getUsers = (selectBy = '*', searchBy = '') => {
-    return new Promise((resolve, reject) => {
-        const table = 'users'
-        const sql = `SELECT ${selectBy} FROM ${table} ${searchBy}`
-        db.query(sql, (error, result) => {
-            if (error) {
-                console.log(`Problem searching for ${table} by ${searchBy}.`)
-                reject(error)
-            }
-            //console.log(rawDataPacketConverter(result))
-            resolve(rawDataPacketConverter(result))
-        })
+    return new Promise(async (resolve, reject) => {
+        try {
+            await createConnection()
+            const table = 'users'
+            const sql = `SELECT ${selectBy} FROM ${table} ${searchBy}`
+            db.query(sql, (error, result) => {
+                if (error) {
+                    console.log(`Problem searching for ${table} by ${searchBy}.`)
+                    reject(error)
+                }
+                //console.log(rawDataPacketConverter(result))
+                resolve(rawDataPacketConverter(result))
+            })
+        } catch (error) {
+            console.log(error)
+            reject(error)
+        } finally {
+            closeConnection()
+        }
     })
 }
 
 const getUserByID = (id) => {
-    return new Promise((resolve, reject) => {
-        const table = 'users'
-        //no reason to send the password_hash
-        const sql = `SELECT id, email, first_name, last_name FROM ${table} WHERE id = ?`
-        const params = [id]
-        db.query(sql, params, (error, result) => {
-            if (error) {
-                console.log(`${error} Problem searching for ${table} by ${searchBy}.`)
-                reject(error)
-            }
-            resolve(rawDataPacketConverter(result))
-        })
+    return new Promise(async (resolve, reject) => {
+        try {
+            await createConnection()
+            const table = 'users'
+            //no reason to send the password_hash
+            const sql = `SELECT id, email, first_name, last_name FROM ${table} WHERE id = ?`
+            const params = [id]
+            db.query(sql, params, (error, result) => {
+                if (error) {
+                    console.log(`${error} Problem searching for ${table} by ${searchBy}.`)
+                    reject(error)
+                }
+                resolve(rawDataPacketConverter(result))
+            })
+        } catch (error) {
+            console.log(error)
+            reject(error)
+        } finally {
+            closeConnection()
+        }
     })
 }
 
 const createUser = (email, password_hash, first_name, last_name, age, city_of_residence, gender) => {
-    return new Promise((resolve, reject) => {
-        const table = 'users'
-        const sql = `INSERT INTO ${table} (email, password_hash, first_name, last_name, age, city_of_residence, gender) VALUES (?, ?, ?, ?, ?, ?, ?)`
-        const params = [email, password_hash, first_name, last_name, age, city_of_residence, gender]
-        db.query(sql, params, (error, result) => {
-            if (error) {
-                console.log(`${error} Problem creating user and inserting into ${table}.`)
-                reject(error)
-            }
-            resolve(rawDataPacketConverter(result))
-        })
+    return new Promise(async (resolve, reject) => {
+        try {
+            await createConnection()
+            const table = 'users'
+            const sql = `INSERT INTO ${table} (email, password_hash, first_name, last_name, age, city_of_residence, gender) VALUES (?, ?, ?, ?, ?, ?, ?)`
+            const params = [email, password_hash, first_name, last_name, age, city_of_residence, gender]
+            db.query(sql, params, (error, result) => {
+                if (error) {
+                    console.log(`${error} Problem creating user and inserting into ${table}.`)
+                    reject(error)
+                }
+                resolve(rawDataPacketConverter(result))
+            })
+        } catch (error) {
+            console.log(error)
+            reject(error)
+        } finally {
+            closeConnection()
+        }
     })
 }
 
