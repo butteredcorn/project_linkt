@@ -17,7 +17,7 @@ const checkAdministratorPrivilege = (user) => {
 router.get('/reset/resetDatabase', protectedRoute, async (req, res, next) => {
     try {
         await checkAdministratorPrivilege(req.user)
-        await db.createConnection()
+        //await db.createConnection()
         //takes path to directory of resources, do not enter filenames
         const result = await db.resetDatabase(resources)
         console.log(result)
@@ -25,7 +25,7 @@ router.get('/reset/resetDatabase', protectedRoute, async (req, res, next) => {
     } catch (error) {
         throw error
     } finally {
-        await db.closeConnection()
+        //await db.closeConnection()
     }
 })
 
@@ -33,15 +33,17 @@ router.get('/getUserByID', protectedRoute, async (req, res, next) => {
     const id = req.query.id
 
     try {
+        // console.log(req.cookies)
+        // console.log(req.user)
         await checkAdministratorPrivilege(req.user)
-        await db.createConnection()
+        //await db.createConnection()
         const result = await db.getUserByID(id)
         console.log(result)
         res.send(result)
     } catch (error) {
         throw error
     } finally {
-        await db.closeConnection()
+        //await db.closeConnection()
     }
 })
 

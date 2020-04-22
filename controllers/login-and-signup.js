@@ -12,7 +12,7 @@ const signUpUser = (email, password, first_name, last_name, age) => {
         })
         .then(async (hashedPassword) => {
             try {
-                await db.createConnection()
+                //await db.createConnection()
                 const newUser = await db.createUser(email, hashedPassword, first_name, last_name, age) //implement
                 //confirmation message from db.createUser   -->  now go create token
                 resolve(newUser)
@@ -21,7 +21,7 @@ const signUpUser = (email, password, first_name, last_name, age) => {
                 reject(error)
             } finally {
                 //always close the connection.
-                await db.closeConnection()
+                //await db.closeConnection()
             }
         })
     })
@@ -32,8 +32,8 @@ const loginUser = (email, password) => {
         const crypticUsernamePasswordError = "Incorrect email and password combination. Who knows what the issue is. Â¯\_(ãƒ„)_/Â¯"
         try {
             //find the user by email
-            await db.createConnection()
-            const user = await db.getUsers(undefined, `WHERE email = '${email}'`)
+            //await db.createConnection()
+            const user = await db.getUsers('id, email, first_name, last_name, city_of_residence', `WHERE email = '${email}'`)
             console.log(user)
             if (user && Array.isArray(user) && user.length > 0) {
                 //user confirmed, then try password
@@ -57,7 +57,7 @@ const loginUser = (email, password) => {
             //error with db.getUsers
             reject(error)
         } finally {
-            await db.closeConnection()
+            //await db.closeConnection()
         }
     })
 }
@@ -65,7 +65,7 @@ const loginUser = (email, password) => {
 const emailAlreadyExist = (email) => {
     return new Promise(async (resolve, reject) => {
         try {
-            await db.createConnection()
+            //await db.createConnection()
             const emailMatch = await db.getUsers("email", `WHERE email = '${email}'`)
             //console.log(emailMatch)
             if (emailMatch && Array.isArray(emailMatch) && emailMatch.length > 0) {
@@ -77,7 +77,7 @@ const emailAlreadyExist = (email) => {
             //error with db.getUsers
             reject(error)
         } finally {
-            await db.closeConnection()
+            //await db.closeConnection()
         }
     })
 }
