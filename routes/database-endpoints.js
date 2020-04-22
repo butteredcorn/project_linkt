@@ -33,6 +33,8 @@ router.get('/getUserByID', protectedRoute, async (req, res, next) => {
     const id = req.query.id
 
     try {
+        // console.log(req.cookies)
+        // console.log(req.user)
         await checkAdministratorPrivilege(req.user)
         //await db.createConnection()
         const result = await db.getUserByID(id)
