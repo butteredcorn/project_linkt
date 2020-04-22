@@ -164,16 +164,25 @@ const dropAndRecreateTables = () => {
 }
 
 const resetDatabase = () => {
-    return new Promise((resolve, reject) => {
-        dropAndRecreateTables()
-        .then((message) => console.log(message))
-        .then(() => {
-            resolve(`${default_databaseName} database reset`)
-        })
-        .catch((error) => {
-            console.log("problem resetting database")
+    return new Promise(async (resolve, reject) => {
+        try {
+            await createConnection()
+            dropAndRecreateTables()
+            .then((message) => console.log(message))
+            .then(() => {
+                resolve(`${default_databaseName} database reset`)
+            })
+            .then(() => {
+                closeConnection()
+            })
+            .catch((error) => {
+                console.log("problem resetting database")
+                reject(error)
+            })
+        } catch (error) {
+            console.log(error)
             reject(error)
-        })
+        }
     })
 }
 

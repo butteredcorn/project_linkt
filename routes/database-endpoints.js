@@ -19,7 +19,7 @@ router.get('/reset/resetDatabase', protectedRoute, async (req, res, next) => {
         await checkAdministratorPrivilege(req.user)
         //await db.createConnection()
         //takes path to directory of resources, do not enter filenames
-        const result = await db.resetDatabase(resources)
+        const result = await db.resetDatabase()
         console.log(result)
         res.send(result)
     } catch (error) {
