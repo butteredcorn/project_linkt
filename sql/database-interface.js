@@ -6,6 +6,8 @@ const default_mySQLPassword = "root"
 const default_databaseName = 'project_linkt'
 const default_port = 3306
 
+const herokuJawsDB = process.env.JAWSDB_URL
+
 let db = null
 
 const rawDataPacketConverter = (result) => {
@@ -28,14 +30,15 @@ const createConnection = (hostAddress = default_hostAddress, port = default_port
         if (databaseName == "set_undefined") {
             databaseName = undefined
         }
-        const newDB = mysql.createConnection({
-            host: hostAddress,
-            'port': port,
-            user: mySQLUser,
-            password: mySQLPassword,
-            database: databaseName
-        })
+        // const newDB = mysql.createConnection({
+        //     host: hostAddress,
+        //     'port': port,
+        //     user: mySQLUser,
+        //     password: mySQLPassword,
+        //     database: databaseName
+        // })
     
+        const newDB = mysql.createConnection(herokuJawsDB)
         db = newDB
     
         db.connect((error) => {
