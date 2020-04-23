@@ -24,7 +24,7 @@ router.get('/returnURL', async (req, res) => {
         console.log(redirectURL)
         await getInstagramAccessToken(redirectURL, instagramCode)
         .then((user) => {
-            user.email = req.user.email
+            //user.email = req.user.email //undefined no reference to the cookie
             console.log(user)
             res.send('complete.')
         })
