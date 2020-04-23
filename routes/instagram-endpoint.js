@@ -5,6 +5,7 @@ const { getInstagramAuthWindow, getInstagramAccessToken } = require('../controll
 
 router.get('/login', protectedRoute, async (req, res) => {
     try {
+        console.log(req.get('host'))
         const redirectURI = `https://${req.get('host')}/instagram/returnURL`
         const instagramAuthWindow = await getInstagramAuthWindow(redirectURI)
         res.redirect(instagramAuthWindow)
@@ -14,8 +15,9 @@ router.get('/login', protectedRoute, async (req, res) => {
     }
 })
 
-router.get('/returnURL', protectedRoute, async (req, res) => {
+router.get('/returnURL', async (req, res) => {
     try {
+        console.log(req.get('host'))
         const redirectURL = `https://${req.get('host')}/instagram/returnURL`
         const instagramCode = req.query.code
         await getInstagramAccessToken(redirectURL, instagramCode)
