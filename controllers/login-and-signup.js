@@ -33,7 +33,7 @@ const loginUser = (email, password) => {
         try {
             //find the user by email
             //await db.createConnection()
-            const user = await db.getUsers('id, email, first_name, last_name, city_of_residence', `WHERE email = '${email}'`)
+            const user = await db.getUsers('id, email, password_hash, first_name, last_name, city_of_residence', `WHERE email = '${email}'`)
             console.log(user)
             if (user && Array.isArray(user) && user.length > 0) {
                 //user confirmed, then try password
@@ -42,7 +42,7 @@ const loginUser = (email, password) => {
                         if(result && user[0] && user[0].id <= admins.length && admins.includes(user[0].first_name)) {
                             user[0].admin = true
                         }
-                        console.log(result)
+                        delete user[0].password_hash
                         //resolve the user object
                         resolve(user[0])
                     })

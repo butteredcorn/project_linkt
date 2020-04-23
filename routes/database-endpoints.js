@@ -29,6 +29,19 @@ router.get('/reset/resetDatabase', protectedRoute, async (req, res, next) => {
     }
 })
 
+router.get('/getUsers', protectedRoute, async (req, res, next) => {
+    const selectBy = req.query.selectBy
+    const searchBy = req.query.searchBy
+    try {
+        await checkAdministratorPrivilege(req.user)
+        .then((message) => console.log(message))
+        const result = await db.getUsers(selectBy, searchBy)
+        res.send(result)
+    } catch (error) {
+        throw error
+    }
+})
+
 router.get('/getUserByID', protectedRoute, async (req, res, next) => {
     const id = req.query.id
 
