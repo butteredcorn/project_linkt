@@ -31,11 +31,11 @@ const getInstagramAccessToken = (redirectURI, instagramCode) => {
             params.append('grant_type', 'authorization_code')
             params.append('redirect_uri', redirectURI)
             params.append('code', instagramCode)
-            return axios({
+            resolve(axios({
                 method: 'POST',
                 url: 'https://instagram.com/oauth/access_token',
                 data: params
-            })
+            }))
         } catch (error) {
             console.log(error)
             reject(error)

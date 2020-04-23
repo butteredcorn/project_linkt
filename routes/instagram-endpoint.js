@@ -5,8 +5,8 @@ const { getInstagramAuthWindow, getInstagramAccessToken } = require('../controll
 
 router.get('/login', protectedRoute, async (req, res) => {
     try {
-        console.log(req.get('host'))
         const redirectURI = `https://${req.get('host')}/instagram/returnURL`
+        console.log(redirectURL)
         const instagramAuthWindow = await getInstagramAuthWindow(redirectURI)
         res.redirect(instagramAuthWindow)
     } catch (error) {
@@ -15,11 +15,13 @@ router.get('/login', protectedRoute, async (req, res) => {
     }
 })
 
+//need to protect this end point later
 router.get('/returnURL', async (req, res) => {
     try {
-        console.log(req.get('host'))
         const redirectURL = `https://${req.get('host')}/instagram/returnURL`
         const instagramCode = req.query.code
+        console.log(instagramCode)
+        console.log(redirectURL)
         await getInstagramAccessToken(redirectURL, instagramCode)
         .then((user) => {
             user.email = req.user.email
