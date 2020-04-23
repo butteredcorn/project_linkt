@@ -4,6 +4,7 @@ module.exports = function () {
     const cookieParser = require('cookie-parser')
     const {protectedRoute } = require('./controllers/authentication')
     require('dotenv').config()
+    const { verifyExistingToken } = require('./controllers/json-web-token')
 
     const app = express()
 
@@ -27,6 +28,9 @@ module.exports = function () {
         const decode = require('jwt-decode')
         console.log('hello world!')
         const user = decode(req.cookies.token)
+        if (req.cookies.token && verifyExistingToken(req.cookies.token)) {
+            console.log('Token accepted.')
+        }
         console.log(user)
         res.send('hello world!' + user)
     })
