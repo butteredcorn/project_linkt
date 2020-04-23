@@ -24,8 +24,11 @@ module.exports = function () {
 
 
     app.get('/', protectedRoute, async (req, res) => {
+        const decode = require('jwt-decode')
         console.log('hello world!')
-        res.send('hello world!')
+        const user = decode(req.cookies.token)
+        console.log(user)
+        res.send('hello world!' + user)
     })
     
     return app
