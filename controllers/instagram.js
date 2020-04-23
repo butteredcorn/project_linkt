@@ -34,6 +34,9 @@ const getInstagramAccessToken = (redirectURI, instagramCode) => {
                 url: 'https://instagram.com/oauth/access_token',
                 data: params
             })
+        } catch (error) {
+            console.log(error)
+            reject(error)
         }
     })
 }
