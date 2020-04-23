@@ -30,3 +30,5 @@ router.get('/returnURL', protectedRoute, async (req, res) => {
         res.send('Error with instagram login.')
     }
 })
+
+module.exports = router
