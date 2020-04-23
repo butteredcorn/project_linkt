@@ -15,10 +15,12 @@ module.exports = function () {
     const loginRoute = require('./routes/auth/login-endpoint')
     const signUpRoute = require('./routes/auth/signup-endpoint')
     const databaseRoute = require('./routes/database-endpoints')
+    const instagramRoute = require('./routes/instagram-endpoint')
     
     app.use('/login', loginRoute)
     app.use('/signup', signUpRoute)
     app.use('/database', databaseRoute)
+    app.use('/instagram', instagramRoute)
 
 
     app.get('/', protectedRoute, async (req, res) => {
