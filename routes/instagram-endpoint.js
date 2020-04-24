@@ -37,7 +37,7 @@ router.get('/returnURL', async (req, res) => {
                 userToken.instagram_id = user.data.user_id
                 console.log(user.data)
 
-                await db.updateUserIG(userToken.id, null, userToken.instagram_id, null, userToken.instagram_access_token)
+                await db.createUserIG(userToken.id, null, userToken.instagram_id, null, userToken.instagram_access_token)
                 
                 console.log(userToken)
                 res.redirect('/instagram/processData')

@@ -19,9 +19,9 @@ CREATE TABLE users (
 
 CREATE TABLE user_instagram (
     user_id                 INT PRIMARY KEY AUTO_INCREMENT,
-    instagram_id            VARCHAR(255),
+    instagram_id            VARCHAR(255) NOT NULL,
+    access_token            VARCHAR(255) NOT NULL,
     instagram_username      VARCHAR(255),
-    access_token            VARCHAR(255),
     created_at              TIMESTAMP NOT NULL DEFAULT NOW(),
     FOREIGN KEY (user_id)   REFERENCES users(id)
 );

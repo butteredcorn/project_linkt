@@ -109,9 +109,9 @@ const dropAndRecreateTables = () => {
             console.log(result.message)
             return sqlCallback(`CREATE TABLE user_instagram (
                 user_id                 INT PRIMARY KEY AUTO_INCREMENT,
-                instagram_id            VARCHAR(255),
+                instagram_id            VARCHAR(255) NOT NULL,
+                access_token            VARCHAR(255) NOT NULL,
                 instagram_username      VARCHAR(255),
-                access_token            VARCHAR(255),
                 created_at              TIMESTAMP NOT NULL DEFAULT NOW(),
                 FOREIGN KEY (user_id)   REFERENCES users(id)
             )`)
@@ -258,39 +258,26 @@ const createUser = (email, password_hash, first_name, last_name, age, city_of_re
     })
 }
 
-const updateUserIG = (id, email, instagram_id, instagram_username, access_token) => {
+const createUserIG = (instagram_id, access_token, instagram_username) => {
     return new Promise(async (resolve, reject) => {
         try {
-            createConnection()
-            const table = 'users'
-            let whereCondtion;
-            let conditionValue;
-            
-            if (id) {
-                whereCondition = 'id'
-                conditionValue = id
-            } else if (email) {
-                whereCondition = 'email'
-                conditionValue = email
-            } else {
-                reject("Invalid parameter. Must pass in either id or email. Pass null first to skip id and update by email")
-            }
-    
-            const sql = `UPDATE ${table} SET instagram_id = ?, instagram_username = ?, access_token = ? WHERE ${whereCondition} = ?`
-            const params = [instagram_id, instagram_username, access_token, conditionValue]
+            await createConnection()
+            const table = 'user_instagram'
+            const sql = `INSERT INTO ${table} (instagram_id, access_token, instagram_username) VALUES (?, ?, ?)`
+            const params = [instagram_id, access_token, instagram_username]
             db.query(sql, params, (error, result) => {
                 if (error) {
-                    console.log(`Problem updateing ${table}.`)
+                    console.log(`${error} Problem creating user_instagram and inserting into ${table}.`)
                     reject(error)
                 }
-                //console.log(result)
                 resolve(rawDataPacketConverter(result))
             })
         } catch (error) {
+            console.log(error)
             reject(error)
         } finally {
             closeConnection()
-        }
+        }     
     })
 }
 
@@ -301,6 +288,6 @@ module.exports = {
     getUsers,
     getUserByID,
     createUser,
-    updateUserIG
+    createUserIG
 }
 
