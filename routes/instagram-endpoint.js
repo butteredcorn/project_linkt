@@ -3,6 +3,7 @@ const router = express.Router()
 const { protectedRoute } = require('../controllers/authentication')
 const { getInstagramAuthWindow, getInstagramAccessToken } = require('../controllers/instagram')
 const { verifyExistingToken } = require('../controllers/json-web-token')
+const db = require('../sql/database-interface')
 const decode = require('jwt-decode')
 
 router.get('/login', protectedRoute, async (req, res) => {
@@ -16,7 +17,7 @@ router.get('/login', protectedRoute, async (req, res) => {
     }
 })
 
-//need to protect this end point later
+//header has no reference to req.user after redirect, so manually check the token and redirect the protected page
 router.get('/returnURL', async (req, res) => {
     try {
         if (req.cookies.token && verifyExistingToken(req.cookies.token)) {
@@ -34,8 +35,12 @@ router.get('/returnURL', async (req, res) => {
                 userToken = decode(req.cookies.token)
                 userToken.instagram_access_token = user.data.access_token
                 userToken.instagram_id = user.data.user_id
+                console.log(user.data)
+
+                await db.updateUserIG(userToken.id, null, userToken.instagram_id, null, userToken.instagram_access_token)
+                
                 console.log(userToken)
-                res.send('complete.')
+                res.redirect('/instagram/processData')
             })
         } else {
             res.send(new Error('Error with instagram redirectURI. No token found.'))
@@ -43,6 +48,15 @@ router.get('/returnURL', async (req, res) => {
     } catch (error) {
         console.log(error)
         res.send('Error with instagram login.')
+    }
+})
+
+router.get('/processData', async (req, res) => {
+    try {
+       console.log(req.user) 
+    } catch (error) {
+        console.log(error)
+        res.send(new Error('Error with data retrieval or processing data.'))
     }
 })
 

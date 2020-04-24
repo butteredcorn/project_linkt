@@ -1,5 +1,6 @@
 const axios = require('axios')
 const { URLSearchParams } = require('url')
+const { maximumInstagramPhotosForProcessing } = require('../globals')
 
 const getInstagramAuthWindow = (redirectURI) => {
     return new Promise(async (resolve, reject) => {
@@ -12,7 +13,7 @@ const getInstagramAuthWindow = (redirectURI) => {
             `&response_type=code`
             resolve(instagramAuthWindow)
         } catch (error) {
-            console.log(error)
+            //console.log(error)
             reject(error)
         }
     })
@@ -35,7 +36,24 @@ const getInstagramAccessToken = (redirectURI, instagramCode) => {
                 data: params
             }))
         } catch (error) {
-            console.log(error)
+            //console.log(error)
+            reject(error)
+        }
+    })
+}
+
+const getUserInstagramData = (access_token) => {
+    return new Promise(async(resolve, reject) => {
+        try {
+            axios.get(`https://graph.instagram.com/me/media?fields=id,caption,media_url,media_type&access_token=${access_token}`)
+            .then(result => {
+                if(result.data.data.length > maximumInstagramPhotosForProcessing){
+                    resolve(result.data.data.slice(0,maximumInstagramPhotosForProcessing))
+                } else {
+                    resolve(result.data.data)
+                }
+            })
+        } catch (error) {
             reject(error)
         }
     })
@@ -43,5 +61,6 @@ const getInstagramAccessToken = (redirectURI, instagramCode) => {
 
 module.exports = {
     getInstagramAuthWindow,
-    getInstagramAccessToken
+    getInstagramAccessToken,
+    getUserInstagramData
 }

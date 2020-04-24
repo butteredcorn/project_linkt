@@ -1,4 +1,5 @@
 const mysql = require('mysql')
+const { defaultMaxDistanceKMs } = require('../globals')
 
 const default_hostAddress = process.env.LOCAL_DB_HOST_ADDRESS //|| "192.168.55.10"//if you are Sam Meech-Ward, change this to "192.168.55.20"
 const default_mySQLUser = "root"
@@ -98,7 +99,8 @@ const dropAndRecreateTables = () => {
                 first_name              VARCHAR(255) NOT NULL,
                 last_name               VARCHAR(255) NOT NULL,
                 age                     INT NOT NULL,
-                city_of_residence       VARCHAR(255),   
+                city_of_residence       VARCHAR(255),
+                max_distance            INT,
                 gender                  VARCHAR(255),     
                 created_at              TIMESTAMP NOT NULL DEFAULT NOW()
             )`)
@@ -233,13 +235,13 @@ const getUserByID = (id) => {
     })
 }
 
-const createUser = (email, password_hash, first_name, last_name, age, city_of_residence, gender) => {
+const createUser = (email, password_hash, first_name, last_name, age, city_of_residence, max_distance = defaultMaxDistanceKMs, gender) => {
     return new Promise(async (resolve, reject) => {
         try {
             await createConnection()
             const table = 'users'
-            const sql = `INSERT INTO ${table} (email, password_hash, first_name, last_name, age, city_of_residence, gender) VALUES (?, ?, ?, ?, ?, ?, ?)`
-            const params = [email, password_hash, first_name, last_name, age, city_of_residence, gender]
+            const sql = `INSERT INTO ${table} (email, password_hash, first_name, last_name, age, city_of_residence, max_distance, gender) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`
+            const params = [email, password_hash, first_name, last_name, age, city_of_residence, max_distance, gender]
             db.query(sql, params, (error, result) => {
                 if (error) {
                     console.log(`${error} Problem creating user and inserting into ${table}.`)
@@ -256,12 +258,42 @@ const createUser = (email, password_hash, first_name, last_name, age, city_of_re
     })
 }
 
+const updateUserIG = (id, email, instagram_id, instagram_username, access_token) => {
+    return new Promise((resolve, reject) => {
+        const table = 'users'
+        let whereCondtion;
+        let conditionValue;
+        
+        if (id) {
+            whereCondition = 'id'
+            conditionValue = id
+        } else if (email) {
+            whereCondition = 'email'
+            conditionValue = email
+        } else {
+            reject("Invalid parameter. Must pass in either id or email. Pass null first to skip id and update by email")
+        }
+
+        const sql = `UPDATE ${table} SET instagram_id = ?, instagram_username = ?, access_token = ? WHERE ${whereCondition} = ?`
+        const params = [instagram_id, instagram_username, access_token, conditionValue]
+        db.query(sql, params, (error, result) => {
+            if (error) {
+                console.log(`Problem updateing ${table}.`)
+                reject(error)
+            }
+            //console.log(result)
+            resolve(rawDataPacketConverter(result))
+        })
+    })
+}
+
 module.exports = {
     createConnection,
     closeConnection,
     resetDatabase,
     getUsers,
     getUserByID,
-    createUser
+    createUser,
+    updateUserIG
 }
 
