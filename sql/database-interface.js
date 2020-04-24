@@ -259,31 +259,38 @@ const createUser = (email, password_hash, first_name, last_name, age, city_of_re
 }
 
 const updateUserIG = (id, email, instagram_id, instagram_username, access_token) => {
-    return new Promise((resolve, reject) => {
-        const table = 'users'
-        let whereCondtion;
-        let conditionValue;
-        
-        if (id) {
-            whereCondition = 'id'
-            conditionValue = id
-        } else if (email) {
-            whereCondition = 'email'
-            conditionValue = email
-        } else {
-            reject("Invalid parameter. Must pass in either id or email. Pass null first to skip id and update by email")
-        }
-
-        const sql = `UPDATE ${table} SET instagram_id = ?, instagram_username = ?, access_token = ? WHERE ${whereCondition} = ?`
-        const params = [instagram_id, instagram_username, access_token, conditionValue]
-        db.query(sql, params, (error, result) => {
-            if (error) {
-                console.log(`Problem updateing ${table}.`)
-                reject(error)
+    return new Promise(async (resolve, reject) => {
+        try {
+            createConnection()
+            const table = 'users'
+            let whereCondtion;
+            let conditionValue;
+            
+            if (id) {
+                whereCondition = 'id'
+                conditionValue = id
+            } else if (email) {
+                whereCondition = 'email'
+                conditionValue = email
+            } else {
+                reject("Invalid parameter. Must pass in either id or email. Pass null first to skip id and update by email")
             }
-            //console.log(result)
-            resolve(rawDataPacketConverter(result))
-        })
+    
+            const sql = `UPDATE ${table} SET instagram_id = ?, instagram_username = ?, access_token = ? WHERE ${whereCondition} = ?`
+            const params = [instagram_id, instagram_username, access_token, conditionValue]
+            db.query(sql, params, (error, result) => {
+                if (error) {
+                    console.log(`Problem updateing ${table}.`)
+                    reject(error)
+                }
+                //console.log(result)
+                resolve(rawDataPacketConverter(result))
+            })
+        } catch (error) {
+            reject(error)
+        } finally {
+            closeConnection()
+        }
     })
 }
 
