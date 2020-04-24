@@ -35,7 +35,7 @@ router.get('/returnURL', async (req, res) => {
                 userToken = decode(req.cookies.token)
                 userToken.instagram_access_token = user.data.access_token
                 userToken.instagram_id = user.data.user_id
-                console.log(user.data)
+                //console.log(user.data)
 
                 await db.createUserIG(userToken.id, null, userToken.instagram_id, null, userToken.instagram_access_token)
                 

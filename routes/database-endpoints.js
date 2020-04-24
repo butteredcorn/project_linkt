@@ -30,9 +30,9 @@ router.get('/reset/resetDatabase', protectedRoute, async (req, res, next) => {
 })
 
 router.get('/getUsers', protectedRoute, async (req, res, next) => {
-    const selectBy = req.query.selectBy
-    const searchBy = req.query.searchBy
     try {
+        const selectBy = req.query.selectBy
+        const searchBy = req.query.searchBy
         await checkAdministratorPrivilege(req.user)
         .then((message) => console.log(message))
         const result = await db.getUsers(selectBy, searchBy)
@@ -57,6 +57,20 @@ router.get('/getUserByID', protectedRoute, async (req, res, next) => {
         throw error
     } finally {
         //await db.closeConnection()
+    }
+})
+
+router.get('/getUserInstagrams', protectedRoute, async (req, res) => {
+    try {
+        const selectBy = req.query.selectBy
+        const searchBy = req.query.searchBy
+        await checkAdministratorPrivilege(req.user)
+        const result = await db.getUserInstagrams(selectBy, searchBy)
+        console.log(result)
+        res.send(result)
+    } catch (error) {
+        console.log(error)
+        throw error
     }
 })
 

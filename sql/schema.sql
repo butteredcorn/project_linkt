@@ -18,7 +18,7 @@ CREATE TABLE users (
 );
 
 CREATE TABLE user_instagram (
-    user_id                 INT PRIMARY KEY AUTO_INCREMENT,
+    user_id                 INT PRIMARY KEY,
     instagram_id            VARCHAR(255) NOT NULL,
     access_token            VARCHAR(255) NOT NULL,
     instagram_username      VARCHAR(255),
@@ -27,7 +27,8 @@ CREATE TABLE user_instagram (
 );
 
 CREATE TABLE user_personality_aspects (
-    user_id                 INT PRIMARY KEY AUTO_INCREMENT,
+    id                      INT PRIMARY KEY AUTO_INCREMENT,
+    user_id                 INT,
     mind                    VARCHAR(255),
     energy                  VARCHAR(255),
     nature                  VARCHAR(255),
