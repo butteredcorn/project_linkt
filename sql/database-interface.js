@@ -84,6 +84,10 @@ const dropAndRecreateTables = () => {
         })
         .then((result) => {
             console.log(result.message)
+            return sqlCallback('DROP TABLE IF EXISTS user_photos')
+        })
+        .then((result) => {
+            console.log(result.message)
             return sqlCallback('DROP TABLE IF EXISTS user_instagram')
         })
         .then((result) => {
@@ -113,6 +117,18 @@ const dropAndRecreateTables = () => {
                 access_token            VARCHAR(255) NOT NULL,
                 instagram_username      VARCHAR(255),
                 created_at              TIMESTAMP NOT NULL DEFAULT NOW(),
+                FOREIGN KEY (user_id)   REFERENCES users(id)
+            )`)
+        })
+        .then((result) => {
+            console.log(result.message)
+            return sqlCallback(`CREATE TABLE user_photos (
+                id                      INT PRIMARY KEY AUTO_INCREMENT,
+                user_id                 INT,
+                photo_link              VARCHAR(255),
+                photo_created_date      VARCHAR(255),
+                caption                 VARCHAR(255),
+                instagram_post_id            INT,
                 FOREIGN KEY (user_id)   REFERENCES users(id)
             )`)
         })
@@ -200,7 +216,6 @@ const getUsers = (selectBy = '*', searchBy = '') => {
                     console.log(`Problem searching for ${table} by ${searchBy}.`)
                     reject(error)
                 }
-                //console.log(rawDataPacketConverter(result))
                 resolve(rawDataPacketConverter(result))
             })
         } catch (error) {
@@ -299,7 +314,6 @@ const getUserInstagrams = (selectBy = '*', searchBy = '') => {
                     console.log(`Problem searching for ${table} by ${searchBy}.`)
                     reject(error)
                 }
-                //console.log(rawDataPacketConverter(result))
                 resolve(rawDataPacketConverter(result))
             })
         } catch (error) {
@@ -311,6 +325,60 @@ const getUserInstagrams = (selectBy = '*', searchBy = '') => {
     })
 }
 
+
+
+/**
+ * user_photos
+ * @param {*} selectBy 
+ * @param {*} searchBy 
+ */
+const getUserPhotos = (selectBy = '*', searchBy = '') => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            await createConnection()
+            const table = 'user_photos'
+            const sql = `SELECT ${selectBy} FROM ${table} ${searchBy}`
+            db.query(sql, (error, result) => {
+                if (error) {
+                    console.log(`Problem searching for ${table} by ${searchBy}.`)
+                    reject(error)
+                }
+                resolve(rawDataPacketConverter(result))
+            })
+        } catch (error) {
+            console.log(error)
+            reject(error)
+        } finally {
+            closeConnection()
+        }
+    })
+}
+
+const createUserPhoto = (user_id, photo_link, photo_created_date, caption, instagram_post_id) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            await createConnection()
+            const table = 'user_photos'
+            const sql = `INSERT INTO ${table} (user_id, photo_link, photo_created_date, caption, instagram_post_id) VALUES (?, ?, ?, ?, ?)`
+            const params = [user_id, photo_link, photo_created_date, caption, instagram_post_id]
+            db.query(sql, params, (error, result) => {
+                if (error) {
+                    console.log(`${error} Problem creating user photo and inserting into ${table}.`)
+                    reject(error)
+                }
+                resolve(rawDataPacketConverter(result))
+            })
+        } catch (error) {
+            console.log(error)
+            reject(error)
+        } finally {
+            closeConnection()
+        }     
+    })
+}
+
+
+
 module.exports = {
     createConnection,
     closeConnection,
@@ -319,6 +387,8 @@ module.exports = {
     getUserByID,
     createUser,
     getUserInstagrams,
-    createUserIG
+    createUserIG,
+    getUserPhotos,
+    createUserPhoto,
 }
 

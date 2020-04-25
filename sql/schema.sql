@@ -1,6 +1,7 @@
 DROP TABLE IF EXISTS user_career_and_education;
 DROP TABLE IF EXISTS user_preferences;
 DROP TABLE IF EXISTS user_personality_aspects;
+DROP TABLE IF EXISTS user_photos;
 DROP TABLE IF EXISTS user_instagram;
 DROP TABLE IF EXISTS users;
 
@@ -23,6 +24,16 @@ CREATE TABLE user_instagram (
     access_token            VARCHAR(255) NOT NULL,
     instagram_username      VARCHAR(255),
     created_at              TIMESTAMP NOT NULL DEFAULT NOW(),
+    FOREIGN KEY (user_id)   REFERENCES users(id)
+);
+
+CREATE TABLE user_photos (
+    id                      INT PRIMARY KEY AUTO_INCREMENT,
+    user_id                 INT,
+    photo_link              VARCHAR(255),
+    photo_created_date      VARCHAR(255),
+    caption                 VARCHAR(255),
+    instagram_post_id       INT,
     FOREIGN KEY (user_id)   REFERENCES users(id)
 );
 

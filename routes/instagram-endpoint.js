@@ -57,6 +57,11 @@ router.get('/processData', protectedRoute, async (req, res) => {
 
         //get instagram data
         instagramData = await getUserInstagramData(req.user.instagram_access_token)
+        for (object of instagramData) {
+            //await not necessary here?
+            await db.createUserPhoto(req.user.id, obj.media_url, obj.timestamp, obj.caption, obj.id)
+        }
+
         console.log(instagramData)
         //process instagram data
         res.send(instagramData)
