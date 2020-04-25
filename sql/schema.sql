@@ -11,22 +11,24 @@ CREATE TABLE users (
     first_name              VARCHAR(255) NOT NULL,
     last_name               VARCHAR(255) NOT NULL,
     age                     INT NOT NULL,
-    city_of_residence       VARCHAR(255),   
+    city_of_residence       VARCHAR(255),
+    max_distance            INT,
     gender                  VARCHAR(255),     
     created_at              TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
 CREATE TABLE user_instagram (
-    user_id                 INT PRIMARY KEY AUTO_INCREMENT,
-    instagram_id            VARCHAR(255),
+    user_id                 INT PRIMARY KEY,
+    instagram_id            VARCHAR(255) NOT NULL,
+    access_token            VARCHAR(255) NOT NULL,
     instagram_username      VARCHAR(255),
-    access_token            VARCHAR(255),
     created_at              TIMESTAMP NOT NULL DEFAULT NOW(),
     FOREIGN KEY (user_id)   REFERENCES users(id)
 );
 
 CREATE TABLE user_personality_aspects (
-    user_id                 INT PRIMARY KEY AUTO_INCREMENT,
+    id                      INT PRIMARY KEY AUTO_INCREMENT,
+    user_id                 INT,
     mind                    VARCHAR(255),
     energy                  VARCHAR(255),
     nature                  VARCHAR(255),

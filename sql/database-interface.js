@@ -1,4 +1,5 @@
 const mysql = require('mysql')
+const { defaultMaxDistanceKMs } = require('../globals')
 
 const default_hostAddress = process.env.LOCAL_DB_HOST_ADDRESS //|| "192.168.55.10"//if you are Sam Meech-Ward, change this to "192.168.55.20"
 const default_mySQLUser = "root"
@@ -98,7 +99,8 @@ const dropAndRecreateTables = () => {
                 first_name              VARCHAR(255) NOT NULL,
                 last_name               VARCHAR(255) NOT NULL,
                 age                     INT NOT NULL,
-                city_of_residence       VARCHAR(255),   
+                city_of_residence       VARCHAR(255),
+                max_distance            INT,
                 gender                  VARCHAR(255),     
                 created_at              TIMESTAMP NOT NULL DEFAULT NOW()
             )`)
@@ -106,10 +108,10 @@ const dropAndRecreateTables = () => {
         .then((result) => {
             console.log(result.message)
             return sqlCallback(`CREATE TABLE user_instagram (
-                user_id                 INT PRIMARY KEY AUTO_INCREMENT,
-                instagram_id            VARCHAR(255),
+                user_id                 INT PRIMARY KEY,
+                instagram_id            VARCHAR(255) NOT NULL,
+                access_token            VARCHAR(255) NOT NULL,
                 instagram_username      VARCHAR(255),
-                access_token            VARCHAR(255),
                 created_at              TIMESTAMP NOT NULL DEFAULT NOW(),
                 FOREIGN KEY (user_id)   REFERENCES users(id)
             )`)
@@ -117,7 +119,8 @@ const dropAndRecreateTables = () => {
         .then((result) => {
             console.log(result.message)
             return sqlCallback(`CREATE TABLE user_personality_aspects (
-                user_id                 INT PRIMARY KEY AUTO_INCREMENT,
+                id                      INT PRIMARY KEY AUTO_INCREMENT,
+                user_id                 INT,
                 mind                    VARCHAR(255),
                 energy                  VARCHAR(255),
                 nature                  VARCHAR(255),
@@ -233,18 +236,70 @@ const getUserByID = (id) => {
     })
 }
 
-const createUser = (email, password_hash, first_name, last_name, age, city_of_residence, gender) => {
+const createUser = (email, password_hash, first_name, last_name, age, city_of_residence, max_distance = defaultMaxDistanceKMs, gender) => {
     return new Promise(async (resolve, reject) => {
         try {
             await createConnection()
             const table = 'users'
-            const sql = `INSERT INTO ${table} (email, password_hash, first_name, last_name, age, city_of_residence, gender) VALUES (?, ?, ?, ?, ?, ?, ?)`
-            const params = [email, password_hash, first_name, last_name, age, city_of_residence, gender]
+            const sql = `INSERT INTO ${table} (email, password_hash, first_name, last_name, age, city_of_residence, max_distance, gender) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`
+            const params = [email, password_hash, first_name, last_name, age, city_of_residence, max_distance, gender]
             db.query(sql, params, (error, result) => {
                 if (error) {
                     console.log(`${error} Problem creating user and inserting into ${table}.`)
                     reject(error)
                 }
+                resolve(rawDataPacketConverter(result))
+            })
+        } catch (error) {
+            console.log(error)
+            reject(error)
+        } finally {
+            closeConnection()
+        }
+    })
+}
+
+/**
+ * user_instagram
+ * @param {*} instagram_id 
+ * @param {*} access_token 
+ * @param {*} instagram_username 
+ */
+const createUserIG = (user_id, instagram_id, access_token, instagram_username) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            await createConnection()
+            const table = 'user_instagram'
+            const sql = `INSERT INTO ${table} (user_id, instagram_id, access_token, instagram_username) VALUES (?, ?, ?, ?)`
+            const params = [user_id, instagram_id, access_token, instagram_username]
+            db.query(sql, params, (error, result) => {
+                if (error) {
+                    console.log(`${error} Problem creating user_instagram and inserting into ${table}.`)
+                    reject(error)
+                }
+                resolve(rawDataPacketConverter(result))
+            })
+        } catch (error) {
+            console.log(error)
+            reject(error)
+        } finally {
+            closeConnection()
+        }     
+    })
+}
+
+const getUserInstagrams = (selectBy = '*', searchBy = '') => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            await createConnection()
+            const table = 'user_instagram'
+            const sql = `SELECT ${selectBy} FROM ${table} ${searchBy}`
+            db.query(sql, (error, result) => {
+                if (error) {
+                    console.log(`Problem searching for ${table} by ${searchBy}.`)
+                    reject(error)
+                }
+                //console.log(rawDataPacketConverter(result))
                 resolve(rawDataPacketConverter(result))
             })
         } catch (error) {
@@ -262,6 +317,8 @@ module.exports = {
     resetDatabase,
     getUsers,
     getUserByID,
-    createUser
+    createUser,
+    getUserInstagrams,
+    createUserIG
 }
 
