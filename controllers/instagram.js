@@ -1,6 +1,6 @@
 const axios = require('axios')
 const { URLSearchParams } = require('url')
-const { maximumInstagramPhotosForProcessing } = require('../globals')
+const { NUM_IG_PHOTOS_PUSHED_TO_DB } = require('../globals')
 
 const getInstagramAuthWindow = (redirectURI) => {
     return new Promise(async (resolve, reject) => {
@@ -61,8 +61,8 @@ const getUserInstagramData = (access_token) => {
         try {
             axios.get(`https://graph.instagram.com/me/media?fields=id,caption,media_url,media_type,username,timestamp&access_token=${access_token}`)
             .then(result => {
-                if(result.data.data.length > maximumInstagramPhotosForProcessing){
-                    resolve(result.data.data.slice(0,maximumInstagramPhotosForProcessing))
+                if(result.data.data.length > NUM_IG_PHOTOS_PUSHED_TO_DB){
+                    resolve(result.data.data.slice(0, NUM_IG_PHOTOS_PUSHED_TO_DB))
                 } else {
                     resolve(result.data.data)
                 }
