@@ -129,6 +129,8 @@ const dropAndRecreateTables = () => {
                 photo_created_date      VARCHAR(255),
                 caption                 VARCHAR(255),
                 instagram_post_id       INT,
+                media_type              VARCHAR(255),
+                video_thumbnail_url     VARCHAR(255),
                 FOREIGN KEY (user_id)   REFERENCES users(id)
             )`)
         })
@@ -354,13 +356,13 @@ const getUserPhotos = (selectBy = '*', searchBy = '') => {
     })
 }
 
-const createUserPhoto = (user_id, photo_link, photo_created_date, caption, instagram_post_id) => {
+const createUserPhoto = (user_id, photo_link, photo_created_date, caption, instagram_post_id, media_type, video_thumbnail_url) => {
     return new Promise(async (resolve, reject) => {
         try {
             await createConnection()
             const table = 'user_photos'
-            const sql = `INSERT INTO ${table} (user_id, photo_link, photo_created_date, caption, instagram_post_id) VALUES (?, ?, ?, ?, ?)`
-            const params = [user_id, photo_link, photo_created_date, caption, instagram_post_id]
+            const sql = `INSERT INTO ${table} (user_id, photo_link, photo_created_date, caption, instagram_post_id, media_type, video_thumbnail_url) VALUES (?, ?, ?, ?, ?, ?, ?)`
+            const params = [user_id, photo_link, photo_created_date, caption, instagram_post_id, media_type, video_thumbnail_url]
             db.query(sql, params, (error, result) => {
                 if (error) {
                     console.log(`${error} Problem creating user photo and inserting into ${table}.`)

@@ -34,6 +34,8 @@ CREATE TABLE user_photos (
     photo_created_date      VARCHAR(255),
     caption                 VARCHAR(255),
     instagram_post_id       INT,
+    media_type              VARCHAR(255),
+    video_thumbnail_url     VARCHAR(255),
     FOREIGN KEY (user_id)   REFERENCES users(id)
 );
 

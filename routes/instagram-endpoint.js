@@ -4,6 +4,7 @@ const { protectedRoute } = require('../controllers/authentication')
 const { getInstagramAuthWindow, getInstagramAccessToken, getUserInstagramData } = require('../controllers/instagram')
 const { verifyExistingToken } = require('../controllers/json-web-token')
 const db = require('../sql/database-interface')
+const { NUM_IG_PHOTOS_PUSHED_TO_DB } = require('../globals')
 
 router.get('/login', protectedRoute, async (req, res) => {
     try {
@@ -64,14 +65,21 @@ router.get('/processData', protectedRoute, async (req, res) => {
 
         //get instagram data --> save to database
         instagramData = await getUserInstagramData(req.user.instagram_access_token)
+
+        //trim down the array if wanted
+        if(instagramData.length > NUM_IG_PHOTOS_PUSHED_TO_DB) {
+            instagramData = instagramData.slice(0, NUM_IG_PHOTOS_PUSHED_TO_DB)
+        }
+
+        //could also filter out all photos without captions instead of just by recency
         for (let obj of instagramData) {
             //await not necessary here?
-            await db.createUserPhoto(req.user.id, obj.media_url, obj.timestamp, obj.caption, obj.id)
+            await db.createUserPhoto(req.user.id, obj.media_url, obj.timestamp, obj.caption, obj.id, obj.media_type, obj.thumbnail_url)
         }
 
         //process instagram data
 
-        
+
 
         //console.log(instagramData)
         //process instagram data
