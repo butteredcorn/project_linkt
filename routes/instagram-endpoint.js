@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 const { protectedRoute } = require('../controllers/authentication')
 const { getInstagramAuthWindow, getInstagramAccessToken } = require('../controllers/instagram')
-const { verifyExistingToken } = require('../controllers/json-web-token')
+const { createNewToken, verifyExistingToken } = require('../controllers/json-web-token')
 const db = require('../sql/database-interface')
 const decode = require('jwt-decode')
 
@@ -27,19 +27,26 @@ router.get('/returnURL', async (req, res) => {
             // console.log(instagramCode)
             // console.log(redirectURL)
             await getInstagramAccessToken(redirectURL, instagramCode)
-            .then(async (user) => {
+            .then(async (instagramData) => {
                 // user.email = req.user.email //undefined no reference to the cookie after redirect
                 // console.log(user)
                 // console.log('user access token: ' + user.data.access_token)
                 // console.log('instagram id: ' + user.data.user_id)
-                userToken = decode(req.cookies.token)
-                userToken.instagram_access_token = user.data.access_token
-                userToken.instagram_id = user.data.user_id
-                //console.log(user.data)
+                user = decode(req.cookies.token)
+                user.instagram_access_token = instagramData.data.access_token
+                user.instagram_id = instagramData.data.user_id
 
-                await db.createUserIG(userToken.id, userToken.instagram_id, userToken.instagram_access_token)
+                await db.createUserIG(user.id, user.instagram_id, user.instagram_access_token)
                 
-                console.log(userToken)
+                console.log(user)
+                //hack  --  lost req.user binding, reset it
+                delete user.iat
+                await createNewToken(user)
+                .then((token) => {
+                    const milliSecondsPerDay = 86400000
+                    res.cookie('token', token, { maxAge: milliSecondsPerDay })
+                })
+
                 res.redirect('/instagram/processData')
             })
         } else {
@@ -53,7 +60,9 @@ router.get('/returnURL', async (req, res) => {
 
 router.get('/processData', async (req, res) => {
     try {
-       console.log(req.user) 
+       console.log(req.user)
+       res.send('complete')
+
     } catch (error) {
         console.log(error)
         res.send(new Error('Error with data retrieval or processing data.'))
