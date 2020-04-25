@@ -59,7 +59,7 @@ router.get('/processData', protectedRoute, async (req, res) => {
         instagramData = await getUserInstagramData(req.user.instagram_access_token)
         console.log(instagramData)
         //process instagram data
-        res.send('complete')
+        res.send(instagramData)
 
     } catch (error) {
         console.log(error)

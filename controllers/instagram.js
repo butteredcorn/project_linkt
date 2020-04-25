@@ -59,7 +59,7 @@ const getInstagramUsername = (access_token, instagram_id) => {
 const getUserInstagramData = (access_token) => {
     return new Promise(async(resolve, reject) => {
         try {
-            axios.get(`https://graph.instagram.com/me/media?fields=id,caption,media_url,media_type&access_token=${access_token}`)
+            axios.get(`https://graph.instagram.com/me/media?fields=id,caption,media_url,media_type,username,timestamp&access_token=${access_token}`)
             .then(result => {
                 if(result.data.data.length > maximumInstagramPhotosForProcessing){
                     resolve(result.data.data.slice(0,maximumInstagramPhotosForProcessing))
