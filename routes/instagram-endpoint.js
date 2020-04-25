@@ -59,17 +59,21 @@ router.get('/processData', protectedRoute, async (req, res) => {
             const result = await db.getUserInstagrams('access_token', `WHERE user_id=${req.user.id}`)
             req.user.instagram_access_token = result[0].access_token
         }
-        
-        console.log(req.user)
 
-        //get instagram data
+        //console.log(req.user)
+
+        //get instagram data --> save to database
         instagramData = await getUserInstagramData(req.user.instagram_access_token)
         for (let obj of instagramData) {
             //await not necessary here?
             await db.createUserPhoto(req.user.id, obj.media_url, obj.timestamp, obj.caption, obj.id)
         }
 
-        console.log(instagramData)
+        //process instagram data
+
+        
+
+        //console.log(instagramData)
         //process instagram data
         res.send(instagramData)
 
