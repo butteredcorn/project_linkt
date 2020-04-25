@@ -42,10 +42,24 @@ const getInstagramAccessToken = (redirectURI, instagramCode) => {
     })
 }
 
+const getInstagramUsername = (access_token, instagram_id) => {
+    return new Promise(async(resolve, reject) => {
+        try {
+            axios.get(`https://graph.instagram.com/${instagram_id}?fields=id,username&access_token=${access_token}`)
+            .then(result => {
+                console.log(result)
+                resolve(result.username)
+            })
+        } catch (error) {
+            reject(error)
+        }
+    })
+}
+
 const getUserInstagramData = (access_token) => {
     return new Promise(async(resolve, reject) => {
         try {
-            axios.get(`https://graph.instagram.com/me/media?fields=id,caption,media_url,media_type&access_token=${access_token}`)
+            axios.get(`https://graph.instagram.com/me/media?fields=id,caption,media_url,media_type,username,timestamp&access_token=${access_token}`)
             .then(result => {
                 if(result.data.data.length > maximumInstagramPhotosForProcessing){
                     resolve(result.data.data.slice(0,maximumInstagramPhotosForProcessing))
@@ -62,5 +76,6 @@ const getUserInstagramData = (access_token) => {
 module.exports = {
     getInstagramAuthWindow,
     getInstagramAccessToken,
+    getInstagramUsername,
     getUserInstagramData
 }
