@@ -29,7 +29,7 @@ router.get('/returnURL', async (req, res) => {
             const instagramCode = req.query.code
             // console.log(instagramCode)
             // console.log(redirectURL)
-            
+
             await getInstagramAccessToken(redirectURL, instagramCode)
             .then(async (instagramData) => {
                 
@@ -55,6 +55,12 @@ router.get('/returnURL', async (req, res) => {
 router.get('/processData', protectedRoute, async (req, res) => {
     try {
         console.log(req.user)
+
+        if(!req.user.instagram_access_token) {
+            const result = await db.getUserInstagrams('access_token', `WHERE user_id=${req.user.id}`)
+            console.log(result)
+            req.user.instagram_access_token = result[0]
+        }
 
         //get instagram data
         instagramData = await getUserInstagramData(req.user.instagram_access_token)
