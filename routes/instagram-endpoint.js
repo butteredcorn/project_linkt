@@ -41,7 +41,7 @@ router.get('/returnURL', async (req, res) => {
                 console.log(user)
                 //hack  --  lost req.user binding, reset it
                 delete user.iat
-                await createNewToken(user)
+                await createNewToken({...user})
                 .then((token) => {
                     const milliSecondsPerDay = 86400000
                     res.cookie('token', token, { maxAge: milliSecondsPerDay })
