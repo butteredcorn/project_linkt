@@ -21,6 +21,10 @@ router.get('/login', protectedRoute, async (req, res) => {
 router.get('/returnURL', async (req, res) => {
     try {
         if (req.cookies.token && verifyExistingToken(req.cookies.token)) {
+            //rebind user to request object, it is lost after redirect
+            verifyExistingToken(req.cookies.token).then((user) => {
+                req.user = user
+            })
             console.log('Token accepted.')
             const redirectURL = `https://${req.get('host')}/instagram/returnURL`
             const instagramCode = req.query.code
@@ -32,20 +36,14 @@ router.get('/returnURL', async (req, res) => {
                 // console.log(user)
                 // console.log('user access token: ' + user.data.access_token)
                 // console.log('instagram id: ' + user.data.user_id)
-                user = decode(req.cookies.token)
-                user.instagram_access_token = instagramData.data.access_token
-                user.instagram_id = instagramData.data.user_id
-
-                await db.createUserIG(user.id, user.instagram_id, user.instagram_access_token)
                 
-                console.log(user)
-                //hack  --  lost req.user binding, reset it
-                delete user.iat
-                await createNewToken({...user})
-                .then((token) => {
-                    const milliSecondsPerDay = 86400000
-                    res.cookie('token', token, { maxAge: milliSecondsPerDay })
-                })
+                //user = decode(req.cookies.token)
+                req.user.instagram_access_token = instagramData.data.access_token
+                req.user.instagram_id = instagramData.data.user_id
+
+                await db.createUserIG(req.user.id, req.user.instagram_id, req.user.instagram_access_token)
+                
+                console.log(req.user)
 
                 res.redirect('/instagram/processData')
             })
@@ -58,7 +56,7 @@ router.get('/returnURL', async (req, res) => {
     }
 })
 
-router.get('/processData', async (req, res) => {
+router.get('/processData', protectedRoute, async (req, res) => {
     try {
        console.log(req.user)
        res.send('complete')
