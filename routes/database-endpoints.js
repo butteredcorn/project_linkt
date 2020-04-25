@@ -32,9 +32,10 @@ router.get('/reset/resetDatabase', protectedRoute, async (req, res, next) => {
 router.get('/getUsers', protectedRoute, async (req, res, next) => {
     try {
         await checkAdministratorPrivilege(req.user)
+        .then((message) => console.log(message))
+
         const selectBy = req.query.selectBy
         const searchBy = req.query.searchBy
-        .then((message) => console.log(message))
         const result = await db.getUsers(selectBy, searchBy)
         res.send(result)
     } catch (error) {

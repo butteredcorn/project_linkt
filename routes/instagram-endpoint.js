@@ -29,6 +29,7 @@ router.get('/returnURL', async (req, res) => {
             const instagramCode = req.query.code
             // console.log(instagramCode)
             // console.log(redirectURL)
+            
             await getInstagramAccessToken(redirectURL, instagramCode)
             .then(async (instagramData) => {
                 

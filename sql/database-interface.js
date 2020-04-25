@@ -128,7 +128,7 @@ const dropAndRecreateTables = () => {
                 photo_link              VARCHAR(255),
                 photo_created_date      VARCHAR(255),
                 caption                 VARCHAR(255),
-                instagram_post_id            INT,
+                instagram_post_id       INT,
                 FOREIGN KEY (user_id)   REFERENCES users(id)
             )`)
         })
