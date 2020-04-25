@@ -54,13 +54,13 @@ router.get('/returnURL', async (req, res) => {
 
 router.get('/processData', protectedRoute, async (req, res) => {
     try {
-        console.log(req.user)
-
+        //not getting bound in /returnURL*
         if(!req.user.instagram_access_token) {
             const result = await db.getUserInstagrams('access_token', `WHERE user_id=${req.user.id}`)
-            console.log(result)
-            req.user.instagram_access_token = result[0]
+            req.user.instagram_access_token = result[0].access_token
         }
+        
+        console.log(req.user)
 
         //get instagram data
         instagramData = await getUserInstagramData(req.user.instagram_access_token)
