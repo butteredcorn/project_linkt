@@ -42,6 +42,20 @@ const getInstagramAccessToken = (redirectURI, instagramCode) => {
     })
 }
 
+const getInstagramUsername = (access_token, instagram_id) => {
+    return new Promise(async(resolve, reject) => {
+        try {
+            axios.get(`https://graph.instagram.com/${instagram_id}?fields=id,username&access_token=${access_token}`)
+            .then(result => {
+                console.log(result)
+                resolve(result.username)
+            })
+        } catch (error) {
+            reject(error)
+        }
+    })
+}
+
 const getUserInstagramData = (access_token) => {
     return new Promise(async(resolve, reject) => {
         try {
@@ -62,5 +76,6 @@ const getUserInstagramData = (access_token) => {
 module.exports = {
     getInstagramAuthWindow,
     getInstagramAccessToken,
+    getInstagramUsername,
     getUserInstagramData
 }
