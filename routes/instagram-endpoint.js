@@ -75,16 +75,16 @@ router.get('/processData', protectedRoute, async (req, res) => {
         
         const metrics = await processInstagramData(instagramData)
         
-        console.log(metrics)
 
 
         //process instagram data
         //clarifai
 
 
-        //console.log(instagramData)
+        console.log(instagramData)
+        console.log(metrics)
         //process instagram data
-        res.send(instagramData + '/n' + metrics)
+        res.send(instagramData + '\n' + metrics)
 
     } catch (error) {
         console.log(error)

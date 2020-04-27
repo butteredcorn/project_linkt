@@ -4,7 +4,7 @@ module.exports = {
 
     MINIMUM_IG_PHOTOS: 0,
 
-    NUM_IG_PHOTOS_PUSHED_TO_DB: 20,
+    NUM_IG_PHOTOS_PUSHED_TO_DB: 20, //default from IG is 25 post objects
 
     maximumInstagramPhotosForProcessing: 5,
 
