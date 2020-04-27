@@ -38,8 +38,8 @@ router.get('/returnURL', async (req, res) => {
                 req.user.instagram_id = instagramData.data.user_id
 
                 //check to see if user exists in db
-                const userExists = await db.getUserByID(req.user.id)
-                if(userExists.length > 0) {
+                const userIGExists = await db.getUserInstagrams('user_id, access_token', `WHERE user_id = ${req.user.id}`)
+                if(userIGExists.length > 0) {
                     await db.updateUserIG(req.user.id, req.user.instagram_id, req.user.instagram_access_token)
                 } else {
                     //create userIG table
