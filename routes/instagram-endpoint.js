@@ -71,7 +71,7 @@ router.get('/processData', protectedRoute, async (req, res) => {
 
         //get instagram data --> save to database
         instagramData = await getUserInstagramData(req.user.instagram_access_token)
-        trimAndPushToDB(instagramData)
+        trimAndPushToDB(instagramData, req.user)
         
         const metrics = await processInstagramData(instagramData)
         

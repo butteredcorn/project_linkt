@@ -2,7 +2,7 @@ const { NUM_IG_PHOTOS_PUSHED_TO_DB, MILLISECONDS_PER_DAY, psychometric_constants
 const { POST_FREQUENCY_WINDOW_DAYS } = psychometric_constants
 const db = require('../../sql/database-interface')
 
-const trimAndPushToDB = (instagramData) => {
+const trimAndPushToDB = (instagramData, user) => {
     return new Promise(async(resolve, reject) => {
         try {
             //trim down the array of data if wanted
@@ -14,7 +14,7 @@ const trimAndPushToDB = (instagramData) => {
             for (let obj of instagramData) {
 
                 //await not necessary here?
-                db.createUserPhoto(req.user.id, obj.media_url, obj.timestamp, obj.caption, obj.id, obj.media_type, obj.thumbnail_url)
+                db.createUserPhoto(user.id, obj.media_url, obj.timestamp, obj.caption, obj.id, obj.media_type, obj.thumbnail_url)
             }
 
             resolve('Uploaded to database.') //resolve back the same data as inputted
