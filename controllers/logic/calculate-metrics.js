@@ -1,6 +1,6 @@
 const { NUM_IG_PHOTOS_PUSHED_TO_DB, MILLISECONDS_PER_DAY, psychometric_constants } = require('../../globals')
 const { POST_FREQUENCY_WINDOW_DAYS } = psychometric_constants
-
+const db = require('../../sql/database-interface')
 
 const trimAndPushToDB = (instagramData) => {
     return new Promise(async(resolve, reject) => {

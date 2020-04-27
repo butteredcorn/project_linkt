@@ -4,11 +4,13 @@
 * post frequency
 * facial expression - smiles vs facial expressions
 * post content ratio - 'business' to 'entertainment'
+    * caption data
+    * photo data
 
 ## Other Metrics
 * captioned to uncaptioned posts ratio
 
-#### ```portrait``` to ```no person``` ratio
+#### The ```portrait``` to ```no person``` ratio
 Assumptions:
 * Greater presence of selfies means the user is more comfortable with their appearance
 
