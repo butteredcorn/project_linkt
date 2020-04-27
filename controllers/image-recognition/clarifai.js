@@ -7,17 +7,25 @@ const { CLARIFAI_KEY } = require('../../globals')
 //     throw new Error('CLARIFAI_KEY missing')
 // }
 
-const apiKEy = CLARIFAI_KEY 
+const apiKEy = CLARIFAI_KEY
       
 
-const generalLabelDetection = (imageURL) => {
+const generalLabelDetection = (imageURL, option) => {
     return new Promise(async (resolve, reject) => {
         try {
             // Instantiate a new Clarifai app by passing in your API key.
             const app = new Clarifai.App({apiKey: apiKEy});
 
             // Predict the contents of an image by passing in a URL.
-            const result = await app.models.predict(Clarifai.GENERAL_MODEL, imageURL)
+            let result = null
+
+            if (option && option.toLowerCase() == 'food') {
+                result = await app.models.predict(Clarifai.FOOD_MODEL, imageURL)
+            } else if (option && option.toLowerCase() == 'travel') {
+                result = await app.models.predict(Clarifai.TRAVEL_MODEL, imageURL)
+            } else { //default, use general model
+                result = await app.models.predict(Clarifai.GENERAL_MODEL, imageURL)
+            }
             
             // const rawData = result.rawData.outputs[0]
             // console.log(rawData)
@@ -47,37 +55,28 @@ const generalLabelDetection = (imageURL) => {
 }
 
 
-
-const foodDetection = (image_url) => {
-    return new Promise(async (resolve, reject) => {
-        try {
-            
-        } catch (error) {
-            
-        }
-    })
+const labelDetection = async (img_url, option) => {
+    try {
+        const result = await generalLabelDetection(img_url, option)
+        console.log(result)
+    } catch (error) {
+        console.log(error)
+    }
 }
 
-const travelDetection = (image_url) => {
-    return new Promise(async (resolve, reject) => {
-        try {
-            
-        } catch (error) {
-            
-        }
-    })
-}
+//labelDetection('https://scontent-atl3-1.xx.fbcdn.net/v/t51.2885-15/66764177_632447373915244_802380948486434624_n.jpg?_nc_cat=105&_nc_sid=8ae9d6&_nc_ohc=9QymXy5nXtQAX8ePb6o&_nc_ht=scontent-atl3-1.xx&oh=eb77b0e70f09eb180afdb27960d1c7a6&oe=5ECA63B6', 'travel')
 
-const visionStart = async (img_url) => {
-    const result = await generalLabelDetection(img_url)
-    console.log(result)
+module.exports = {
+    generalLabelDetection
 }
-
-// visionStart('https://scontent-atl3-1.xx.fbcdn.net/v/t51.2885-15/66764177_632447373915244_802380948486434624_n.jpg?_nc_cat=105&_nc_sid=8ae9d6&_nc_ohc=9QymXy5nXtQAX8ePb6o&_nc_ht=scontent-atl3-1.xx&oh=eb77b0e70f09eb180afdb27960d1c7a6&oe=5ECA63B6')
 
 /**
+ * 
+ * GENERAL LABEL DETECTION
+ * 
  * OWN_IMAGES
  * 
+ * https://scontent-atl3-1.xx.fbcdn.net/v/t51.2885-15/66764177_632447373915244_802380948486434624_n.jpg?_nc_cat=105&_nc_sid=8ae9d6&_nc_ohc=9QymXy5nXtQAX8ePb6o&_nc_ht=scontent-atl3-1.xx&oh=eb77b0e70f09eb180afdb27960d1c7a6&oe=5ECA63B6
  * raisu-taishoku = [
     { label: 'food',        score: 0.99296594 },
     { label: 'meat',        score: 0.98410416 },
@@ -147,6 +146,212 @@ const visionStart = async (img_url) => {
     { label: 'business',        score: 0.9316323 },
     { label: 'abstract',        score: 0.9258821 },
     { label: 'festival',        score: 0.9235925 }
-  ]  
+  ]
+  
+  
+
+ * PIXABAY_IMAGES
+
+ * https://cdn.pixabay.com/photo/2013/11/25/09/52/japan-217882_960_720.jpg
+ * shibuya-crossing = [
+    { label: 'shopping',    score: 0.98942935 },
+    { label: 'crowd',       score: 0.9890027 },
+    { label: 'city',        score: 0.98693013 },
+    { label: 'street',      score: 0.9863054 },
+    { label: 'rush',        score: 0.97094905 },
+    { label: 'people',      score: 0.9705453 },
+    { label: 'many',        score: 0.96857285 },
+    { label: 'commuter',    score: 0.9631983 },
+    { label: 'road',        score: 0.96028125 },
+    { label: 'tourist',     score: 0.9523463 },
+    { label: 'commerce',    score: 0.9398624 },
+    { label: 'business',    score: 0.93920916 },
+    { label: 'billboard',   score: 0.93178976 },
+    { label: 'pedestrian',  score: 0.92909384 },
+    { label: 'Broadway',    score: 0.9272678 },
+    { label: 'urban',       score: 0.9154226 },
+    { label: 'market',      score: 0.913249 },
+    { label: 'stock',       score: 0.90825146 },
+    { label: 'travel',      score: 0.9080475 },
+    { label: 'crossing',    score: 0.9076482 }
+  ]
+
+ * https://cdn.pixabay.com/photo/2016/08/22/18/52/fushimi-inari-taisha-shrine-1612656_960_720.jpg
+ * fushimi-inari-base-shrine = [
+    { label: 'temple',          score: 0.99743134 },
+    { label: 'travel',          score: 0.9885951 },
+    { label: 'architecture',    score: 0.98543304 },
+    { label: 'Shinto',          score: 0.9835237 },
+    { label: 'shrine',          score: 0.9823333 },
+    { label: 'building',        score: 0.98146707 },
+    { label: 'pagoda',          score: 0.9803253 },
+    { label: 'traditional',     score: 0.97879016 },
+    { label: 'marquee',         score: 0.9716576 },
+    { label: 'culture',         score: 0.97146046 },
+    { label: 'dragon',          score: 0.97087145 },
+    { label: 'no person',       score: 0.9659549 },     // note: there are people in the background
+    { label: 'construction',    score: 0.96411324 },
+    { label: 'roof',            score: 0.9566566 },
+    { label: 'dynasty',         score: 0.9508827 },
+    { label: 'emperor',         score: 0.9499223 },
+    { label: 'daylight',        score: 0.9401834 },
+    { label: 'outdoors',        score: 0.938752 },
+    { label: 'castle',          score: 0.9379485 },
+    { label: 'Taoism',          score: 0.93536854 }
+  ]
+
+  * https://cdn.pixabay.com/photo/2014/12/10/06/46/venetian-562759_960_720.jpg
+  * lasvegas-venetian-canals = [
+    { label: 'gondola',     score: 0.9987962 },
+    { label: 'canal',       score: 0.9977027 },
+    { label: 'Venetian',    score: 0.99716604 },   //IDENTIFIED THE PLACE*
+    { label: 'travel',      score: 0.99662113 },
+    { label: 'gondolier',   score: 0.9810128 },
+    { label: 'water',       score: 0.97883093 },
+    { label: 'architecture', score: 0.97362036 },
+    { label: 'vacation',    score: 0.9735558 },
+    { label: 'city',        score: 0.9730811 },
+    { label: 'grand',       score: 0.97197986 },
+    { label: 'boat',        score: 0.9704846 },
+    { label: 'tourism',     score: 0.9683686 },
+    { label: 'tourist',     score: 0.9673258 },
+    { label: 'building',    score: 0.96447504 },
+    { label: 'street',      score: 0.9581579 },
+    { label: 'lagoon',      score: 0.92866635 },
+    { label: 'transmit',    score: 0.9268701 },
+    { label: 'outdoors',    score: 0.9261423 },
+    { label: 'no person',   score: 0.9251864 },     //people in the background
+    { label: 'sky',         score: 0.9103383 }      //fake sky
+  ]
+
+ * https://cdn.pixabay.com/photo/2015/10/06/18/26/eiffel-tower-975004_960_720.jpg
+ * eiffel-tower = [
+    { label: 'architecture', score: 0.98852587 },
+    { label: 'sky',         score: 0.98549116 },
+    { label: 'travel',      score: 0.9849011 },
+    { label: 'no person',   score: 0.9809067 },
+    { label: 'tower',       score: 0.9534407 },
+    { label: 'outdoors',    score: 0.9483056 },
+    { label: 'sunset',      score: 0.9348634 },
+    { label: 'city',        score: 0.9144579 },
+    { label: 'cloud',       score: 0.8833779 },
+    { label: 'monument',    score: 0.8699472 },
+    { label: 'summer',      score: 0.86158246 },
+    { label: 'high',        score: 0.8421973 },
+    { label: 'landmark',    score: 0.83392435 },       // GOOD LABEL
+    { label: 'building',    score: 0.80196786 },
+    { label: 'sightseeing', score: 0.8019031 },
+    { label: 'tourism',     score: 0.7979623 },
+    { label: 'tallest',     score: 0.7891295 },
+    { label: 'nature',      score: 0.7880188 },
+    { label: 'old',         score: 0.7837875 },
+    { label: 'ancient',     score: 0.7804959 }
+  ]
+
+ *
+ * FOOD DETECTION
+ * 
+ * OWN_IMAGES
+ * raisu-taishoku = [
+    { label: 'sushi',           score: 0.99889743 },
+    { label: 'seafood',         score: 0.9868798 },
+    { label: 'fish',            score: 0.98543566 },
+    { label: 'salmon',          score: 0.96020466 },
+    { label: 'sashimi',         score: 0.9542178 },
+    { label: 'tuna',            score: 0.937123 },
+    { label: 'rice',            score: 0.8724812 },
+    { label: 'platter',         score: 0.8348447 },
+    { label: 'meat',            score: 0.7555738 },
+    { label: 'vegetable',       score: 0.71719605 },
+    { label: 'feast',           score: 0.6735115 },
+    { label: 'gastronomy',      score: 0.6090589 },
+    { label: 'shrimp',          score: 0.59838814 },
+    { label: 'canape',          score: 0.56183344 },
+    { label: 'spread',          score: 0.44966435 },
+    { label: 'tempura',         score: 0.36266991 },
+    { label: 'wasabi',          score: 0.32597515 },
+    { label: 'cheese',          score: 0.31455904 },
+    { label: 'dairy product',   score: 0.30855697 },
+    { label: 'crab',            score: 0.29677683 }
+  ]
+
+
+
+ * 
+ * TRAVEL DETECTION
+ * 
+ * OWN_IMAGES
+ * raisu-taishoku = [
+    { label: 'Food & Beverages',    score: 0.9588607 },
+    { label: 'Breakfast Buffet',    score: 0.62488246 },
+    { label: 'Restaurant',          score: 0.47120038 },
+    { label: 'Bar',                 score: 0.2281397 },
+    { label: 'Coffee Machine',      score: 0.16448486 },
+    { label: 'Details',             score: 0.11888954 },
+    { label: 'Sports & Activities', score: 0.0959726 },
+    { label: 'In-Room Kitchenette', score: 0.087179214 },
+    { label: 'Autumn',              score: 0.072377 },
+    { label: 'Boat',                score: 0.067370474 },
+    { label: 'People',              score: 0.057657152 },
+    { label: 'Minibar',             score: 0.04606694 },
+    { label: 'Lounge',              score: 0.043147773 },
+    { label: 'Room Amenities',      score: 0.039232016 },
+    { label: 'Reception',           score: 0.03800738 },
+    { label: 'Water Sports',        score: 0.036848575 },
+    { label: 'Garden',              score: 0.035126776 },
+    { label: 'Casino',              score: 0.032830775 },
+    { label: 'Fireplace',           score: 0.03235534 },
+    { label: 'Desk',                score: 0.030688524 }
+  ]
+ 
+
+ * PIXABAY_IMAGES
+ * 
+ * 
+ * fushimi-inari-base-shrine = [                    // BASICALLY AWFUL
+    { label: 'Summer',      score: 0.37722734 },
+    { label: 'Kids Area',   score: 0.34652805 },
+    { label: 'Terrace',     score: 0.3431396 },
+    { label: 'Water Park',  score: 0.27615207 },
+    { label: 'Casino',      score: 0.25772434 },
+    { label: 'Entrance',    score: 0.22955295 },
+    { label: 'Daytime',     score: 0.21278036 },
+    { label: 'Surroundings', score: 0.16655365 },
+    { label: 'Animals',     score: 0.119549185 },
+    { label: 'Autumn',      score: 0.10691136 },
+    { label: 'Wedding',     score: 0.09679249 },
+    { label: 'Yoga',        score: 0.09354153 },
+    { label: 'Garden',      score: 0.0900991 },
+    { label: 'Water Sports', score: 0.08672559 },
+    { label: 'Boat',        score: 0.08564749 },
+    { label: 'Building',    score: 0.07910958 },
+    { label: 'People',      score: 0.07176486 },
+    { label: 'Beach',       score: 0.0716829 },
+    { label: 'Ballroom',    score: 0.06288409 },
+    { label: 'Game Room',   score: 0.054320484 }
+  ]
+
+ * lasvegas-venetian-canals = [                     // BASICALLY AWFUL
+    { label: 'Daytime',     score: 0.83272856 },
+    { label: 'People',      score: 0.7604201 },
+    { label: 'Summer',      score: 0.55384386 },
+    { label: 'Surroundings', score: 0.51859426 },
+    { label: 'Wedding',     score: 0.43300813 },
+    { label: 'Nighttime',   score: 0.37086326 },
+    { label: 'Casino',      score: 0.36911136 },
+    { label: 'Terrace',     score: 0.3072496 },
+    { label: 'Balcony',     score: 0.30539292 },
+    { label: 'Details',     score: 0.27312383 },
+    { label: 'Autumn',      score: 0.22323078 },
+    { label: 'Building',    score: 0.20226744 },
+    { label: 'View',        score: 0.20189875 },
+    { label: 'Fountain',    score: 0.17156383 },
+    { label: 'Animals',     score: 0.15532842 },
+    { label: 'Snow & Ski Sports', score: 0.15517473 },
+    { label: 'Boat',        score: 0.13692158 },
+    { label: 'Television',  score: 0.13484004 },
+    { label: 'Food & Beverages', score: 0.1320909 },
+    { label: 'Restaurant',  score: 0.11654633 }
+  ] 
  * 
  */
