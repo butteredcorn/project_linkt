@@ -64,7 +64,7 @@ const labelDetection = async (img_url, option) => {
     }
 }
 
-//labelDetection('https://scontent-atl3-1.xx.fbcdn.net/v/t51.2885-15/66764177_632447373915244_802380948486434624_n.jpg?_nc_cat=105&_nc_sid=8ae9d6&_nc_ohc=9QymXy5nXtQAX8ePb6o&_nc_ht=scontent-atl3-1.xx&oh=eb77b0e70f09eb180afdb27960d1c7a6&oe=5ECA63B6', 'travel')
+//labelDetection('https://scontent-atl3-1.xx.fbcdn.net/v/t51.2885-15/69041448_1084341638425907_6444124026857586679_n.jpg?_nc_cat=111&_nc_sid=8ae9d6&_nc_ohc=BZYj998Rn3QAX-LF1vm&_nc_ht=scontent-atl3-1.xx&oh=e99985bc57801c6e725e25b04694b841&oe=5EC89BE4')
 
 module.exports = {
     generalLabelDetection
@@ -147,8 +147,57 @@ module.exports = {
     { label: 'abstract',        score: 0.9258821 },
     { label: 'festival',        score: 0.9235925 }
   ]
-  
-  
+
+
+ * https://scontent-atl3-1.xx.fbcdn.net/v/t51.2885-15/69976968_153726909029750_6622911244653413457_n.jpg?_nc_cat=100&_nc_sid=8ae9d6&_nc_ohc=N1fJCLtgehMAX--bNLm&_nc_ht=scontent-atl3-1.xx&oh=6c21d2ee980df7f71ebef577ab2f11d4&oe=5ECB41C7
+ * selfie = [
+    { label: 'portrait',            score: 0.98007965 },    // essentially the selfie label?
+    { label: 'man',                 score: 0.9753847 },
+    { label: 'eyeglasses',          score: 0.9593862 },
+    { label: 'people',              score: 0.9546592 },
+    { label: 'fine-looking',        score: 0.95279527 },
+    { label: 'intelligence',        score: 0.9519278 },
+    { label: 'one',                 score: 0.94537836 },
+    { label: 'business',            score: 0.94420326 },
+    { label: 'wear',                score: 0.9261111 },
+    { label: 'formal',              score: 0.91962457 },
+    { label: 'looking',             score: 0.91945326 },
+    { label: 'fashion',             score: 0.9185101 },
+    { label: 'achievement',         score: 0.9170359 },
+    { label: 'serious',             score: 0.91701376 },
+    { label: 'contemporary',        score: 0.9027086 },
+    { label: 'tie',                 score: 0.89161646 },
+    { label: 'indoors',             score: 0.87271416 },     // BAD LABEL
+    { label: 'elegant',             score: 0.8668804 },
+    { label: 'facial expression',   score: 0.86143494 },
+    { label: 'adult',               score: 0.84847105 }
+  ]
+
+  * https://scontent-atl3-1.xx.fbcdn.net/v/t51.2885-15/69041448_1084341638425907_6444124026857586679_n.jpg?_nc_cat=111&_nc_sid=8ae9d6&_nc_ohc=BZYj998Rn3QAX-LF1vm&_nc_ht=scontent-atl3-1.xx&oh=e99985bc57801c6e725e25b04694b841&oe=5EC89BE4
+  * bottanist, empty room = [
+    { label: 'interior design', score: 0.9973869 },
+    { label: 'table',           score: 0.99521244 },
+    { label: 'luxury',          score: 0.99497545 },
+    { label: 'dining',          score: 0.9933415 },
+    { label: 'furniture',       score: 0.99196076 },
+    { label: 'contemporary',    score: 0.9877579 },
+    { label: 'indoors',         score: 0.9867792 },
+    { label: 'hotel',           score: 0.9832692 },
+    { label: 'place setting',   score: 0.98057973 },
+    { label: 'chair',           score: 0.97834337 },
+    { label: 'dining room',     score: 0.9767884 },
+    { label: 'family',          score: 0.96548676 },
+    { label: 'tableware',       score: 0.95225805 },
+    { label: 'seat',            score: 0.9394796 },
+    { label: 'room',            score: 0.9317125 },
+    { label: 'trading floor',   score: 0.9207214 },         // BAD LABEL
+    { label: 'sofa',            score: 0.91817284 },
+    { label: 'lamp',            score: 0.90848744 },
+    { label: 'inside',          score: 0.90643466 },
+    { label: 'tablecloth',      score: 0.9009719 }
+  ]
+  * 
+
 
  * PIXABAY_IMAGES
 
