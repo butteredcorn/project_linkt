@@ -4,7 +4,7 @@ const { protectedRoute } = require('../controllers/authentication')
 const { getInstagramAuthWindow, getInstagramAccessToken, getUserInstagramData } = require('../controllers/instagram')
 const { verifyExistingToken } = require('../controllers/json-web-token')
 const db = require('../sql/database-interface')
-const { processInstagramData } = require('../controllers/logic/calculate-metrics')
+const { trimAndPushToDB, processInstagramData } = require('../controllers/logic/calculate-metrics')
 
 router.get('/login', protectedRoute, async (req, res) => {
     try {
@@ -71,7 +71,7 @@ router.get('/processData', protectedRoute, async (req, res) => {
 
         //get instagram data --> save to database
         instagramData = await getUserInstagramData(req.user.instagram_access_token)
-
+        trimAndPushToDB(instagramData)
         
         const metrics = await processInstagramData(instagramData)
         
@@ -84,7 +84,7 @@ router.get('/processData', protectedRoute, async (req, res) => {
         console.log(instagramData)
         console.log(metrics)
         //process instagram data
-        res.send(instagramData + '\n' + metrics)
+        res.send(instagramData)
 
     } catch (error) {
         console.log(error)

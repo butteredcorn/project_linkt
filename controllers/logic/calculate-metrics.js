@@ -14,10 +14,10 @@ const trimAndPushToDB = (instagramData) => {
             for (let obj of instagramData) {
 
                 //await not necessary here?
-                await db.createUserPhoto(req.user.id, obj.media_url, obj.timestamp, obj.caption, obj.id, obj.media_type, obj.thumbnail_url)
+                db.createUserPhoto(req.user.id, obj.media_url, obj.timestamp, obj.caption, obj.id, obj.media_type, obj.thumbnail_url)
             }
 
-            resolve(instagramData) //resolve back the same data as inputted
+            resolve('Uploaded to database.') //resolve back the same data as inputted
 
         } catch (error) {
             reject(error)
@@ -128,5 +128,6 @@ const processInstagramData = (instagramData) => {
 }
 
 module.exports = {
+    trimAndPushToDB,
     processInstagramData
 }
