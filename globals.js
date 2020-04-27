@@ -9,6 +9,14 @@ module.exports = {
     maximumInstagramPhotosForProcessing: 5,
 
     defaultMaxDistanceKMs: 25,
+
+    CLARIFAI_KEY: process.env.CLARIFAI_KEY,
+
+    MILLISECONDS_PER_DAY: 86400000,
+
+    psychometric_constants: {
+        POST_FREQUENCY_WINDOW_DAYS: 30,
+    },
 }
 
 //instagram date stamp is in ISO 8601 format

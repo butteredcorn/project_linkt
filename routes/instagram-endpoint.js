@@ -4,7 +4,7 @@ const { protectedRoute } = require('../controllers/authentication')
 const { getInstagramAuthWindow, getInstagramAccessToken, getUserInstagramData } = require('../controllers/instagram')
 const { verifyExistingToken } = require('../controllers/json-web-token')
 const db = require('../sql/database-interface')
-const { NUM_IG_PHOTOS_PUSHED_TO_DB } = require('../globals')
+const { processInstagramData } = require('../controllers/logic/calculate-metrics')
 
 router.get('/login', protectedRoute, async (req, res) => {
     try {
@@ -37,8 +37,14 @@ router.get('/returnURL', async (req, res) => {
                 req.user.instagram_access_token = instagramData.data.access_token
                 req.user.instagram_id = instagramData.data.user_id
 
-                //create userIG table
-                await db.createUserIG(req.user.id, req.user.instagram_id, req.user.instagram_access_token)
+                //check to see if user exists in db
+                const userExists = await db.getUserByID(req.user.id)
+                if(userExists.length > 0) {
+                    await db.updateUserIG(req.user.id, req.user.instagram_id, req.user.instagram_access_token)
+                } else {
+                    //create userIG table
+                    await db.createUserIG(req.user.id, req.user.instagram_id, req.user.instagram_access_token)
+                }
                 
                 //console.log(req.user)
 
@@ -66,24 +72,19 @@ router.get('/processData', protectedRoute, async (req, res) => {
         //get instagram data --> save to database
         instagramData = await getUserInstagramData(req.user.instagram_access_token)
 
-        //trim down the array if wanted
-        if(instagramData.length > NUM_IG_PHOTOS_PUSHED_TO_DB) {
-            instagramData = instagramData.slice(0, NUM_IG_PHOTOS_PUSHED_TO_DB)
-        }
+        
+        const metrics = await processInstagramData(instagramData)
+        
+        console.log(metrics)
 
-        //could also filter out all photos without captions instead of just by recency
-        for (let obj of instagramData) {
-            //await not necessary here?
-            await db.createUserPhoto(req.user.id, obj.media_url, obj.timestamp, obj.caption, obj.id, obj.media_type, obj.thumbnail_url)
-        }
 
         //process instagram data
-
+        //clarifai
 
 
         //console.log(instagramData)
         //process instagram data
-        res.send(instagramData)
+        res.send(instagramData + '/n' + metrics)
 
     } catch (error) {
         console.log(error)

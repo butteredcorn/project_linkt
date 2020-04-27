@@ -139,11 +139,11 @@ const dropAndRecreateTables = () => {
             return sqlCallback(`CREATE TABLE user_personality_aspects (
                 id                      INT PRIMARY KEY AUTO_INCREMENT,
                 user_id                 INT,
-                mind                    VARCHAR(255),
-                energy                  VARCHAR(255),
-                nature                  VARCHAR(255),
-                tactics                 VARCHAR(255),
-                identtiy                VARCHAR(255),
+                openess                 VARCHAR(255),
+                conscientiousness       VARCHAR(255),
+                extroversion            VARCHAR(255),
+                agreeableness           VARCHAR(255),
+                neuroticism             VARCHAR(255),
                 FOREIGN KEY (user_id)   REFERENCES users(id)
             )`)
         })
@@ -305,6 +305,31 @@ const createUserIG = (user_id, instagram_id, access_token, instagram_username) =
     })
 }
 
+const updateUserIG = (user_id, instagram_id, access_token, instagram_username) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            await createConnection()
+            const table = 'user_instagram'
+            const sql = `UPDATE ${table} SET instagram_id = ?, access_token = ? , instagram_username = ? WHERE user_id = ?`
+            const params = [instagram_id, access_token, instagram_username, user_id]
+            db.query(sql, params, (error, result) => {
+                if (error) {
+                    console.log(`${error} Problem creating updating user_instagram for ${table}.`)
+                    reject(error)
+                }
+                resolve(rawDataPacketConverter(result))
+            })
+        } catch (error) {
+            console.log(error)
+            reject(error)
+        } finally {
+            closeConnection()
+        }     
+    })
+}
+
+
+
 const getUserInstagrams = (selectBy = '*', searchBy = '') => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -390,6 +415,7 @@ module.exports = {
     createUser,
     getUserInstagrams,
     createUserIG,
+    updateUserIG,
     getUserPhotos,
     createUserPhoto,
 }
