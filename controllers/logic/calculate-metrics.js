@@ -63,7 +63,7 @@ const calculateNonPhotoDependentData = (instagramData) => {
                 //loop through all the data
                 for (let post of instagramData) {
                     //if post is within time period (POST_FREQUENCY_WINDOW_DAYS)
-                    if (Math.abs(currentDate - new Date(post.photo_created_date)) <= POST_FREQUENCY_WINDOW_DAYS * MILLISECONDS_PER_DAY) {
+                    if (Math.abs(currentDate - new Date(post.timestamp)) <= POST_FREQUENCY_WINDOW_DAYS * MILLISECONDS_PER_DAY) {
                         postsWithinWindow++
                     }
 
@@ -79,8 +79,8 @@ const calculateNonPhotoDependentData = (instagramData) => {
                 const captionedUncaptionedRatio = captioned / instagramData.length
                 const meanHashtagsPerPost = numHashtags / instagramData.length
                 const postFrequencyWithinWindow = postsWithinWindow / POST_FREQUENCY_WINDOW_DAYS
-                const newestPost = instagramData[0].photo_created_date
-                const oldestPost = instagramData[instagramData.length - 1].photo_created_date
+                const newestPost = instagramData[0].timestamp
+                const oldestPost = instagramData[instagramData.length - 1].timestamp
 
                 const averageDaysBetweenPostsAll = Math.round((Math.abs(new Date(newestPost) - new Date(oldestPost)) * MILLISECONDS_PER_DAY / instagramData.length) * 10)/10
 
