@@ -84,6 +84,10 @@ const dropAndRecreateTables = () => {
         })
         .then((result) => {
             console.log(result.message)
+            return sqlCallback('DROP TABLE IF EXISTS user_psychometrics')
+        })
+        .then((result) => {
+            console.log(result.message)
             return sqlCallback('DROP TABLE IF EXISTS user_photos')
         })
         .then((result) => {
@@ -124,7 +128,7 @@ const dropAndRecreateTables = () => {
             console.log(result.message)
             return sqlCallback(`CREATE TABLE user_photos (
                 id                      INT PRIMARY KEY AUTO_INCREMENT,
-                user_id                 INT,
+                user_id                 INT NOT NULL,
                 photo_link              VARCHAR(255),
                 photo_created_date      VARCHAR(255),
                 caption                 VARCHAR(255),
@@ -136,9 +140,24 @@ const dropAndRecreateTables = () => {
         })
         .then((result) => {
             console.log(result.message)
+            return sqlCallback(`CREATE TABLE user_psychometrics (
+                id                                      INT PRIMARY KEY AUTO_INCREMENT,
+                user_id                                 INT NOT NULL,
+                captioned_uncaptioned_ratio             FLOAT,
+                portrait_to_noperson_ratio              FLOAT,
+                mean_hashtags_per_post                  FLOAT,
+                post_frequency                          FLOAT,
+                facial_expression_ratio                 FLOAT,
+                business_entertainment_content_ratio    FLOAT,
+                last_updated                            TIMESTAMP NOT NULL DEFAULT NOW(),
+                FOREIGN KEY (user_id)                   REFERENCES users(id)
+            )`)
+        })
+        .then((result) => {
+            console.log(result.message)
             return sqlCallback(`CREATE TABLE user_personality_aspects (
                 id                      INT PRIMARY KEY AUTO_INCREMENT,
-                user_id                 INT,
+                user_id                 INT NOT NULL,
                 openess                 VARCHAR(255),
                 conscientiousness       VARCHAR(255),
                 extroversion            VARCHAR(255),
@@ -151,7 +170,7 @@ const dropAndRecreateTables = () => {
             console.log(result.message)
             return sqlCallback(`CREATE TABLE user_preferences (
                 id                      INT PRIMARY KEY AUTO_INCREMENT,
-                user_id                 INT,
+                user_id                 INT NOT NULL,
                 partner_gender          VARCHAR(255),
                 partner_age_min         INT,
                 partner_age_max         INT,
@@ -163,7 +182,7 @@ const dropAndRecreateTables = () => {
             console.log(result.message)
             return sqlCallback(`CREATE TABLE user_career_and_education (
                 id                      INT PRIMARY KEY AUTO_INCREMENT,
-                user_id                 INT,
+                user_id                 INT NOT NULL,
                 highest_education_type  VARCHAR(255),
                 education_field         VARCHAR(255),
                 industry_type           VARCHAR(255),
