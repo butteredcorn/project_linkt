@@ -423,6 +423,29 @@ const createUserPhoto = (user_id, photo_link, photo_created_date, caption, insta
     })
 }
 
+const createUserPhotoNonHandled = (user_id, photo_link, photo_created_date, caption, instagram_post_id, media_type, video_thumbnail_url) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            //await createConnection()
+            const table = 'user_photos'
+            const sql = `INSERT INTO ${table} (user_id, photo_link, photo_created_date, caption, instagram_post_id, media_type, video_thumbnail_url) VALUES (?, ?, ?, ?, ?, ?, ?)`
+            const params = [user_id, photo_link, photo_created_date, caption, instagram_post_id, media_type, video_thumbnail_url]
+            db.query(sql, params, (error, result) => {
+                if (error) {
+                    console.log(`${error} Problem creating user photo and inserting into ${table}.`)
+                    reject(error)
+                }
+                resolve(rawDataPacketConverter(result))
+            })
+        } catch (error) {
+            console.log(error)
+            reject(error)
+        } finally {
+            //closeConnection()
+        }     
+    })
+}
+
 
 
 module.exports = {
@@ -437,5 +460,6 @@ module.exports = {
     updateUserIG,
     getUserPhotos,
     createUserPhoto,
+    createUserPhotoNonHandled,
 }
 

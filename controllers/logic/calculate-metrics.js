@@ -9,18 +9,22 @@ const trimAndPushToDB = (instagramData, user) => {
             if(instagramData.length > NUM_IG_PHOTOS_PUSHED_TO_DB) {
                 instagramData = instagramData.slice(0, NUM_IG_PHOTOS_PUSHED_TO_DB)
             }
-
+            await db.createConnection()
             //could also filter out all photos without captions instead of just by recency
             for (let obj of instagramData) {
-
-                //await not necessary here?
-                db.createUserPhoto(user.id, obj.media_url, obj.timestamp, obj.caption, obj.id, obj.media_type, obj.thumbnail_url)
+                //await not necessary here? -- will need to try to 
+                db.createUserPhotoNonHandled(user.id, obj.media_url, obj.timestamp, obj.caption, obj.id, obj.media_type, obj.thumbnail_url)
             }
 
             resolve('Uploaded to database.') //resolve back the same data as inputted
 
         } catch (error) {
             reject(error)
+        } finally {
+            setTimeout(() => {
+                console.log('connection closed manually')
+                db.closeConnection()
+            },5000)
         }
     })
 }
