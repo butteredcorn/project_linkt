@@ -82,7 +82,7 @@ const calculateNonPhotoDependentData = (instagramData) => {
                 const newestPost = instagramData[0].timestamp
                 const oldestPost = instagramData[instagramData.length - 1].timestamp
 
-                const averageDaysBetweenPostsAll = Math.round((Math.abs(new Date(newestPost) - new Date(oldestPost)) * MILLISECONDS_PER_DAY / instagramData.length) * 10)/10
+                const averageDaysBetweenPostsAll = Math.round((Math.abs(new Date(newestPost) - new Date(oldestPost)) / MILLISECONDS_PER_DAY / instagramData.length) * 10)/10
 
                 const result = {
                     number_of_posts: instagramData.length,
