@@ -84,6 +84,10 @@ const dropAndRecreateTables = () => {
         })
         .then((result) => {
             console.log(result.message)
+            return sqlCallback('DROP TABLE IF EXISTS user_psychometrics')
+        })
+        .then((result) => {
+            console.log(result.message)
             return sqlCallback('DROP TABLE IF EXISTS user_photos')
         })
         .then((result) => {
@@ -124,24 +128,41 @@ const dropAndRecreateTables = () => {
             console.log(result.message)
             return sqlCallback(`CREATE TABLE user_photos (
                 id                      INT PRIMARY KEY AUTO_INCREMENT,
-                user_id                 INT,
+                user_id                 INT NOT NULL,
                 photo_link              VARCHAR(255),
                 photo_created_date      VARCHAR(255),
                 caption                 VARCHAR(255),
                 instagram_post_id       INT,
+                media_type              VARCHAR(255),
+                video_thumbnail_url     VARCHAR(255),
                 FOREIGN KEY (user_id)   REFERENCES users(id)
+            )`)
+        })
+        .then((result) => {
+            console.log(result.message)
+            return sqlCallback(`CREATE TABLE user_psychometrics (
+                id                                      INT PRIMARY KEY AUTO_INCREMENT,
+                user_id                                 INT NOT NULL,
+                captioned_uncaptioned_ratio             FLOAT,
+                portrait_to_noperson_ratio              FLOAT,
+                mean_hashtags_per_post                  FLOAT,
+                post_frequency                          FLOAT,
+                facial_expression_ratio                 FLOAT,
+                business_entertainment_content_ratio    FLOAT,
+                last_updated                            TIMESTAMP NOT NULL DEFAULT NOW(),
+                FOREIGN KEY (user_id)                   REFERENCES users(id)
             )`)
         })
         .then((result) => {
             console.log(result.message)
             return sqlCallback(`CREATE TABLE user_personality_aspects (
                 id                      INT PRIMARY KEY AUTO_INCREMENT,
-                user_id                 INT,
-                mind                    VARCHAR(255),
-                energy                  VARCHAR(255),
-                nature                  VARCHAR(255),
-                tactics                 VARCHAR(255),
-                identtiy                VARCHAR(255),
+                user_id                 INT NOT NULL,
+                openess                 VARCHAR(255),
+                conscientiousness       VARCHAR(255),
+                extroversion            VARCHAR(255),
+                agreeableness           VARCHAR(255),
+                neuroticism             VARCHAR(255),
                 FOREIGN KEY (user_id)   REFERENCES users(id)
             )`)
         })
@@ -149,7 +170,7 @@ const dropAndRecreateTables = () => {
             console.log(result.message)
             return sqlCallback(`CREATE TABLE user_preferences (
                 id                      INT PRIMARY KEY AUTO_INCREMENT,
-                user_id                 INT,
+                user_id                 INT NOT NULL,
                 partner_gender          VARCHAR(255),
                 partner_age_min         INT,
                 partner_age_max         INT,
@@ -161,7 +182,7 @@ const dropAndRecreateTables = () => {
             console.log(result.message)
             return sqlCallback(`CREATE TABLE user_career_and_education (
                 id                      INT PRIMARY KEY AUTO_INCREMENT,
-                user_id                 INT,
+                user_id                 INT NOT NULL,
                 highest_education_type  VARCHAR(255),
                 education_field         VARCHAR(255),
                 industry_type           VARCHAR(255),
@@ -303,6 +324,31 @@ const createUserIG = (user_id, instagram_id, access_token, instagram_username) =
     })
 }
 
+const updateUserIG = (user_id, instagram_id, access_token, instagram_username) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            await createConnection()
+            const table = 'user_instagram'
+            const sql = `UPDATE ${table} SET instagram_id = ?, access_token = ? , instagram_username = ? WHERE user_id = ?`
+            const params = [instagram_id, access_token, instagram_username, user_id]
+            db.query(sql, params, (error, result) => {
+                if (error) {
+                    console.log(`${error} Problem creating updating user_instagram for ${table}.`)
+                    reject(error)
+                }
+                resolve(rawDataPacketConverter(result))
+            })
+        } catch (error) {
+            console.log(error)
+            reject(error)
+        } finally {
+            closeConnection()
+        }     
+    })
+}
+
+
+
 const getUserInstagrams = (selectBy = '*', searchBy = '') => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -354,13 +400,13 @@ const getUserPhotos = (selectBy = '*', searchBy = '') => {
     })
 }
 
-const createUserPhoto = (user_id, photo_link, photo_created_date, caption, instagram_post_id) => {
+const createUserPhoto = (user_id, photo_link, photo_created_date, caption, instagram_post_id, media_type, video_thumbnail_url) => {
     return new Promise(async (resolve, reject) => {
         try {
             await createConnection()
             const table = 'user_photos'
-            const sql = `INSERT INTO ${table} (user_id, photo_link, photo_created_date, caption, instagram_post_id) VALUES (?, ?, ?, ?, ?)`
-            const params = [user_id, photo_link, photo_created_date, caption, instagram_post_id]
+            const sql = `INSERT INTO ${table} (user_id, photo_link, photo_created_date, caption, instagram_post_id, media_type, video_thumbnail_url) VALUES (?, ?, ?, ?, ?, ?, ?)`
+            const params = [user_id, photo_link, photo_created_date, caption, instagram_post_id, media_type, video_thumbnail_url]
             db.query(sql, params, (error, result) => {
                 if (error) {
                     console.log(`${error} Problem creating user photo and inserting into ${table}.`)
@@ -388,6 +434,7 @@ module.exports = {
     createUser,
     getUserInstagrams,
     createUserIG,
+    updateUserIG,
     getUserPhotos,
     createUserPhoto,
 }

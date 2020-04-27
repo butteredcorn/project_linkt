@@ -4,6 +4,7 @@ const { protectedRoute } = require('../controllers/authentication')
 const { getInstagramAuthWindow, getInstagramAccessToken, getUserInstagramData } = require('../controllers/instagram')
 const { verifyExistingToken } = require('../controllers/json-web-token')
 const db = require('../sql/database-interface')
+const { processInstagramData } = require('../controllers/logic/calculate-metrics')
 
 router.get('/login', protectedRoute, async (req, res) => {
     try {
@@ -36,8 +37,14 @@ router.get('/returnURL', async (req, res) => {
                 req.user.instagram_access_token = instagramData.data.access_token
                 req.user.instagram_id = instagramData.data.user_id
 
-                //create userIG table
-                await db.createUserIG(req.user.id, req.user.instagram_id, req.user.instagram_access_token)
+                //check to see if user exists in db
+                const userIGExists = await db.getUserInstagrams('user_id, access_token', `WHERE user_id = ${req.user.id}`)
+                if(userIGExists.length > 0) {
+                    await db.updateUserIG(req.user.id, req.user.instagram_id, req.user.instagram_access_token)
+                } else {
+                    //create userIG table
+                    await db.createUserIG(req.user.id, req.user.instagram_id, req.user.instagram_access_token)
+                }
                 
                 //console.log(req.user)
 
@@ -64,18 +71,20 @@ router.get('/processData', protectedRoute, async (req, res) => {
 
         //get instagram data --> save to database
         instagramData = await getUserInstagramData(req.user.instagram_access_token)
-        for (let obj of instagramData) {
-            //await not necessary here?
-            await db.createUserPhoto(req.user.id, obj.media_url, obj.timestamp, obj.caption, obj.id)
-        }
-
-        //process instagram data
 
         
+        const metrics = await processInstagramData(instagramData)
+        
 
-        //console.log(instagramData)
+
         //process instagram data
-        res.send(instagramData)
+        //clarifai
+
+
+        console.log(instagramData)
+        console.log(metrics)
+        //process instagram data
+        res.send(instagramData + '\n' + metrics)
 
     } catch (error) {
         console.log(error)

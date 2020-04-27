@@ -1,6 +1,6 @@
 const axios = require('axios')
 const { URLSearchParams } = require('url')
-const { NUM_IG_PHOTOS_PUSHED_TO_DB } = require('../globals')
+const { MINIMUM_IG_PHOTOS } = require('../globals')
 
 const getInstagramAuthWindow = (redirectURI) => {
     return new Promise(async (resolve, reject) => {
@@ -59,10 +59,10 @@ const getInstagramUsername = (access_token, instagram_id) => {
 const getUserInstagramData = (access_token) => {
     return new Promise(async(resolve, reject) => {
         try {
-            axios.get(`https://graph.instagram.com/me/media?fields=id,caption,media_url,media_type,username,timestamp&access_token=${access_token}`)
+            axios.get(`https://graph.instagram.com/me/media?fields=id,caption,media_url,media_type,username,timestamp,thumbnail_url&access_token=${access_token}`)
             .then(result => {
-                if(result.data.data.length > NUM_IG_PHOTOS_PUSHED_TO_DB){
-                    resolve(result.data.data.slice(0, NUM_IG_PHOTOS_PUSHED_TO_DB))
+                if(result.data.data.length < MINIMUM_IG_PHOTOS){
+                    reject(new Error(`User did not meet MINIMUM_IG_PHOTOS requirement of ${MINIMUM_IG_PHOTOS}.`))
                 } else {
                     resolve(result.data.data)
                 }
