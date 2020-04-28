@@ -51,7 +51,7 @@ Theory:
 
 
 
-#### post content ratio - 'business' to 'entertainment'
+#### post content ratio - 'career_focused' to 'entertainment'
 Assumptions:
 * Greater presence of 'business' related tags/content reflects actual work to achieve long term goals
 

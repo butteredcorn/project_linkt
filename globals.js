@@ -16,6 +16,8 @@ module.exports = {
 
     psychometric_constants: {
         POST_FREQUENCY_WINDOW_DAYS: 30,
+        CAREER_FOCUSED_KEYWORDS: ['challenge', 'challenging', 'reflect', 'passion', 'career', 'business', 'development', 'finance', 'money', 'success', 'motivation'],
+        ENTERTAINMENT_KEYWORDS: ['travel', 'fun', 'bar', 'drink', 'drinks', 'cocktail', 'club', 'chill', 'relax'],
     },
 }
 

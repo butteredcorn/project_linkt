@@ -1,5 +1,5 @@
 const { NUM_IG_PHOTOS_PUSHED_TO_DB, MILLISECONDS_PER_DAY, psychometric_constants } = require('../../globals')
-const { POST_FREQUENCY_WINDOW_DAYS } = psychometric_constants
+const { POST_FREQUENCY_WINDOW_DAYS, CAREER_FOCUSED_KEYWORDS, ENTERTAINMENT_KEYWORDS } = psychometric_constants
 const db = require('../../sql/database-interface')
 
 const trimAndPushToDB = (instagramData, user) => {
@@ -12,7 +12,7 @@ const trimAndPushToDB = (instagramData, user) => {
             await db.createConnection()
             //could also filter out all photos without captions instead of just by recency
             for (let obj of instagramData) {
-                //await not necessary here? -- will need to try to 
+                //await omitted here for optimal performance, handle createConnection/closeConnection manually
                 db.createUserPhotoNonHandled(user.id, obj.media_url, obj.timestamp, obj.caption, obj.id, obj.media_type, obj.thumbnail_url)
             }
 
@@ -22,9 +22,9 @@ const trimAndPushToDB = (instagramData, user) => {
             reject(error)
         } finally {
             setTimeout(() => {
-                console.log('connection closed manually')
+                console.log('Database connection closed manually. If enqueue error exists, consider modifying the closeConnection() handler.')
                 db.closeConnection()
-            },5000)
+            }, 5000)
         }
     })
 }
@@ -63,6 +63,8 @@ const calculateNonPhotoDependentData = (instagramData) => {
                 let numHashtags = 0
                 const currentDate = new Date()
                 let postsWithinWindow = 0
+                let careerFocusedWordsFound = 0
+                let entertainmentWordsFound = 0
 
                 //loop through all the data
                 for (let post of instagramData) {
@@ -77,6 +79,15 @@ const calculateNonPhotoDependentData = (instagramData) => {
                         if (post.caption.includes('#')) { //additionally, if hashtag found
                             numHashtags = numHashtags + post.caption.split('#').length - 1  //add the hashtags to total
                         }
+
+                        const wordsArray = post.caption.split(' ')
+                        for (let word of wordsArray) {
+                            if (CAREER_FOCUSED_KEYWORDS.includes(word)) {
+                                careerFocusedWordsFound++
+                            } else if (ENTERTAINMENT_KEYWORDS.includes(word)) {
+                                entertainmentWordsFound++
+                            }
+                        }
                     }
                 }
 
@@ -85,8 +96,8 @@ const calculateNonPhotoDependentData = (instagramData) => {
                 const postFrequencyWithinWindow = postsWithinWindow / POST_FREQUENCY_WINDOW_DAYS
                 const newestPost = instagramData[0].timestamp
                 const oldestPost = instagramData[instagramData.length - 1].timestamp
-
                 const averageDaysBetweenPostsAll = Math.round((Math.abs(new Date(newestPost) - new Date(oldestPost)) / MILLISECONDS_PER_DAY / instagramData.length) * 10)/10
+
 
                 const result = {
                     number_of_posts: instagramData.length,
@@ -98,7 +109,10 @@ const calculateNonPhotoDependentData = (instagramData) => {
                     post_per_day_in_window: postFrequencyWithinWindow,
                     newest_post_date: newestPost,
                     oldest_post_date: oldestPost,
-                    mean_days_between_all_posts: averageDaysBetweenPostsAll
+                    mean_days_between_all_posts: averageDaysBetweenPostsAll,
+                    number_career_focused_words: careerFocusedWordsFound,
+                    number_entertainment_words: entertainmentWordsFound,
+                    careerfocused_entertainment_ratio: careerFocusedWordsFound/entertainmentWordsFound,
                 }
 
                 resolve(result)

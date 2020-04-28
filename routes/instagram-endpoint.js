@@ -81,7 +81,7 @@ router.get('/processData', protectedRoute, async (req, res) => {
         //clarifai
 
 
-        console.log(instagramData)
+        //console.log(instagramData)
         console.log(metrics)
         //process instagram data
         res.send(instagramData)
