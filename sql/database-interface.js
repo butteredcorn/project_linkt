@@ -487,7 +487,7 @@ const getUserMetrics = (selectBy = '*', searchBy = '') => {
 const createUserMetric = (user_id, number_of_posts, number_of_captioned_posts, number_of_hashtags, mean_hashtags_per_post, captioned_uncaptioned_ratio, caption_careerfocused_words, caption_entertainment_words, caption_careerfocused_entertainment_ratio, posts_per_day_recent, most_recent_post_date, oldest_post_date, mean_days_between_all_posts, portrait_to_noperson_ratio, facial_expression_smile_other_ratio, photo_careerfocused_words, photo_entertainment_words, photo_careerfocused_entertainment_ratio) => {
     return new Promise(async (resolve, reject) => {
         try {
-            //await createConnection()
+            await createConnection()
             const table = 'user_psychometrics'
             const sql = `INSERT INTO ${table} (user_id, number_of_posts, number_of_captioned_posts, number_of_hashtags, mean_hashtags_per_post, captioned_uncaptioned_ratio, caption_careerfocused_words, caption_entertainment_words, caption_careerfocused_entertainment_ratio, posts_per_day_recent, most_recent_post_date, oldest_post_date, mean_days_between_all_posts, portrait_to_noperson_ratio, facial_expression_smile_other_ratio, photo_careerfocused_words, photo_entertainment_words, photo_careerfocused_entertainment_ratio) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
             const params = [user_id, number_of_posts, number_of_captioned_posts, number_of_hashtags, mean_hashtags_per_post, captioned_uncaptioned_ratio, caption_careerfocused_words, caption_entertainment_words, caption_careerfocused_entertainment_ratio, posts_per_day_recent, most_recent_post_date, oldest_post_date, mean_days_between_all_posts, portrait_to_noperson_ratio, facial_expression_smile_other_ratio, photo_careerfocused_words, photo_entertainment_words, photo_careerfocused_entertainment_ratio]
@@ -502,7 +502,7 @@ const createUserMetric = (user_id, number_of_posts, number_of_captioned_posts, n
             console.log(error)
             reject(error)
         } finally {
-            //closeConnection()
+            closeConnection()
         }     
     })
 }
