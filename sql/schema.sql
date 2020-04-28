@@ -41,16 +41,27 @@ CREATE TABLE user_photos (
 );
 
 CREATE TABLE user_psychometrics (
-    id                                      INT PRIMARY KEY AUTO_INCREMENT,
-    user_id                                 INT NOT NULL,
-    captioned_uncaptioned_ratio             FLOAT,
-    portrait_to_noperson_ratio              FLOAT,
-    mean_hashtags_per_post                  FLOAT,
-    post_frequency                          FLOAT,
-    facial_expression_ratio                 FLOAT,
-    business_entertainment_content_ratio    FLOAT,
-    last_updated                            TIMESTAMP NOT NULL DEFAULT NOW(),
-    FOREIGN KEY (user_id)                   REFERENCES users(id)
+    id                                          INT PRIMARY KEY AUTO_INCREMENT,
+    user_id                                     INT NOT NULL,
+    number_of_posts                             INT,
+    number_of_captioned_posts                   INT,
+    number_of_hashtags                          INT,
+    mean_hashtags_per_post                      FLOAT,
+    captioned_uncaptioned_ratio                 FLOAT,
+    caption_careerfocused_words                 INT,
+    caption_entertainment_words                 INT,
+    caption_careerfocused_entertainment_ratio   FLOAT,
+    posts_per_day_recent                        FLOAT,
+    most_recent_post_date                       VARCHAR(255),
+    oldest_post_date                            VARCHAR(255),
+    mean_days_between_all_posts                 FLOAT,
+    portrait_to_noperson_ratio                  FLOAT,
+    facial_expression_smile_other_ratio         FLOAT,
+    photo_careerfocused_words                   INT,
+    photo_entertainment_words                   INT,
+    photo_careerfocused_entertainment_ratio     FLOAT,
+    created_at                                  TIMESTAMP NOT NULL DEFAULT NOW(),
+    FOREIGN KEY (user_id)                       REFERENCES users(id)
 );
 
 -- Openness to experience   (inventive/curious vs. consistent/cautious)

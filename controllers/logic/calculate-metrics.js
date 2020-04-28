@@ -80,8 +80,9 @@ const calculateNonPhotoDependentData = (instagramData) => {
                             numHashtags = numHashtags + post.caption.split('#').length - 1  //add the hashtags to total
                         }
 
-                        const wordsArray = post.caption.split(' ')
-                        for (let word of wordsArray) {
+                        const formattedCaption = post.caption.replace('#', '') //remove hashtags
+                        const wordsArray = formattedCaption.split(' ')
+                        for (let word of wordsArray) { //check if caption contains keywords
                             if (CAREER_FOCUSED_KEYWORDS.includes(word)) {
                                 careerFocusedWordsFound++
                             } else if (ENTERTAINMENT_KEYWORDS.includes(word)) {
@@ -98,7 +99,6 @@ const calculateNonPhotoDependentData = (instagramData) => {
                 const oldestPost = instagramData[instagramData.length - 1].timestamp
                 const averageDaysBetweenPostsAll = Math.round((Math.abs(new Date(newestPost) - new Date(oldestPost)) / MILLISECONDS_PER_DAY / instagramData.length) * 10)/10
 
-
                 const result = {
                     number_of_posts: instagramData.length,
                     number_of_captioned_posts: captioned,
@@ -110,9 +110,11 @@ const calculateNonPhotoDependentData = (instagramData) => {
                     newest_post_date: newestPost,
                     oldest_post_date: oldestPost,
                     mean_days_between_all_posts: averageDaysBetweenPostsAll,
-                    number_career_focused_words: careerFocusedWordsFound,
-                    number_entertainment_words: entertainmentWordsFound,
-                    careerfocused_entertainment_ratio: careerFocusedWordsFound/entertainmentWordsFound,
+                    caption_data: {
+                        number_career_focused_words: careerFocusedWordsFound,
+                        number_entertainment_words: entertainmentWordsFound,
+                        careerfocused_entertainment_ratio: careerFocusedWordsFound/entertainmentWordsFound,
+                    } 
                 }
 
                 resolve(result)
@@ -137,8 +139,9 @@ const processInstagramData = (instagramData) => {
         try {
             const result = await calculateNonPhotoDependentData(instagramData)
         
-            resolve(result)
 
+
+            resolve(result)
         } catch (error) {
             reject(error)
         }

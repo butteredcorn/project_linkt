@@ -69,19 +69,21 @@ router.get('/processData', protectedRoute, async (req, res) => {
 
         //console.log(req.user)
 
-        //get instagram data --> save to database
+        //get instagram data
         instagramData = await getUserInstagramData(req.user.instagram_access_token)
-        trimAndPushToDB(instagramData, req.user)
         
         const metrics = await processInstagramData(instagramData)
-        
+
+        //currently does not pass in photo dependent data
+        await db.createUserMetric(req.user.id, metrics.number_of_posts, metrics.number_of_captioned_posts, metrics.number_of_hashtags, metrics.mean_hashtags_per_post, metrics.captioned_uncaptioned_ratio, metrics.number_career_focused_words, metrics.number_entertainment_words, metrics.careerfocused_entertainment_ratio, metrics.post_per_day_in_window, metrics.newest_post_date, metrics.oldest_post_date, metrics.mean_days_between_all_posts)
+
+        //save raw instagram data (do this last for enqueue)
+        trimAndPushToDB(instagramData, req.user)
 
 
         //process instagram data
         //clarifai
 
-
-        //console.log(instagramData)
         console.log(metrics)
         //process instagram data
         res.send(instagramData)
