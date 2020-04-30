@@ -34,6 +34,15 @@ module.exports = function () {
         console.log(user)
         res.send('hello world!' + user)
     })
+
+    app.get('/api', async(req, res) => {
+        try {
+            res.send({ data: 'Hello from express server!'})
+        } catch (error) {
+            console.log(error)
+            res.send({message: 'error.'})
+        }
+    })
     
     return app
 }
