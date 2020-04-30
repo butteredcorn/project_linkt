@@ -1,6 +1,7 @@
 const { NUM_IG_PHOTOS_PUSHED_TO_DB, MILLISECONDS_PER_DAY, psychometric_constants } = require('../../globals')
 const { POST_FREQUENCY_WINDOW_DAYS, CAREER_FOCUSED_KEYWORDS, ENTERTAINMENT_KEYWORDS } = psychometric_constants
 const db = require('../../sql/database-interface')
+const { generalLabelDetection } = require('../image-recognition/clarifai')
 
 const trimAndPushToDB = (instagramData, user) => {
     return new Promise(async(resolve, reject) => {
@@ -128,6 +129,15 @@ const calculateNonPhotoDependentData = (instagramData) => {
 }
 
 
+const calculatePhotoDependentData = (instagramData) => {
+    return new Promise( async(resolve, reject) => {
+        try {
+
+        } catch (error) {
+            
+        }
+    })
+}
 
 
 
