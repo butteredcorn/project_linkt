@@ -1,8 +1,8 @@
-    import express from 'express'
-    import path from 'path'
-    import React from 'react'
-    import ReactDOMServer from 'react-dom/server'
-    import App from './src/App'
+import express from 'express'
+import path from 'path'
+import React from 'react'
+import ReactDOMServer from 'react-dom/server'
+import App from './src/App'
 
 module.exports = function () {
     //const express = require('express')
