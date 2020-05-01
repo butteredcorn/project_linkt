@@ -139,6 +139,10 @@ const calculateNonPhotoDependentData = (instagramData) => {
 /**
  * selectPhotos depends on the instagramData being sorted by recency, (newest post first/lowest index)
  * 
+ * currently: 
+ * 1. filter for recent posts within PHOTO_RECENCY_REQUIREMENT (days), and have captions
+ *    else: backfill with most recent posts up to NUM_PHOTOS_FOR_ANNOTATION
+ * 
  */
 const selectPhotos = (instagramData) => {
     return new Promise(async (resolve, reject) => {
@@ -152,10 +156,7 @@ const selectPhotos = (instagramData) => {
 
                 // 1. if photo meets PHOTO_RECENCY_REQUIREMENT and photo has a caption, add to filtered Array
                 for (let post of instagramData) {
-                    if (post.caption && Math.abs(currentDate - new Date(post.timestamp)) <= PHOTO_RECENCY_REQUIREMENT * MILLISECONDS_PER_DAY) {
-                        
-                        console.log(post.caption)
-
+                    if (post.caption && post.caption != '' && Math.abs(currentDate - new Date(post.timestamp)) <= PHOTO_RECENCY_REQUIREMENT * MILLISECONDS_PER_DAY) {
                         post.position = instagramData.indexOf(post)
                         filteredInstagramData.push(post)
                     }
@@ -205,9 +206,18 @@ const calculatePhotoDependentData = (instagramData) => {
                 //logic for selecting posts from instagram array of posts
                 const filteredInstagramData = await selectPhotos(instagramData)
 
+                //use generalLabelDetection
                 for (let post of filteredInstagramData) {
-                        
+                    let labels
+                    if (post.media_type.toLowerCase() == 'video') {
+                        labels = await generalLabelDetection(post.thumbnail_url)
+                    } else {
+                        labels = await generalLabelDetection(post.media_url)
+                    } 
+                    post.general_labels = labels //raw data
                 }
+
+                
 
                 //determin the following:
                     //raw data?
