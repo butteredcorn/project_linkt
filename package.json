@@ -11,6 +11,7 @@
     "concurrently": "^5.2.0",
     "cookie-parser": "^1.4.5",
     "dotenv": "^8.2.0",
+    "ejs": "^3.1.2",
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",
     "jwt-decode": "^2.2.0",
@@ -23,7 +24,6 @@
     "client": "cd react-app && npm start",
     "server": "nodemon server.js",
     "start": "concurrently --kill-others-on-fail \"nodemon server.js\" \"cd react-app && npm start\""
-
   },
   "author": "justin yee",
   "license": "UNLICENSED",

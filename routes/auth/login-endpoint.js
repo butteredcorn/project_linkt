@@ -8,8 +8,8 @@ const path = require('path')
 const milliSecondsPerDay = 86400000
 
 router.get('/', authUserRedirect, (req, res) => {
-    res.sendFile(path.join(__dirname, '../../content/public/login.html'))
-
+    //res.sendFile(path.join(__dirname, '../../public/login.html'))
+    res.render('login')
 })
 
 router.post('/', (req, res) => {

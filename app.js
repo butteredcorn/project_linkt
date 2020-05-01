@@ -7,8 +7,10 @@ module.exports = function () {
     const { verifyExistingToken } = require('./controllers/json-web-token')
 
     const app = express()
+    app.set('view engine', 'ejs')
 
-    app.use(express.static('./content/public'));
+
+    app.use(express.static('./public'));
     app.use(bodyParser.json())
     app.use(bodyParser.urlencoded({extended: true}))
     app.use(cookieParser())
@@ -23,6 +25,16 @@ module.exports = function () {
     app.use('/database', databaseRoute)
     app.use('/instagram', instagramRoute)
 
+    app.get('/dashboard', protectedRoute, async(req, res) => {
+        try {
+            res.render('dashboard', {
+                
+            })
+        } catch (error) {
+            console.log(error)
+            res.send(error)
+        }
+    })
 
     app.get('/', protectedRoute, async (req, res) => {
         const decode = require('jwt-decode')
