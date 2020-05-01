@@ -23,7 +23,7 @@
   "scripts": {
     "client": "cd react-app && npm start",
     "server": "nodemon server.js",
-    "start": "concurrently --kill-others-on-fail \"nodemon server.js\" \"cd react-app && npm start\""
+    "start": "node server.js"
   },
   "author": "justin yee",
   "license": "UNLICENSED",

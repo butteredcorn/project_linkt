@@ -26,3 +26,7 @@ module.exports = {
 }
 
 //instagram date stamp is in ISO 8601 format
+//json backup for react front end:
+// "client": "cd react-app && npm start",
+// "server": "nodemon server.js",
+// "start": "concurrently --kill-others-on-fail \"nodemon server.js\" \"cd react-app && npm start\""
