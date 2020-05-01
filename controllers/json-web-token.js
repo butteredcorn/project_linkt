@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken')
 
-createNewToken = (content) => {
+const createNewToken = (content) => {
     const key = process.env.JWT_SECRET
     return new Promise((resolve, reject) => {
         if(content) {
@@ -21,7 +21,7 @@ createNewToken = (content) => {
     })
 }
 
-verifyExistingToken = (token) => {
+const verifyExistingToken = (token) => {
     const key = process.env.JWT_SECRET
     return new Promise((resolve, reject) => {
         if(token) {

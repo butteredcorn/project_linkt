@@ -14,7 +14,7 @@ let db = null
 const rawDataPacketConverter = (result) => {
     let formattedResult;
     if (Array.isArray(result) && result.length > 0){
-            for(row of result) {
+            for(let row of result) {
                 // function  will be used on every row returned by the query
                 const objectifyRawPacket = row => ({...row});
                 // iterate over all items and convert the raw packet row -> js object
