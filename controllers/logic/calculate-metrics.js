@@ -100,6 +100,14 @@ const calculateNonPhotoDependentData = (instagramData) => {
                 const oldestPost = instagramData[instagramData.length - 1].timestamp
                 const averageDaysBetweenPostsAll = Math.round((Math.abs(new Date(newestPost) - new Date(oldestPost)) / MILLISECONDS_PER_DAY / instagramData.length) * 10)/10
 
+                let careerFocusedEntertainmentRatio
+                if(entertainmentWordsFound == 0) {
+                    careerFocusedEntertainmentRatio = null
+                } else {
+                    careerFocusedEntertainmentRatio = careerFocusedWordsFound/entertainmentWordsFound
+                }
+
+
                 const result = {
                     number_of_posts: instagramData.length,
                     number_of_captioned_posts: captioned,
@@ -114,7 +122,7 @@ const calculateNonPhotoDependentData = (instagramData) => {
                     caption_data: {
                         number_career_focused_words: careerFocusedWordsFound,
                         number_entertainment_words: entertainmentWordsFound,
-                        careerfocused_entertainment_ratio: careerFocusedWordsFound/entertainmentWordsFound,
+                        careerfocused_entertainment_ratio: careerFocusedEntertainmentRatio,
                     } 
                 }
 
@@ -145,6 +153,9 @@ const selectPhotos = (instagramData) => {
                 // 1. if photo meets PHOTO_RECENCY_REQUIREMENT and photo has a caption, add to filtered Array
                 for (let post of instagramData) {
                     if (post.caption && Math.abs(currentDate - new Date(post.timestamp)) <= PHOTO_RECENCY_REQUIREMENT * MILLISECONDS_PER_DAY) {
+                        
+                        console.log(post.caption)
+
                         post.position = instagramData.indexOf(post)
                         filteredInstagramData.push(post)
                     }
