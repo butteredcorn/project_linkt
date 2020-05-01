@@ -224,7 +224,7 @@ const processInstagramData = (instagramData) => {
         try {
             const result = await calculateNonPhotoDependentData(instagramData)
         
-            await calculatePhotoDependentData()
+            await calculatePhotoDependentData(instagramData)
 
             resolve(result)
         } catch (error) {
