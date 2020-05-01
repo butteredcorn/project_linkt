@@ -1,5 +1,5 @@
 const { NUM_IG_PHOTOS_PUSHED_TO_DB, MILLISECONDS_PER_DAY, psychometric_constants } = require('../../globals')
-const { POST_FREQUENCY_WINDOW_DAYS, CAREER_FOCUSED_KEYWORDS, ENTERTAINMENT_KEYWORDS } = psychometric_constants
+const { POST_FREQUENCY_WINDOW_DAYS, CAREER_FOCUSED_KEYWORDS, ENTERTAINMENT_KEYWORDS, PHOTO_RECENCY_REQUIREMENT, NUM_PHOTOS_FOR_ANNOTATION } = psychometric_constants
 const db = require('../../sql/database-interface')
 const { generalLabelDetection } = require('../image-recognition/clarifai')
 
@@ -128,13 +128,88 @@ const calculateNonPhotoDependentData = (instagramData) => {
     })
 }
 
+/**
+ * selectPhotos depends on the instagramData being sorted by recency, (newest post first/lowest index)
+ * 
+ */
+const selectPhotos = (instagramData) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (instagramData && instagramData.length <= NUM_PHOTOS_FOR_ANNOTATION) {
+                resolve(instagramData)
+                reject(new Error(`WARN: instagramData passed in has less than or equal to NUM_PHOTOS_FOR_ANNOTATION. It's length was ${instagramData.length}, while NUM_PHOTOS_FOR_ANNOTATION is ${NUM_PHOTOS_FOR_ANNOTATION}.`))
+            } else {
+                const currentDate = new Date()
+                const filteredInstagramData = []
 
+                // 1. if photo meets PHOTO_RECENCY_REQUIREMENT and photo has a caption, add to filtered Array
+                for (let post of instagramData) {
+                    if (post.caption && Math.abs(currentDate - new Date(post.timestamp)) <= PHOTO_RECENCY_REQUIREMENT * MILLISECONDS_PER_DAY) {
+                        filteredInstagramData.push(post)
+                    }
+                }
+                
+                // 2. check to see if filtered Array has NUM_PHOTOS_FOR_ANNOTATION, if yes, resolve, if no, --> 3.
+                if (filteredInstagramData.length == NUM_PHOTOS_FOR_ANNOTATION) {
+                    resolve(filteredInstagramData)
+
+                //3a. remove excess photos if any
+                } else if (filteredInstagramData > NUM_PHOTOS_FOR_ANNOTATION) {
+                    resolve(filteredInstagramData.slice(0, NUM_PHOTOS_FOR_ANNOTATION - 1))
+
+                //3b. if not enough photos, back fill array with most recent photos without a caption, --> resolve.
+                } else {
+
+                    //check to see if the post has already been added, if not add.
+                    for (let post of instagramData) {
+                        if(filteredInstagramData.length < NUM_PHOTOS_FOR_ANNOTATION) {
+                            const postExists = filteredInstagramData.some(obj => obj.id === post.id);
+                            if (!postExists) filteredInstagramData.push(post);
+                        }
+                    }
+                    resolve(filteredInstagramData)
+                }
+            }
+        } catch (error) {
+            reject(error)
+        }
+    })
+}
+
+
+
+/**
+ * PSYCHOMETRICS DEPENDENT ON PHOTO RECOGNITION* (RESOURCE INTENSIVE)
+ * 
+ */
 const calculatePhotoDependentData = (instagramData) => {
     return new Promise( async(resolve, reject) => {
         try {
+            if (instagramData && instagramData.length > 0) {
 
+                //logic for selecting posts from instagram array of posts
+                const filteredInstagramData = await selectPhotos(instagramData)
+
+                console.log(filteredInstagramData)
+
+                for (let post of filteredInstagramData) {
+                        
+                }
+
+                //determin the following:
+                    //raw data?
+                    //portrait_to_noperson_ratio
+                    //facial_expression_smile_other_ratio
+                    //photo_careerfocused_words
+                    //photo_entertainment_words
+                    //photo_careerfocused_entertainment_ratio
+
+
+            } else {
+                reject(new Error(`instagramData not defined or not iterable: ${instagramData}.`))
+            }
         } catch (error) {
-            
+            reject(error)
         }
     })
 }
@@ -149,7 +224,7 @@ const processInstagramData = (instagramData) => {
         try {
             const result = await calculateNonPhotoDependentData(instagramData)
         
-
+            await calculatePhotoDependentData()
 
             resolve(result)
         } catch (error) {

@@ -1,5 +1,6 @@
 const verify = require('./json-web-token').verifyExistingToken
 const loginPage = '/login'
+const dashboard = '/dashboard'
 
 const protectedRoute = (req, res, next) => {
     //if token exists
@@ -25,7 +26,7 @@ const authedUserRedirect = (req, res, next) => {
     if(req.cookies && req.cookies.token) {
         verify(req.cookies.token)
             .then((user) => {
-                res.redirect(process.env.AUTHED_USER_REDIRECT_PAGE)
+                res.redirect(dashboard)
             })
             //if error, log error and do nothing
             .catch((error) => {

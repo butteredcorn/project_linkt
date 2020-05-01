@@ -7,9 +7,11 @@ const path = require('path')
 
 const milliSecondsPerDay = 86400000
 
-router.get('/', authUserRedirect, (req, res) => {
-    res.sendFile(path.join(__dirname, '../../content/public/login.html'))
+const dashboard = '/dashboard'
 
+router.get('/', authUserRedirect, (req, res) => {
+    //res.sendFile(path.join(__dirname, '../../public/login.html'))
+    res.render('login')
 })
 
 router.post('/', (req, res) => {
@@ -25,7 +27,7 @@ router.post('/', (req, res) => {
                 res.cookie('token', token, { maxAge: milliSecondsPerDay })
             })
             .then(() => {
-                res.redirect('/')
+                res.redirect(dashboard)
             })
             .catch((error) => {
                 console.log(error)
