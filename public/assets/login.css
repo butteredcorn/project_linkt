@@ -1,3 +1,43 @@
+* {
+    color: #FAFAFA;
+}
+
 .main-container {
     background-color: #3BA3A8;
+    height: 100vw;
+}
+
+main {
+    height: 80vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+
+.secondary-color {
+    background-color: #3BA3A8;
+}
+
+.sign-in {
+    padding-bottom: 0.5em;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+
+.login {
+    background-color: #ED2265;
+    border: none;
+    padding-top: 0.2em;
+    padding-bottom: 0.2em;
+    padding-left:0.5em;
+    padding-right: 0.5em;
+}
+
+form > * {
+    margin-left: 0.25em;
+    margin-right: 0.25em;
 }

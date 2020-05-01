@@ -19,22 +19,13 @@ module.exports = function () {
     const signUpRoute = require('./routes/auth/signup-endpoint')
     const databaseRoute = require('./routes/database-endpoints')
     const instagramRoute = require('./routes/instagram-endpoint')
+    const applicationUIRoute = require('./routes/application-ui')
     
     app.use('/login', loginRoute)
     app.use('/signup', signUpRoute)
     app.use('/database', databaseRoute)
     app.use('/instagram', instagramRoute)
-
-    app.get('/dashboard', protectedRoute, async(req, res) => {
-        try {
-            res.render('dashboard', {
-                
-            })
-        } catch (error) {
-            console.log(error)
-            res.send(error)
-        }
-    })
+    app.use('/', applicationUIRoute)
 
     app.get('/', protectedRoute, async (req, res) => {
         const decode = require('jwt-decode')
@@ -44,7 +35,7 @@ module.exports = function () {
             console.log('Token accepted.')
         }
         console.log(user)
-        res.send('hello world!' + user)
+        res.redirect('/dashboard')
     })
 
     app.get('/api', async(req, res) => {

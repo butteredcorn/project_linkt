@@ -11,15 +11,24 @@
 </head>
 <body>
     <div class="main-container">
-        <main>
+        <main class="secondary-color">
+            <div class="logo-container">
+                <img class="main-logo" src="/assets/icons/logo.png" alt="linkt-logo">
+            </div>
+
+            <div class="name-container">
+                <h1 class="name">LINKT</h1>
+            </div>
+
             <div class='login-form'>
-                <h1>Sign In</h1>
-                    <form method='post' action='/login'>
-                        <input type='text' placeholder='Email' name='email' required>
-                        <input type='password' placeholder='Password' name='password' required>
-                        <button class='login' type='submit'>Login</button>
-                    </form>
-                </div>
+            <h1 class="sign-in">Sign In</h1>
+                <form method='post' action='/login'>
+                    <input type='text' placeholder=' Email' name='email' required>
+                    <input type='password' placeholder=' Password' name='password' required>
+                    <button class='login' type='submit'> Login </button>
+                </form>
+            </div>
+
             <div>
                 <h1>Not a Member? <a href="/signup">Sign Up</a></h1>
             </div>

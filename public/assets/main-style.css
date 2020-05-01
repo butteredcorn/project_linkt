@@ -12,6 +12,25 @@ body {
     height: 100vh;
 }
 
+a {
+    color: #3f729b;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: none;
+}
+
+.back-button {
+    max-width: 30px;
+}
+
+input {
+    border: none;
+    padding: 0.2em;
+    border-radius: 15px;
+}
+
 .header-container {    
     background-color: #FAFAFA;
     border-bottom: 1px lightgrey solid;
@@ -45,11 +64,6 @@ header {
     height: 50px;
 }
 
-.main-container {
-    padding-top: 4em;
-    padding-bottom: 8em;
-}
-
 main {
     background-color: #FAFAFA;
     display: flex;
@@ -65,12 +79,6 @@ button {
     color: #FAFAFA;
     font-weight: bolder;
 }
-
-
-main > * {
-    padding-top: 4em;
-}
-
 
 
 .footer-container {
@@ -94,6 +102,10 @@ footer {
 
 
 @media only screen and (max-width: 500px) {
+    * {
+        font-size: 10px;
+    }
+
     main {
         width: 100vw;
     }
