@@ -145,6 +145,7 @@ const selectPhotos = (instagramData) => {
                 // 1. if photo meets PHOTO_RECENCY_REQUIREMENT and photo has a caption, add to filtered Array
                 for (let post of instagramData) {
                     if (post.caption && Math.abs(currentDate - new Date(post.timestamp)) <= PHOTO_RECENCY_REQUIREMENT * MILLISECONDS_PER_DAY) {
+                        post.position = instagramData.indexOf(post)
                         filteredInstagramData.push(post)
                     }
                 }
@@ -164,7 +165,10 @@ const selectPhotos = (instagramData) => {
                     for (let post of instagramData) {
                         if(filteredInstagramData.length < NUM_PHOTOS_FOR_ANNOTATION) {
                             const postExists = filteredInstagramData.some(obj => obj.id === post.id);
-                            if (!postExists) filteredInstagramData.push(post);
+                            if (!postExists) {
+                                post.position = instagramData.indexOf(post)
+                                filteredInstagramData.push(post)
+                            }
                         }
                     }
                     resolve(filteredInstagramData)
@@ -190,8 +194,6 @@ const calculatePhotoDependentData = (instagramData) => {
                 //logic for selecting posts from instagram array of posts
                 const filteredInstagramData = await selectPhotos(instagramData)
 
-                console.log(filteredInstagramData)
-
                 for (let post of filteredInstagramData) {
                         
                 }
@@ -204,7 +206,7 @@ const calculatePhotoDependentData = (instagramData) => {
                     //photo_entertainment_words
                     //photo_careerfocused_entertainment_ratio
 
-
+                resolve(filteredInstagramData)
             } else {
                 reject(new Error(`instagramData not defined or not iterable: ${instagramData}.`))
             }
@@ -224,7 +226,8 @@ const processInstagramData = (instagramData) => {
         try {
             const result = await calculateNonPhotoDependentData(instagramData)
         
-            await calculatePhotoDependentData(instagramData)
+            const result2 = await calculatePhotoDependentData(instagramData)
+            console.log(result2)
 
             resolve(result)
         } catch (error) {
