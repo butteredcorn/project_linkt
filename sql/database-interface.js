@@ -132,7 +132,7 @@ const dropAndRecreateTables = () => {
             console.log(result.message)
             return sqlCallback(`CREATE TABLE user_photos (
                 id                      INT PRIMARY KEY AUTO_INCREMENT,
-                instagram_photo_id      BIGINT NOT NULL UNIQUE,
+                instagram_post_id       BIGINT NOT NULL UNIQUE,
                 user_id                 INT NOT NULL,
                 photo_link              VARCHAR(255),
                 photo_created_date      VARCHAR(255),
@@ -146,10 +146,10 @@ const dropAndRecreateTables = () => {
             console.log(result.message)
             return sqlCallback(`CREATE TABLE photo_labels (
                 id                      INT PRIMARY KEY AUTO_INCREMENT,
-                instagram_photo_id      BIGINT,
+                instagram_post_id       BIGINT,
                 label                   VARCHAR(255),
                 score                   FLOAT,
-                FOREIGN KEY (instagram_photo_id)  REFERENCES user_photos(instagram_photo_id)
+                FOREIGN KEY (instagram_post_id)  REFERENCES user_photos(instagram_post_id)
             )`)
         })
         .then((result) => {
@@ -498,13 +498,13 @@ const getPhotoLabels = (selectBy = '*', searchBy = '') => {
     })
 }
 
-const createPhotoLabelNonHandled = (instagram_photo_id, label, score) => {
+const createPhotoLabelNonHandled = (instagram_post_id, label, score) => {
     return new Promise(async (resolve, reject) => {
         try {
             //await createConnection()
             const table = 'photo_labels'
-            const sql = `INSERT INTO ${table} (instagram_photo_id, label, score) VALUES (?, ?, ?)`
-            const params = [instagram_photo_id, label, score]
+            const sql = `INSERT INTO ${table} (instagram_post_id, label, score) VALUES (?, ?, ?)`
+            const params = [instagram_post_id, label, score]
             db.query(sql, params, (error, result) => {
                 if (error) {
                     console.log(`${error} Problem creating photo label and inserting into ${table}.`)
