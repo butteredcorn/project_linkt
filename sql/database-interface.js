@@ -150,7 +150,7 @@ const dropAndRecreateTables = () => {
                 instagram_photo_id      INT,
                 label                   VARCHAR(255),
                 score                   FLOAT,
-                FOREIGN KEY (photo_id)  REFERENCES user_photos(id)
+                FOREIGN KEY (instagram_photo_id)  REFERENCES user_photos(id)
             )`)
         })
         .then((result) => {
