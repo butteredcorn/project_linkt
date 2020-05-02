@@ -132,12 +132,11 @@ const dropAndRecreateTables = () => {
             console.log(result.message)
             return sqlCallback(`CREATE TABLE user_photos (
                 id                      INT PRIMARY KEY AUTO_INCREMENT,
-                instagram_photo_id      INT NOT NULL UNIQUE,
+                instagram_photo_id      BIGINT NOT NULL UNIQUE,
                 user_id                 INT NOT NULL,
                 photo_link              VARCHAR(255),
                 photo_created_date      VARCHAR(255),
                 caption                 VARCHAR(255),
-                instagram_post_id       INT,
                 media_type              VARCHAR(255),
                 video_thumbnail_url     VARCHAR(255),
                 FOREIGN KEY (user_id)   REFERENCES users(id)
@@ -147,7 +146,7 @@ const dropAndRecreateTables = () => {
             console.log(result.message)
             return sqlCallback(`CREATE TABLE photo_labels (
                 id                      INT PRIMARY KEY AUTO_INCREMENT,
-                instagram_photo_id      INT,
+                instagram_photo_id      BIGINT,
                 label                   VARCHAR(255),
                 score                   FLOAT,
                 FOREIGN KEY (instagram_photo_id)  REFERENCES user_photos(instagram_photo_id)
@@ -426,13 +425,13 @@ const getUserPhotos = (selectBy = '*', searchBy = '') => {
     })
 }
 
-const createUserPhoto = (instagram_photo_id, user_id, photo_link, photo_created_date, caption, instagram_post_id, media_type, video_thumbnail_url) => {
+const createUserPhoto = (instagram_post_id, user_id, photo_link, photo_created_date, caption, media_type, video_thumbnail_url) => {
     return new Promise(async (resolve, reject) => {
         try {
             await createConnection()
             const table = 'user_photos'
-            const sql = `INSERT INTO ${table} (instagram_photo_id, user_id, photo_link, photo_created_date, caption, instagram_post_id, media_type, video_thumbnail_url) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`
-            const params = [instagram_photo_id, user_id, photo_link, photo_created_date, caption, instagram_post_id, media_type, video_thumbnail_url]
+            const sql = `INSERT INTO ${table} (instagram_post_id, user_id, photo_link, photo_created_date, caption, media_type, video_thumbnail_url) VALUES (?, ?, ?, ?, ?, ?, ?)`
+            const params = [instagram_post_id, user_id, photo_link, photo_created_date, caption, media_type, video_thumbnail_url]
             db.query(sql, params, (error, result) => {
                 if (error) {
                     console.log(`${error} Problem creating user photo and inserting into ${table}.`)
@@ -449,13 +448,13 @@ const createUserPhoto = (instagram_photo_id, user_id, photo_link, photo_created_
     })
 }
 
-const createUserPhotoNonHandled = (instagram_photo_id, user_id, photo_link, photo_created_date, caption, instagram_post_id, media_type, video_thumbnail_url) => {
+const createUserPhotoNonHandled = (instagram_post_id, user_id, photo_link, photo_created_date, caption, media_type, video_thumbnail_url) => {
     return new Promise(async (resolve, reject) => {
         try {
             //await createConnection()
             const table = 'user_photos'
-            const sql = `INSERT INTO ${table} (instagram_photo_id, user_id, photo_link, photo_created_date, caption, instagram_post_id, media_type, video_thumbnail_url) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`
-            const params = [instagram_photo_id, user_id, photo_link, photo_created_date, caption, instagram_post_id, media_type, video_thumbnail_url]
+            const sql = `INSERT INTO ${table} (instagram_post_id, user_id, photo_link, photo_created_date, caption, media_type, video_thumbnail_url) VALUES (?, ?, ?, ?, ?, ?, ?)`
+            const params = [instagram_post_id, user_id, photo_link, photo_created_date, caption, media_type, video_thumbnail_url]
             db.query(sql, params, (error, result) => {
                 if (error) {
                     console.log(`${error} Problem creating user photo and inserting into ${table}.`)

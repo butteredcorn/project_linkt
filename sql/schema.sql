@@ -31,12 +31,11 @@ CREATE TABLE user_instagram (
 
 CREATE TABLE user_photos (
     id                      INT PRIMARY KEY AUTO_INCREMENT,
-    instagram_photo_id      INT NOT NULL UNIQUE,
+    instagram_photo_id      BIGINT NOT NULL UNIQUE,
     user_id                 INT NOT NULL,
     photo_link              VARCHAR(255),
     photo_created_date      VARCHAR(255),
     caption                 VARCHAR(255),
-    instagram_post_id       INT,
     media_type              VARCHAR(255),
     video_thumbnail_url     VARCHAR(255),
     FOREIGN KEY (user_id)   REFERENCES users(id)
@@ -44,10 +43,10 @@ CREATE TABLE user_photos (
 
 CREATE TABLE photo_labels (
     id                      INT PRIMARY KEY AUTO_INCREMENT,
-    instagram_photo_id      INT,
+    instagram_photo_id      BIGINT,
     label                   VARCHAR(255),
     score                   FLOAT,
-    FOREIGN KEY (instagram_photo_id)  REFERENCES user_photos(id)
+    FOREIGN KEY (instagram_photo_id)  REFERENCES user_photos(instagram_photo_id)
 );
 
 CREATE TABLE user_psychometrics (
