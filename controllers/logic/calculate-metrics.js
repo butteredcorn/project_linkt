@@ -21,17 +21,18 @@ const trimAndPushToDB = (instagramData, user) => {
             //could also filter out all photos without captions instead of just by recency
             for (let obj of instagramData) { //raw instagram data
                 //await omitted here for optimal performance, handle createConnection/closeConnection manually
+                console.log(instagramData)
                 db.createUserPhotoNonHandled(obj.id, user.id, obj.media_url, obj.timestamp, obj.caption, obj.id, obj.media_type, obj.thumbnail_url)
 
-                if (obj.general_labels) {
-                    const labelsArray = obj.general_labels.labels
-                    for (let label of labelsArray) {
-                        //awaits currently not handled, so time out the creation
-                        setTimeout(() => {
-                            db.createPhotoLabelNonHandled(obj.id, label.label, label.score)
-                        }, timeout * timeoutFactor)
-                    }
-                }
+                // if (obj.general_labels) {
+                //     const labelsArray = obj.general_labels.labels
+                //     for (let label of labelsArray) {
+                //         //awaits currently not handled, so time out the creation
+                //         setTimeout(() => {
+                //             db.createPhotoLabelNonHandled(obj.id, label.label, label.score)
+                //         }, timeout * timeoutFactor)
+                //     }
+                // }
             }
 
             resolve('Uploaded to database.') //resolve back the same data as inputted
