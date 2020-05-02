@@ -18,11 +18,16 @@ const trimAndPushToDB = (instagramData, user) => {
                 instagramData = instagramData.slice(0, NUM_IG_PHOTOS_PUSHED_TO_DB)
             }
             await db.createConnection()
+
+            //console.log(instagramData)
+
             //could also filter out all photos without captions instead of just by recency
             for (let obj of instagramData) { //raw instagram data
                 //await omitted here for optimal performance, handle createConnection/closeConnection manually
-                console.log(instagramData)
-                db.createUserPhotoNonHandled(obj.id, user.id, obj.media_url, obj.timestamp, obj.caption, obj.id, obj.media_type, obj.thumbnail_url)
+                
+                console.log(obj)
+                console.log(obj.id)
+                //db.createUserPhotoNonHandled(obj.id, user.id, obj.media_url, obj.timestamp, obj.caption, obj.id, obj.media_type, obj.thumbnail_url)
 
                 // if (obj.general_labels) {
                 //     const labelsArray = obj.general_labels.labels
