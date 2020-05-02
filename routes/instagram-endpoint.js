@@ -81,12 +81,9 @@ router.get('/processData', protectedRoute, async (req, res) => {
         //save raw instagram data (do this inbetween non-photo-dependent data calc and photo-dependent data calc for db enqueue)
         trimAndPushToDB(instagramData, req.user)
 
-        
-
-        //clarifai
 
         console.log(metrics)
-        //process instagram data
+        
         res.send(instagramData)
 
     } catch (error) {

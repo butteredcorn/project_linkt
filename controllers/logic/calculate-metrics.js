@@ -3,6 +3,13 @@ const { POST_FREQUENCY_WINDOW_DAYS, CAREER_FOCUSED_KEYWORDS, ENTERTAINMENT_KEYWO
 const db = require('../../sql/database-interface')
 const { generalLabelDetection } = require('../image-recognition/clarifai')
 
+const timeout = 5000
+const timeoutFactor = 0.1
+
+/**
+ * DEPENDS ON BOTH NON-PHOTO DEPENDENT AND PHOTO DEPENDENT DATA
+ * 
+ */
 const trimAndPushToDB = (instagramData, user) => {
     return new Promise(async(resolve, reject) => {
         try {
@@ -12,9 +19,19 @@ const trimAndPushToDB = (instagramData, user) => {
             }
             await db.createConnection()
             //could also filter out all photos without captions instead of just by recency
-            for (let obj of instagramData) {
+            for (let obj of instagramData) { //raw instagram data
                 //await omitted here for optimal performance, handle createConnection/closeConnection manually
-                db.createUserPhotoNonHandled(user.id, obj.media_url, obj.timestamp, obj.caption, obj.id, obj.media_type, obj.thumbnail_url)
+                db.createUserPhotoNonHandled(obj.id, user.id, obj.media_url, obj.timestamp, obj.caption, obj.id, obj.media_type, obj.thumbnail_url)
+
+                if (obj.general_labels) {
+                    const labelsArray = obj.general_labels.labels
+                    for (let label of labelsArray) {
+                        //awaits currently not handled, so time out the creation
+                        setTimeout(() => {
+                            db.createPhotoLabelNonHandled(obj.id, label.label, label.score)
+                        }, timeout * timeoutFactor)
+                    }
+                }
             }
 
             resolve('Uploaded to database.') //resolve back the same data as inputted
@@ -25,7 +42,7 @@ const trimAndPushToDB = (instagramData, user) => {
             setTimeout(() => {
                 console.log('Database connection closed manually. If enqueue error exists, consider modifying the closeConnection() handler.')
                 db.closeConnection()
-            }, 5000)
+            }, timeout)
         }
     })
 }
@@ -217,7 +234,7 @@ const calculatePhotoDependentData = (instagramData) => {
                     post.general_labels = labels //raw data
                 }
 
-                
+
 
                 //determin the following:
                     //raw data?
@@ -247,9 +264,11 @@ const processInstagramData = (instagramData) => {
         try {
             const result = await calculateNonPhotoDependentData(instagramData)
         
+            //currently, this modified the original instagramData -- to stop this behavior, would need to duplicate the data first and work off duplicated copy
             const result2 = await calculatePhotoDependentData(instagramData)
             console.log(result2)
 
+            //instagramData in the instagram-endpoint is being modfiied by this function.
             resolve(result)
         } catch (error) {
             reject(error)

@@ -2,6 +2,7 @@ DROP TABLE IF EXISTS user_career_and_education;
 DROP TABLE IF EXISTS user_preferences;
 DROP TABLE IF EXISTS user_personality_aspects;
 DROP TABLE IF EXISTS user_psychometrics;
+DROP TABLE IF EXISTS photo_labels;
 DROP TABLE IF EXISTS user_photos;
 DROP TABLE IF EXISTS user_instagram;
 DROP TABLE IF EXISTS users;
@@ -30,6 +31,7 @@ CREATE TABLE user_instagram (
 
 CREATE TABLE user_photos (
     id                      INT PRIMARY KEY AUTO_INCREMENT,
+    instagram_photo_id      INT NOT NULL UNIQUE,
     user_id                 INT NOT NULL,
     photo_link              VARCHAR(255),
     photo_created_date      VARCHAR(255),
@@ -38,6 +40,14 @@ CREATE TABLE user_photos (
     media_type              VARCHAR(255),
     video_thumbnail_url     VARCHAR(255),
     FOREIGN KEY (user_id)   REFERENCES users(id)
+);
+
+CREATE TABLE photo_labels (
+    id                      INT PRIMARY KEY AUTO_INCREMENT,
+    instagram_photo_id      INT,
+    label                   VARCHAR(255),
+    score                   FLOAT,
+    FOREIGN KEY (photo_id)  REFERENCES user_photos(id)
 );
 
 CREATE TABLE user_psychometrics (

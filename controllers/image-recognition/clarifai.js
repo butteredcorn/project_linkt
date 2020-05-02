@@ -7,7 +7,7 @@ const { CLARIFAI_KEY } = require('../../globals')
 //     throw new Error('CLARIFAI_KEY missing')
 // }
 
-const apiKEy = CLARIFAI_KEY
+const apiKEy = CLARIFAI_KEY || process.env.CLARIFAI_KEY
       
 
 const generalLabelDetection = (imageURL, option) => {

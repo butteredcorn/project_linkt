@@ -88,6 +88,10 @@ const dropAndRecreateTables = () => {
         })
         .then((result) => {
             console.log(result.message)
+            return sqlCallback('DROP TABLE IF EXISTS photo_labels')
+        })
+        .then((result) => {
+            console.log(result.message)
             return sqlCallback('DROP TABLE IF EXISTS user_photos')
         })
         .then((result) => {
@@ -128,6 +132,7 @@ const dropAndRecreateTables = () => {
             console.log(result.message)
             return sqlCallback(`CREATE TABLE user_photos (
                 id                      INT PRIMARY KEY AUTO_INCREMENT,
+                instagram_photo_id      INT NOT NULL UNIQUE,
                 user_id                 INT NOT NULL,
                 photo_link              VARCHAR(255),
                 photo_created_date      VARCHAR(255),
@@ -136,6 +141,16 @@ const dropAndRecreateTables = () => {
                 media_type              VARCHAR(255),
                 video_thumbnail_url     VARCHAR(255),
                 FOREIGN KEY (user_id)   REFERENCES users(id)
+            )`)
+        })
+        .then((result) => {
+            console.log(result.message)
+            return sqlCallback(`CREATE TABLE photo_labels (
+                id                      INT PRIMARY KEY AUTO_INCREMENT,
+                instagram_photo_id      INT,
+                label                   VARCHAR(255),
+                score                   FLOAT,
+                FOREIGN KEY (photo_id)  REFERENCES user_photos(id)
             )`)
         })
         .then((result) => {
@@ -411,13 +426,13 @@ const getUserPhotos = (selectBy = '*', searchBy = '') => {
     })
 }
 
-const createUserPhoto = (user_id, photo_link, photo_created_date, caption, instagram_post_id, media_type, video_thumbnail_url) => {
+const createUserPhoto = (instagram_photo_id, user_id, photo_link, photo_created_date, caption, instagram_post_id, media_type, video_thumbnail_url) => {
     return new Promise(async (resolve, reject) => {
         try {
             await createConnection()
             const table = 'user_photos'
-            const sql = `INSERT INTO ${table} (user_id, photo_link, photo_created_date, caption, instagram_post_id, media_type, video_thumbnail_url) VALUES (?, ?, ?, ?, ?, ?, ?)`
-            const params = [user_id, photo_link, photo_created_date, caption, instagram_post_id, media_type, video_thumbnail_url]
+            const sql = `INSERT INTO ${table} (instagram_photo_id, user_id, photo_link, photo_created_date, caption, instagram_post_id, media_type, video_thumbnail_url) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`
+            const params = [instagram_photo_id, user_id, photo_link, photo_created_date, caption, instagram_post_id, media_type, video_thumbnail_url]
             db.query(sql, params, (error, result) => {
                 if (error) {
                     console.log(`${error} Problem creating user photo and inserting into ${table}.`)
@@ -434,13 +449,13 @@ const createUserPhoto = (user_id, photo_link, photo_created_date, caption, insta
     })
 }
 
-const createUserPhotoNonHandled = (user_id, photo_link, photo_created_date, caption, instagram_post_id, media_type, video_thumbnail_url) => {
+const createUserPhotoNonHandled = (instagram_photo_id, user_id, photo_link, photo_created_date, caption, instagram_post_id, media_type, video_thumbnail_url) => {
     return new Promise(async (resolve, reject) => {
         try {
             //await createConnection()
             const table = 'user_photos'
-            const sql = `INSERT INTO ${table} (user_id, photo_link, photo_created_date, caption, instagram_post_id, media_type, video_thumbnail_url) VALUES (?, ?, ?, ?, ?, ?, ?)`
-            const params = [user_id, photo_link, photo_created_date, caption, instagram_post_id, media_type, video_thumbnail_url]
+            const sql = `INSERT INTO ${table} (instagram_photo_id, user_id, photo_link, photo_created_date, caption, instagram_post_id, media_type, video_thumbnail_url) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`
+            const params = [instagram_photo_id, user_id, photo_link, photo_created_date, caption, instagram_post_id, media_type, video_thumbnail_url]
             db.query(sql, params, (error, result) => {
                 if (error) {
                     console.log(`${error} Problem creating user photo and inserting into ${table}.`)
@@ -456,6 +471,57 @@ const createUserPhotoNonHandled = (user_id, photo_link, photo_created_date, capt
         }     
     })
 }
+
+/**
+ * photo_labels
+ * @param {*} selectBy 
+ * @param {*} searchBy 
+ */
+const getPhotoLabels = (selectBy = '*', searchBy = '') => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            await createConnection()
+            const table = 'photo_labels'
+            const sql = `SELECT ${selectBy} FROM ${table} ${searchBy}`
+            db.query(sql, (error, result) => {
+                if (error) {
+                    console.log(`Problem searching for ${table} by ${searchBy}.`)
+                    reject(error)
+                }
+                resolve(rawDataPacketConverter(result))
+            })
+        } catch (error) {
+            console.log(error)
+            reject(error)
+        } finally {
+            closeConnection()
+        }
+    })
+}
+
+const createPhotoLabelNonHandled = (instagram_photo_id, label, score) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            //await createConnection()
+            const table = 'photo_labels'
+            const sql = `INSERT INTO ${table} (instagram_photo_id, label, score) VALUES (?, ?, ?)`
+            const params = [instagram_photo_id, label, score]
+            db.query(sql, params, (error, result) => {
+                if (error) {
+                    console.log(`${error} Problem creating photo label and inserting into ${table}.`)
+                    reject(error)
+                }
+                resolve(rawDataPacketConverter(result))
+            })
+        } catch (error) {
+            console.log(error)
+            reject(error)
+        } finally {
+            //closeConnection()
+        }     
+    })
+}
+
 
 /**
  * user_psychometrics
@@ -521,6 +587,8 @@ module.exports = {
     getUserPhotos,
     createUserPhoto,
     createUserPhotoNonHandled,
+    getPhotoLabels,
+    createPhotoLabelNonHandled,
     getUserMetrics,
     createUserMetric,
 }
