@@ -23,6 +23,12 @@ module.exports = {
         NUM_PHOTOS_FOR_ANNOTATION: 5,
 
     },
+
+    metric_calculation_constants: {
+        SAVE_LABEL_DATA: false,
+        TIMEOUT: 5000,
+        TIMEOUT_FACTOR: 0.1,
+    }
 }
 
 //instagram date stamp is in ISO 8601 format

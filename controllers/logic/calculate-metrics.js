@@ -2,9 +2,8 @@ const { NUM_IG_PHOTOS_PUSHED_TO_DB, MILLISECONDS_PER_DAY, psychometric_constants
 const { POST_FREQUENCY_WINDOW_DAYS, CAREER_FOCUSED_KEYWORDS, ENTERTAINMENT_KEYWORDS, PHOTO_RECENCY_REQUIREMENT, NUM_PHOTOS_FOR_ANNOTATION } = psychometric_constants
 const db = require('../../sql/database-interface')
 const { generalLabelDetection } = require('../image-recognition/clarifai')
-
-const timeout = 5000
-const timeoutFactor = 0.1
+const { metric_calculation_constants } = require('../../globals')
+const { SAVE_LABEL_DATA, TIMEOUT, TIMEOUT_FACTOR } = metric_calculation_constants
 
 /**
  * DEPENDS ON BOTH NON-PHOTO DEPENDENT AND PHOTO DEPENDENT DATA
@@ -25,17 +24,15 @@ const trimAndPushToDB = (instagramData, user) => {
             for (let obj of instagramData) { //raw instagram data
                 //await omitted here for optimal performance, handle createConnection/closeConnection manually
                 
-                // console.log(obj)
-                //console.log(obj.id)
                 db.createUserPhotoNonHandled(obj.id, user.id, obj.media_url, obj.timestamp, obj.caption, obj.media_type, obj.thumbnail_url)
 
-                if (obj.general_labels) {
+                if (obj.general_labels && SAVE_LABEL_DATA) {
                     const labelsArray = obj.general_labels.labels
                     for (let label of labelsArray) {
                         //awaits currently not handled, so time out the creation
                         setTimeout(() => {
                             db.createPhotoLabelNonHandled(obj.id, label.label, label.score)
-                        }, timeout * timeoutFactor)
+                        }, TIMEOUT * TIMEOUT_FACTOR)
                     }
                 }
             }
@@ -48,7 +45,7 @@ const trimAndPushToDB = (instagramData, user) => {
             setTimeout(() => {
                 console.log('Database connection closed manually. If enqueue error exists, consider modifying the closeConnection() handler.')
                 db.closeConnection()
-            }, timeout)
+            }, TIMEOUT)
         }
     })
 }
@@ -243,7 +240,6 @@ const calculatePhotoDependentData = (instagramData) => {
 
 
                 //determin the following:
-                    //raw data?
                     //portrait_to_noperson_ratio
                     //facial_expression_smile_other_ratio
                     //photo_careerfocused_words
