@@ -53,6 +53,29 @@ router.post('/match-profile', protectedRoute, async(req, res) => {
     }
 })
 
+router.get('/match-message', protectedRoute, async(req, res) => {
+    try {
+        res.render('match-message', {
+            
+        })
+        //res.send('Need to handle match-message get')
+    } catch (error) {
+        console.log(error)
+        res.send(UI_ROUTE_ERROR)
+    }
+})
+
+router.post('/match-message', protectedRoute, async(req, res) => {
+    try {
+        res.render('match-message', {
+            
+        })
+    } catch (error) {
+        console.log(error)
+        res.send(UI_ROUTE_ERROR)
+    }
+})
+
 router.get('/user-settings', protectedRoute, async(req, res) => {
     try {
         const newUserMessage = {

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link href="/assets/main-style.css" rel="stylesheet" type="text/css">
+    <link href="/assets/match-message.css" rel="stylesheet" type="text/css">
+    <title>Linkt</title>
+</head>
+<body>
+    <!-- header -->
+    <div class="header-container">
+        <header class="main-header">
+            <a href="/dashboard"><img class="back-button" src="assets/icons/left-arrow.png" alt="back-button"></a>
+            <div class="header-element">
+                <p class="header-text">Message</p>
+            </div>
+            <div class="header-element">
+                <img class="header-logo" src="/assets/icons/logo.png" alt="linkt-logo">
+            </div>
+        </header>
+    </div>
+
+    <!-- main -->
+    <div class="main-container">
+        <main>
+            <div class="message-box-container">
+                <div class="message-box"></div>
+            </div>
+                <form class="socketIOControls" action="">
+                    <input class="input-box" id="m" autocomplete="off" />
+                    <button class="message">Send</button>
+                </form>
+            
+        </main>
+    </div>
+
+    <div class="footer-container">
+        <footer>
+            <nav>
+                <a href="">a</a>
+                <a href="">b</a>
+                <a href="">c</a>
+
+            </nav>
+        </footer>
+    </div>
+</body>
+<!-- <script src="/socket.io/socket.io.js"></script> -->
+<script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+<script src="assets/message.js"></script>
+</html>

@@ -7,6 +7,9 @@ module.exports = function () {
     const { verifyExistingToken } = require('./controllers/json-web-token')
 
     const app = express()
+    const messageServer = require('http').createServer(app);
+    const io = require('socket.io')(messageServer);
+
     app.set('view engine', 'ejs')
 
 
@@ -46,6 +49,16 @@ module.exports = function () {
             res.send({message: 'error.'})
         }
     })
+
+
+
+
+    io.on('connection', function(socket) {
+        console.log('a user connected');
+        socket.on('chat message', function(msg){
+            console.log('message: ' + msg);
+        });
+    });
     
     return app
 }
