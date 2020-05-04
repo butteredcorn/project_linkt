@@ -1,0 +1,309 @@
+html body {
+   position: relative;
+   margin: 0px;
+   padding: 0px;
+   width: 100%;
+   height: 100%;
+}
+
+#AppMain {
+   position: absolute;
+   width: 100%;
+
+}
+
+#App {
+   top: 0;
+   margin: 0px;
+   padding: 0px;
+   width: 100%;
+   height: 100%;
+   background-color: #3BA3A8;
+   position: relative;
+   display: flex;
+   flex-direction: column;
+   justify-content: center;
+   align-items: center;
+}
+
+
+/* ----------------------------------------------------Titles-------------------------------------------------------- */
+
+
+.TitleDiv {
+   height: 200px;
+   width: 50%;
+   position: relative;
+   display: inline-flex;
+   justify-content: center;
+   align-items: center;
+   flex-direction: column;
+   margin: 15px;
+   padding: 15px;
+}
+
+.Title {
+   position: relative;
+   color: white;
+   font-size: 42pt;
+}
+
+.SubText {
+   position: relative;
+   color: white;
+}
+
+
+
+/* ----------------------------------------------------Question Boxes-------------------------------------------------------- */
+
+
+
+.QuestionBox {
+   height: auto;
+   width: 50%;
+   background-color: white;
+   box-shadow:#1E757E 4px 8px 6px;
+   border-radius: 30px;
+   position: relative;
+   display: inline-flex;
+   justify-content: center;
+   align-items: center;
+   flex-direction: column;
+   margin: 15px;
+   padding: 15px;
+}
+
+#QuestionTitle {
+   margin: 10px;
+   margin-left: 25px;
+   padding: 0px;
+   flex-grow: 2;
+   color: #1E757E;
+   font-size: 24px;
+   font: bold;
+}
+
+.QuestionTextBox {
+   position: relative;
+   display: inline-flex;
+   flex-direction: row;
+   justify-content: center;
+   align-items: center;
+   width: 100%;
+   margin: 0px;
+   padding: 0px;
+}
+
+.QuestionText {
+   margin: 10px;
+   margin-left: 25px;
+   padding: 0px;
+   flex-grow: 2;
+   color: #1E757E;
+}
+
+.Dot {
+   position: absolute;
+   background-color: #1E757E;
+   height: 20px;
+   width: 20px;
+   border-radius: 100px;
+   right: 25px;
+   
+}
+
+
+
+/* ----------------------------------------------------Button-------------------------------------------------------- */
+
+
+
+.button_container {
+   display: inline-flex;
+   align-items: center;
+   justify-content: center;
+   border-radius: 50px;
+   padding: 10px;
+   font-weight: bold;
+   background-color: #ED2265;
+   box-shadow:#1E757E 4px 8px 6px;
+   color: #FFF;
+   cursor: pointer;
+   margin: 5px;
+   width: 200px;
+   height: 40px;
+   margin-top: 50px;
+   margin-bottom: 100px;
+}
+
+.button_container_inner {
+   background: none;
+   color: white;
+   font-size: 24pt;
+}
+
+
+
+/* ----------------------------------------------------Button-------------------------------------------------------- */
+
+
+
+.slider_bubble {
+   display: inline-flex;
+   justify-content: center;
+   align-items: center;
+   flex-direction: column;
+   height: 120px;
+   width: 380px;
+   background-color: white;
+   border-radius: 25px;
+   box-shadow: #1E757E 4px 8px 6px;
+   position: relative;
+   right: -14px;
+   margin-bottom: 20px;
+   color: #1E757E;
+}
+
+.title_box {
+   position: relative;
+   display: inline-flex;
+   flex-direction: row;
+   justify-content: center;
+   align-items: center;
+   width: 100%;
+   margin: 0px;
+   padding: 0px;
+}
+.slider {
+   width: 1000%;
+ }
+ span {
+     margin: 10px;
+     font-size: 25px;
+     color: #1E757E;
+     font-weight: 800;
+ }
+ .title1{
+   margin: 10px;
+   margin-left: 25px;
+   padding: 0px;
+   flex-grow: 2;
+   color: #1E757E;
+ }
+ 
+ .bubble {
+   display: flex;
+   flex-direction: row;
+   align-items: center;
+   justify-content: center;
+   width: 60px;
+ }
+ 
+ #result {
+   font-size: 21px;
+   font-weight: normal;
+   margin: 0;
+ }
+ 
+ #units {
+   font-size: 18px;
+   margin: 3px;
+   /* margin-bottom: -px; */
+   font-weight: normal;
+ }
+ 
+ input[type=range] {
+   -webkit-appearance: none;
+   width: 90%;
+   margin: 13.8px 0;
+ }
+ input[type=range]:focus {
+   outline: none;
+ }
+ input[type=range]::-webkit-slider-runnable-track {
+   width: 100%;
+   height: 4px;
+   cursor: pointer;
+   background: rgb(35, 121, 126);
+   border-radius: 15px;
+   /* border: 1px solid #010101; */
+ }
+ input[type=range]::-webkit-slider-thumb {
+   height: 20px;
+   width: 20px;
+   border-radius: 15px;
+   background: #1E757E;
+   cursor: pointer;
+   -webkit-appearance: none;
+   margin-top: -8px;
+ }
+ input[type=range]:focus::-webkit-slider-runnable-track {
+   background: #3BA3A8;
+ }
+ input[type=range]::-moz-range-track {
+   width: 50%;
+   height: 8.4px;
+   cursor: pointer;
+   box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+   background: #3BA3A8;
+   border-radius: 1.3px;
+   /* border: 0px solid #010101; */
+ }
+ input[type=range]::-moz-range-thumb {
+   border: 0px solid rgba(116, 216, 194, 0);
+   height: 36px;
+   width: 16px;
+   border-radius: 15px;
+   background: #3BA3A8;
+   cursor: pointer;
+ }
+ input[type=range]::-ms-track {
+   width: 50%;
+   height: 8.4px;
+   cursor: pointer;
+   background: transparent;
+   border-color: transparent;
+   color: transparent;
+ }
+ input[type=range]::-ms-fill-lower {
+   background: #3BA3A8;
+   /* border: 1px solid #010101; */
+   border-radius: 2.6px;
+   box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+ }
+ input[type=range]::-ms-fill-upper {
+   background: #3BA3A8;
+   /* border: 1px solid #010101; */
+   border-radius: 2.6px;
+   box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+ }
+ input[type=range]::-ms-thumb {
+   height: 36px;
+   width: 16px;
+   border-radius: 15px;
+   background: #3BA3A8;
+   cursor: pointer;
+   height: 8.4px;
+ }
+ input[type=range]:focus::-ms-fill-lower {
+   background: #3BA3A8;
+ }
+ input[type=range]:focus::-ms-fill-upper {
+   background: #3BA3A8;
+ }
+
+
+
+
+
+
+ #music {
+   position: relative;
+   display: inline-flex;
+   width: 100%;
+   height: 30px;
+   border-radius: 8px;
+   border-color: #1E757E;
+
+ }

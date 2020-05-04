@@ -33,6 +33,27 @@ router.post('/match-profile', protectedRoute, async(req, res) => {
     }
 })
 
+router.get('/user-settings', protectedRoute, async(req, res) => {
+    try {
+        res.render('user-settings', {
+            
+        })
+    } catch (error) {
+        console.log(error)
+        res.send(error)
+    }
+})
+
+router.get('/questionnaire', protectedRoute, async(req, res) => {
+    try {
+        res.render('questionnaire', {
+
+        })
+    } catch (error) {
+        console.log(error)
+        res.send(error)
+    }
+})
 
 
 module.exports = router

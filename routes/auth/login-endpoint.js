@@ -11,7 +11,7 @@ const dashboard = '/dashboard'
 
 router.get('/', authUserRedirect, (req, res) => {
     //res.sendFile(path.join(__dirname, '../../public/login.html'))
-    res.render('login')
+    res.render('login2')
 })
 
 router.post('/', (req, res) => {
