@@ -200,13 +200,13 @@ html body {
     width: 60px;
   }
   
-  #result {
+  .result {
     font-size: 21px;
     font-weight: normal;
     margin: 0;
   }
   
-  #units {
+  .units {
     font-size: 18px;
     margin: 3px;
     /* margin-bottom: -px; */

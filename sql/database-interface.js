@@ -573,6 +573,35 @@ const createUserMetric = (user_id, number_of_posts, number_of_captioned_posts, n
 }
 
 
+
+/**
+ * user_preferences
+ * @param {*} selectBy 
+ * @param {*} searchBy 
+ */
+const getUserPreferences = (selectBy = '*', searchBy = '') => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            await createConnection()
+            const table = 'user_preferences'
+            const sql = `SELECT ${selectBy} FROM ${table} ${searchBy}`
+            db.query(sql, (error, result) => {
+                if (error) {
+                    console.log(`Problem searching for ${table} by ${searchBy}.`)
+                    reject(error)
+                }
+                resolve(rawDataPacketConverter(result))
+            })
+        } catch (error) {
+            console.log(error)
+            reject(error)
+        } finally {
+            closeConnection()
+        }
+    })
+}
+
+
 module.exports = {
     createConnection,
     closeConnection,
@@ -590,5 +619,6 @@ module.exports = {
     createPhotoLabelNonHandled,
     getUserMetrics,
     createUserMetric,
+    getUserPreferences,
 }
 

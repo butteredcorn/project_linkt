@@ -3,7 +3,6 @@ const router = express.Router()
 const { protectedRoute } = require('../controllers/authentication')
 const { getInstagramAuthWindow, getInstagramAccessToken, getUserInstagramData } = require('../controllers/instagram')
 const { verifyExistingToken } = require('../controllers/json-web-token')
-const db = require('../sql/database-interface')
 const { trimAndPushToDB, processInstagramData } = require('../controllers/logic/calculate-metrics')
 
 router.get('/login', protectedRoute, async (req, res) => {

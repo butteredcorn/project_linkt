@@ -4,6 +4,7 @@ const authUserRedirect = require('../../controllers/authentication').authedUserR
 const createNewToken = require('../../controllers/json-web-token').createNewToken
 const loginUser = require('../../controllers/login-and-signup').loginUser
 const path = require('path')
+const db = require('../../sql/database-interface')
 
 const milliSecondsPerDay = 86400000
 
