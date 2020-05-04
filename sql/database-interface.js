@@ -320,6 +320,29 @@ const createUser = (email, password_hash, first_name, last_name, age, city_of_re
     })
 }
 
+const updateUserGenderAndMaxDistance = (id, max_distance, gender) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            await createConnection()
+            const table = 'users'
+            const sql = `UPDATE ${table} SET max_distance = ?, gender = ? WHERE id = ?`
+            const params = [max_distance, gender, id]
+            db.query(sql, params, (error, result) => {
+                if (error) {
+                    console.log(new Error(`${error} Problem updating user setting for ${id} in ${table}.`))
+                    reject(error)
+                }
+                resolve(rawDataPacketConverter(result))
+            })
+        } catch (error) {
+            console.log(error)
+            reject(error)
+        } finally {
+            closeConnection()
+        }
+    })
+}
+
 /**
  * user_instagram
  * @param {*} instagram_id 
@@ -601,6 +624,29 @@ const getUserPreferences = (selectBy = '*', searchBy = '') => {
     })
 }
 
+const createUserPreference = (user_id, partner_gender, partner_age_min, partner_age_max) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            await createConnection()
+            const table = 'user_preferences'
+            const sql = `INSERT INTO ${table} (user_id, partner_gender, partner_age_min, partner_age_max) VALUES (?, ?, ?, ?)`
+            const params = [user_id, partner_gender, partner_age_min, partner_age_max]
+            db.query(sql, params, (error, result) => {
+                if (error) {
+                    console.log(`${error} Problem creating user preference and inserting into ${table}.`)
+                    reject(error)
+                }
+                resolve(rawDataPacketConverter(result))
+            })
+        } catch (error) {
+            console.log(error)
+            reject(error)
+        } finally {
+            closeConnection()
+        }     
+    })
+}
+
 
 module.exports = {
     createConnection,
@@ -609,6 +655,7 @@ module.exports = {
     getUsers,
     getUserByID,
     createUser,
+    updateUserGenderAndMaxDistance,
     getUserInstagrams,
     createUserIG,
     updateUserIG,
@@ -620,5 +667,6 @@ module.exports = {
     getUserMetrics,
     createUserMetric,
     getUserPreferences,
+    createUserPreference
 }
 

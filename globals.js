@@ -28,7 +28,11 @@ module.exports = {
         SAVE_LABEL_DATA: false,
         TIMEOUT: 5000,
         TIMEOUT_FACTOR: 0.1,
-    }
+    },
+
+    errors: {
+        UI_ROUTE_ERROR: new Error("There appears to be some error. We apologize.")
+    },
 }
 
 //instagram date stamp is in ISO 8601 format

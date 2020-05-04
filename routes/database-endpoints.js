@@ -117,4 +117,18 @@ router.get('/getPhotoLabels', protectedRoute, async (req, res) => {
     }
 })
 
+router.get('/getUserPreferences', protectedRoute, async (req, res) => {
+    try {
+        await checkAdministratorPrivilege(req.user)
+        const selectBy = req.query.selectBy
+        const searchBy = req.query.searchBy
+        const result = await db.getUserPreferences(selectBy, searchBy)
+        console.log(result)
+        res.send(result)
+    } catch (error) {
+        console.log(error)
+        throw error
+    }
+})
+
 module.exports = router

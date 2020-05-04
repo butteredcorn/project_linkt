@@ -9,25 +9,6 @@
     <link rel="stylesheet" href="assets/user-settings.css" type="text/css">
 </head>
 <body>
-    
-    <!-- <%
-        function showValue() {
-            console.log('hi')
-        let input = document.getElementsByClassName("slider");
-        let output = document.getElementsByClassName("result");
-        output.innerHTML = input.value;
-    
-        input.oninput = function () {
-            output.innerHTML = this.value;
-    
-    
-            // Show + after value when value = 10
-            if (this.value == 10) {
-                output.innerHTML = this.value + "+";
-            }
-        }
-    }
-    %> -->
     <main id="AppMain">
         <form id="App" method='post' action=''>
             <div class="TitleDiv">
@@ -42,15 +23,15 @@
                 </div>
                 <div class="QuestionTextBox">
                     <p class="QuestionText">Woman</p>
-                    <div class="Dot"></div>
+                    <input type="radio" class="Dot" name="gender" value="woman" required></input>
                 </div>
                 <div class="QuestionTextBox">
                     <p class="QuestionText">Man</p>
-                    <div class="Dot"></div>
+                    <input type="radio" class="Dot" name="gender" value="man" required></input>
                 </div>
                 <div class="QuestionTextBox">
                     <p class="QuestionText">Other</p>
-                    <div class="Dot"></div>
+                    <input type="radio" class="Dot" name="gender" value="other" required></input>
                 </div>
             </div>
 
@@ -60,46 +41,52 @@
                 </div>
                 <div class="QuestionTextBox">
                     <p class="QuestionText">Woman</p>
-                    <div class="Dot"></div>
+                    <input type="radio" class="Dot" name="gender_preference" value="woman" required></input>
                 </div>
                 <div class="QuestionTextBox">
                     <p class="QuestionText">Man</p>
-                    <div class="Dot"></div>
+                    <input type="radio" class="Dot" name="gender_preference" value="man" required></input>
                 </div>
-                <!-- <div class="QuestionTextBox">
-                    <p class="QuestionText">Other</p>
-                    <div class="Dot"></div>
-                </div> -->
+                <div class="QuestionTextBox">
+                    <p class="QuestionText">Both</p>
+                    <input type="radio" class="Dot" name="gender_preference" value="both" required></input>
+                </div>
             </div>
 
             <div class="QuestionBox">  
                     <div class="title_box">
                         <p class="title1">Maximum Distance</p>
                         <p class="bubble">
-                            <span class="result">0</span><br />
+                            <span class="result maxDistanceValue">50</span><br />
                             <span class="units">km</span>
                         </p>
                     </div>
-                    <input type="range" id="slider" name="slider" min="0" max="150" step="1" onChange={showValue} />           
+                    <input type="range" class="slider maxDistance" name="max_distance" min="5" max="100" step="1" value="50" oninput={updateDistance(this.value)}></input>         
             </div>
 
             <div class="QuestionBox">  
                 <div class="title_box">
                     <p class="title1">Age Range</p>
                     <p class="bubble">
-                        <span class="result">18 </span><br />
-                        <span class="units">- 99</span>
+                        <div class="result"><span class="minAge minAgeValue">18</span> - <span class="maxAge maxAgeValue">99</span></div>
                     </p>
                 </div>
-                <input type="range" id="slider" name="slider" min="0" max="150" step="1" onChange={showValue} />           
+                <div class="QuestionTextBox">
+                    <p class="QuestionText">Min Age</p>
+                </div>
+                    <input type="range" class="slider minAge" name="min_age" min="18" max="99" step="1" value="18" oninput={updateMinAge(this.value)}></input>
+                <div class="QuestionTextBox">
+                    <p class="QuestionText">Max Age</p>
+                </div>
+                    <input type="range" class="slider maxAge" name="max_age" min="18" max="99" step="1" value="99" oninput={updateMaxAge(this.value)}></input>              
             </div>
 
             <div class="button_container">
-                <div class="button_container_inner">Next</div>
+                <button type="submit" class="button_container_inner">Next</button>
             </div>
 
         </form>
     </main>
 </body>
-
+<script src="assets/user-settings.js"></script>
 </html>

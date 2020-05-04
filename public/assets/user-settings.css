@@ -103,7 +103,7 @@ html body {
     color: #1E757E;
 }
 
-.Dot {
+.Dot, .Dot:focus {
     position: absolute;
     background-color: #1E757E;
     height: 20px;
@@ -178,11 +178,12 @@ html body {
 .slider {
     width: 1000%;
   }
-  span {
+
+  span, .result {
       margin: 10px;
       font-size: 25px;
       color: #1E757E;
-      font-weight: 800;
+      /* font-weight: 800; */
   }
   .title1{
     margin: 10px;
