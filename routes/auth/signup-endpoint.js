@@ -4,9 +4,11 @@ const authUserRedirect = require('../../controllers/authentication').authedUserR
 const signUpUser = require('../../controllers/login-and-signup').signUpUser
 const path = require('path')
 
+const dashboard = '/dashboard'
+
 
 router.get('/', authUserRedirect, (req, res) => {
-    res.sendFile(path.join(__dirname, '../../content/public/signup.html'))
+    res.sendFile(path.join(__dirname, '../../public/signup.html'))
 })
 
 router.post('/', authUserRedirect, async (req, res) => {
@@ -21,7 +23,7 @@ router.post('/', authUserRedirect, async (req, res) => {
     if(email && password) {
         try {
             await signUpUser(email, password, firstName, lastName, age)
-            res.redirect('/')
+            res.redirect(dashboard)
         } catch (error) {
             console.log(error)
             res.send("Error!")

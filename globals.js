@@ -16,7 +16,27 @@ module.exports = {
 
     psychometric_constants: {
         POST_FREQUENCY_WINDOW_DAYS: 30,
+        CAREER_FOCUSED_KEYWORDS: ['challenge', 'challenging', 'reflect', 'passion', 'career', 'business', 'development', 'finance', 'money', 'success', 'motivation', 'hardatwork'],
+        ENTERTAINMENT_KEYWORDS: ['travel', 'fun', 'bar', 'drink', 'drinks', 'cocktail', 'club', 'chill', 'relax', 'beach', 'party'],
+
+        PHOTO_RECENCY_REQUIREMENT: 30,
+        NUM_PHOTOS_FOR_ANNOTATION: 5,
+
+    },
+
+    metric_calculation_constants: {
+        SAVE_LABEL_DATA: false,
+        TIMEOUT: 5000,
+        TIMEOUT_FACTOR: 0.1,
+    },
+
+    errors: {
+        UI_ROUTE_ERROR: new Error("There appears to be some error. We apologize.")
     },
 }
 
 //instagram date stamp is in ISO 8601 format
+//json backup for react front end:
+// "client": "cd react-app && npm start",
+// "server": "nodemon server.js",
+// "start": "concurrently --kill-others-on-fail \"nodemon server.js\" \"cd react-app && npm start\""

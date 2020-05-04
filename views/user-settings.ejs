@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Linkt</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="assets/user-settings.css" type="text/css">
+</head>
+<body>
+    <main id="AppMain">
+        <form id="App" method='post' action=''>
+            <div class="TitleDiv">
+                <h1 class="Title"><%= heading %></h1>
+
+                <h3 class="SubText"><%= subHeading %></h3>
+            </div>
+
+            <div class="QuestionBox">
+                <div class="QuestionTextBox">
+                    <p id="QuestionTitle">I identify as a</p>
+                </div>
+                <div class="QuestionTextBox">
+                    <p class="QuestionText">Woman</p>
+                    <input type="radio" class="Dot" name="gender" value="woman" required></input>
+                </div>
+                <div class="QuestionTextBox">
+                    <p class="QuestionText">Man</p>
+                    <input type="radio" class="Dot" name="gender" value="man" required></input>
+                </div>
+                <div class="QuestionTextBox">
+                    <p class="QuestionText">Other</p>
+                    <input type="radio" class="Dot" name="gender" value="other" required></input>
+                </div>
+            </div>
+
+            <div class="QuestionBox">
+                <div class="QuestionTextBox">
+                    <p id="QuestionTitle">Show me</p>
+                </div>
+                <div class="QuestionTextBox">
+                    <p class="QuestionText">Woman</p>
+                    <input type="radio" class="Dot" name="gender_preference" value="woman" required></input>
+                </div>
+                <div class="QuestionTextBox">
+                    <p class="QuestionText">Man</p>
+                    <input type="radio" class="Dot" name="gender_preference" value="man" required></input>
+                </div>
+                <div class="QuestionTextBox">
+                    <p class="QuestionText">Both</p>
+                    <input type="radio" class="Dot" name="gender_preference" value="both" required></input>
+                </div>
+            </div>
+
+            <div class="QuestionBox">  
+                    <div class="title_box">
+                        <p class="title1">Maximum Distance</p>
+                        <p class="bubble">
+                            <span class="result maxDistanceValue">50</span><br />
+                            <span class="units">km</span>
+                        </p>
+                    </div>
+                    <input type="range" class="slider maxDistance" name="max_distance" min="5" max="100" step="1" value="50" oninput={updateDistance(this.value)}></input>         
+            </div>
+
+            <div class="QuestionBox">  
+                <div class="title_box">
+                    <p class="title1">Age Range</p>
+                    <p class="bubble">
+                        <div class="result"><span class="minAge minAgeValue">18</span> - <span class="maxAge maxAgeValue">99</span></div>
+                    </p>
+                </div>
+                <div class="QuestionTextBox">
+                    <p class="QuestionText">Min Age</p>
+                </div>
+                    <input type="range" class="slider minAge" name="min_age" min="18" max="99" step="1" value="18" oninput={updateMinAge(this.value)}></input>
+                <div class="QuestionTextBox">
+                    <p class="QuestionText">Max Age</p>
+                </div>
+                    <input type="range" class="slider maxAge" name="max_age" min="18" max="99" step="1" value="99" oninput={updateMaxAge(this.value)}></input>              
+            </div>
+
+            <div class="button_container">
+                <button type="submit" class="button_container_inner">Next</button>
+            </div>
+
+        </form>
+    </main>
+</body>
+<script src="assets/user-settings.js"></script>
+</html>

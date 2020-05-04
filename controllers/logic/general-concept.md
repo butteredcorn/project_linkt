@@ -4,11 +4,13 @@
 * post frequency
 * facial expression - smiles vs facial expressions
 * post content ratio - 'business' to 'entertainment'
+    * caption data
+    * photo data
 
 ## Other Metrics
 * captioned to uncaptioned posts ratio
 
-#### ```portrait``` to ```no person``` ratio
+#### The ```portrait``` to ```no person``` ratio
 Assumptions:
 * Greater presence of selfies means the user is more comfortable with their appearance
 
@@ -49,7 +51,7 @@ Theory:
 
 
 
-#### post content ratio - 'business' to 'entertainment'
+#### post content ratio - 'career_focused' to 'entertainment'
 Assumptions:
 * Greater presence of 'business' related tags/content reflects actual work to achieve long term goals
 

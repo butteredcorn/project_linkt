@@ -4,12 +4,15 @@ const authUserRedirect = require('../../controllers/authentication').authedUserR
 const createNewToken = require('../../controllers/json-web-token').createNewToken
 const loginUser = require('../../controllers/login-and-signup').loginUser
 const path = require('path')
+const db = require('../../sql/database-interface')
 
 const milliSecondsPerDay = 86400000
 
-router.get('/', authUserRedirect, (req, res) => {
-    res.sendFile(path.join(__dirname, '../../content/public/login.html'))
+const dashboard = '/dashboard'
 
+router.get('/', authUserRedirect, (req, res) => {
+    //res.sendFile(path.join(__dirname, '../../public/login.html'))
+    res.render('login2')
 })
 
 router.post('/', (req, res) => {
@@ -25,7 +28,7 @@ router.post('/', (req, res) => {
                 res.cookie('token', token, { maxAge: milliSecondsPerDay })
             })
             .then(() => {
-                res.redirect('/')
+                res.redirect(dashboard)
             })
             .catch((error) => {
                 console.log(error)
