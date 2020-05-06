@@ -22,9 +22,14 @@ const trimAndPushToDB = (instagramData, user) => {
 
             //could also filter out all photos without captions instead of just by recency
             for (let obj of instagramData) { //raw instagram data
-                //await omitted here for optimal performance, handle createConnection/closeConnection manually
+
+                const photo = await db.getUserPhotosUnhandled(undefined, `WHERE instagram_post_id = ${obj.id}`)
+                //if photo doesn't already exist --> create photo
+                if (photo.length == 0) {
+                    //await omitted here for optimal performance, handle createConnection/closeConnection manually
+                    db.createUserPhotoNonHandled(obj.id, user.id, obj.media_url, obj.timestamp, obj.caption, obj.media_type, obj.thumbnail_url)
+                }
                 
-                db.createUserPhotoNonHandled(obj.id, user.id, obj.media_url, obj.timestamp, obj.caption, obj.media_type, obj.thumbnail_url)
 
                 if (obj.general_labels && SAVE_LABEL_DATA) {
                     const labelsArray = obj.general_labels.labels
@@ -216,26 +221,26 @@ const selectPhotos = (instagramData) => {
  * 
  * @param {array} labels -- array of label objects
  */
-const labelKeywordChecker = (labels, {numPortraitLabels, numNoPersonLabels, numPhotoCareerFocusedWords, numPhotoEntertainmentWords}) => {
+const labelKeywordChecker = (labels, counters) => {
     return new Promise(async(resolve, reject) => {
         try {
             
             //check if caption contains keywords
             for (let label of labels) { 
                 if (label.label.toLowerCase() == 'no person') {
-                    numNoPersonLabels++
+                    counters.numNoPersonLabels++
                 } else if (label.label.toLowerCase() == 'portrait') {
-                    numPortraitLabels++
+                    counters.numPortraitLabels++
                 }
 
                 if (CAREER_FOCUSED_KEYWORDS.includes(label.label)) {
-                    numPhotoCareerFocusedWords++
+                    counters.numPhotoCareerFocusedWords++
                 } else if (ENTERTAINMENT_KEYWORDS.includes(label.label)) {
-                    numPhotoEntertainmentWords++
+                    counters.numPhotoEntertainmentWords++
                 }
             }
 
-            resolve({numPortraitLabels, numNoPersonLabels, numPhotoCareerFocusedWords, numPhotoEntertainmentWords})
+            resolve(counters)
 
         } catch (error) {
             reject(error)
