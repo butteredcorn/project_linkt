@@ -265,7 +265,7 @@ const calculatePhotoDependentData = (instagramData) => {
                     } else {
                         labels = await generalLabelDetection(post.media_url)
                     }
-                    const result = await labelKeywordChecker(labels, keywordCounters) 
+                    const result = await labelKeywordChecker(labels.labels, keywordCounters) 
                     console.log(result)
                     console.log(keywordCounters)
                     post.general_labels = labels //raw data
