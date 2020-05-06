@@ -448,6 +448,28 @@ const getUserPhotos = (selectBy = '*', searchBy = '') => {
     })
 }
 
+const getUserPhotosUnhandled = (selectBy = '*', searchBy = '') => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            //await createConnection()
+            const table = 'user_photos'
+            const sql = `SELECT ${selectBy} FROM ${table} ${searchBy}`
+            db.query(sql, (error, result) => {
+                if (error) {
+                    console.log(`Problem searching for ${table} by ${searchBy}.`)
+                    reject(error)
+                }
+                resolve(rawDataPacketConverter(result))
+            })
+        } catch (error) {
+            console.log(error)
+            reject(error)
+        } finally {
+            //closeConnection()
+        }
+    })
+}
+
 const createUserPhoto = (instagram_post_id, user_id, photo_link, photo_created_date, caption, media_type, video_thumbnail_url) => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -661,6 +683,7 @@ module.exports = {
     updateUserIG,
     getUserPhotos,
     createUserPhoto,
+    getUserPhotosUnhandled,
     createUserPhotoNonHandled,
     getPhotoLabels,
     createPhotoLabelNonHandled,
