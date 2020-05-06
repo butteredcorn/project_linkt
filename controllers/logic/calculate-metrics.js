@@ -126,10 +126,12 @@ const calculateNonPhotoDependentData = (instagramData) => {
                 const averageDaysBetweenPostsAll = Math.round((Math.abs(new Date(newestPost) - new Date(oldestPost)) / MILLISECONDS_PER_DAY / instagramData.length) * 10)/10
 
                 let careerFocusedEntertainmentRatio
-                if(entertainmentWordsFound == 0) {
+                if (entertainmentWordsFound == 0 && careerFocusedWordsFound != 0) {
+                    careerFocusedEntertainmentRatio = 1
+                } else if(entertainmentWordsFound == 0 && careerFocusedWordsFound == 0) {
                     careerFocusedEntertainmentRatio = null
                 } else {
-                    careerFocusedEntertainmentRatio = careerFocusedWordsFound/entertainmentWordsFound
+                    careerFocusedEntertainmentRatio = careerFocusedWordsFound / entertainmentWordsFound
                 }
 
 
@@ -253,7 +255,7 @@ const labelKeywordChecker = (labels, counters) => {
  * PSYCHOMETRICS DEPENDENT ON PHOTO RECOGNITION* (RESOURCE INTENSIVE)
  * 
  */
-const calculatePhotoDependentData = (instagramData) => {
+const calculatePhotoDependentData = (instagramData, result) => {
     return new Promise( async(resolve, reject) => {
         try {
             if (instagramData && instagramData.length > 0) {
@@ -270,15 +272,32 @@ const calculatePhotoDependentData = (instagramData) => {
                     } else {
                         labels = await generalLabelDetection(post.media_url)
                     }
-                    const result = await labelKeywordChecker(labels.labels, keywordCounters) 
-                    console.log(result)
-                    console.log(keywordCounters)
+                    await labelKeywordChecker(labels.labels, keywordCounters) 
                     post.general_labels = labels //raw data
                 }
 
+                console.log(keywordCounters)
                 let portraitToNoPersonRatio
                 let photoCareerFocusedEntertainmentRatio
                 let facialExpressionSmileOtherRatio
+
+                // check divisor
+                if(keywordCounters.numNoPersonLabels == 0 && keywordCounters.numPortraitLabels != 0) {
+                    portraitToNoPersonRatio = 1
+                } else if (keywordCounters.numNoPersonLabels == 0 && keywordCounters.numPortraitLabels == 0) {
+                    portraitToNoPersonRatio = null
+                } else {
+                    portraitToNoPersonRatio = keywordCounters.numPortraitLabels / keywordCounters.numNoPersonLabels
+                }
+
+                // check divisor
+                if(keywordCounters.numPhotoEntertainmentWords == 0 && keywordCounters.numPhotoCareerFocusedWords != 0) {
+                    portraitToNoPersonRatio = 1
+                } else if (keywordCounters.numPhotoEntertainmentWords == 0 && keywordCounters.numPhotoCareerFocusedWords == 0) {
+                    portraitToNoPersonRatio = null
+                } else {
+                    photoCareerFocusedEntertainmentRatio = keywordCounters.numPhotoCareerFocusedWords / keywordCounters.numPhotoEntertainmentWords
+                }
 
                 //determin the following:
                     //portrait_to_noperson_ratio
@@ -286,6 +305,17 @@ const calculatePhotoDependentData = (instagramData) => {
                     //photo_careerfocused_words
                     //photo_entertainment_words
                     //photo_careerfocused_entertainment_ratio
+                
+                const photo_data = {
+                    number_portraits: keywordCounters.numPortraitLabels,
+                    number_noperson: keywordCounters.numNoPersonLabels,
+                    portrait_to_noperson_ratio: portraitToNoPersonRatio,
+                    number_career_focused_words: keywordCounters.numPhotoCareerFocusedWords,
+                    number_entertainment_words: keywordCounters.numPhotoEntertainmentWords,
+                    careerfocused_entertainment_ratio: photoCareerFocusedEntertainmentRatio
+                }
+
+                result.photo_data = photo_data
 
                 resolve(filteredInstagramData)
             } else {
@@ -308,8 +338,7 @@ const processInstagramData = (instagramData) => {
             const result = await calculateNonPhotoDependentData(instagramData)
         
             //currently, this modified the original instagramData -- to stop this behavior, would need to duplicate the data first and work off duplicated copy
-            const result2 = await calculatePhotoDependentData(instagramData)
-            console.log(result2)
+            await calculatePhotoDependentData(instagramData)
 
             //instagramData in the instagram-endpoint is being modfiied by this function.
             resolve(result)
