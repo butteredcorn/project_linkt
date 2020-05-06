@@ -338,7 +338,7 @@ const processInstagramData = (instagramData) => {
             const result = await calculateNonPhotoDependentData(instagramData)
         
             //currently, this modified the original instagramData -- to stop this behavior, would need to duplicate the data first and work off duplicated copy
-            await calculatePhotoDependentData(instagramData)
+            await calculatePhotoDependentData(instagramData, result)
 
             //instagramData in the instagram-endpoint is being modfiied by this function.
             resolve(result)
