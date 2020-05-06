@@ -76,7 +76,7 @@ router.get('/processData', protectedRoute, async (req, res) => {
         const metrics = await processInstagramData(instagramData)
 
         //currently does not pass in photo dependent data
-        await db.createUserMetric(req.user.id, metrics.number_of_posts, metrics.number_of_captioned_posts, metrics.number_of_hashtags, metrics.mean_hashtags_per_post, metrics.captioned_uncaptioned_ratio, metrics.caption_data.number_career_focused_words, metrics.caption_data.number_entertainment_words, metrics.caption_data.careerfocused_entertainment_ratio, metrics.post_per_day_in_window, metrics.newest_post_date, metrics.oldest_post_date, metrics.mean_days_between_all_posts)
+        await db.createUserMetric(req.user.id, metrics.number_of_posts, metrics.number_of_captioned_posts, metrics.number_of_hashtags, metrics.mean_hashtags_per_post, metrics.captioned_uncaptioned_ratio, metrics.caption_data.number_career_focused_words, metrics.caption_data.number_entertainment_words, metrics.caption_data.careerfocused_entertainment_ratio, metrics.post_per_day_in_window, metrics.newest_post_date, metrics.oldest_post_date, metrics.mean_days_between_all_posts, metrics.photo_data.number_photos_annotated, metrics.photo_data.number_portraits, metrics.photo_data.number_noperson, metrics.photo_data.portrait_to_noperson_ratio, metrics.photo_data.number_career_focused_words, metrics.photo_data.number_entertainment_words, metrics.photo_data.careerfocused_entertainment_ratio)
 
         //save raw instagram data (do this inbetween non-photo-dependent data calc and photo-dependent data calc for db enqueue)
         trimAndPushToDB(instagramData, req.user)

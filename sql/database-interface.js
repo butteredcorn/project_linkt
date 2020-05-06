@@ -169,11 +169,17 @@ const dropAndRecreateTables = () => {
                 most_recent_post_date                       VARCHAR(255),
                 oldest_post_date                            VARCHAR(255),
                 mean_days_between_all_posts                 FLOAT,
+                number_photos_annotated                     INT,
+                number_portraits                            INT,
+                number_noperson                             INT,
                 portrait_to_noperson_ratio                  FLOAT,
-                facial_expression_smile_other_ratio         FLOAT,
                 photo_careerfocused_words                   INT,
                 photo_entertainment_words                   INT,
                 photo_careerfocused_entertainment_ratio     FLOAT,
+                number_photos_with_facial_expressions       INT,
+                number_smiles                               INT,
+                number_other_expressions                    INT,
+                facial_expression_smile_other_ratio         FLOAT,
                 created_at                                  TIMESTAMP NOT NULL DEFAULT NOW(),
                 FOREIGN KEY (user_id)                       REFERENCES users(id)
             )`)
@@ -594,13 +600,13 @@ const getUserMetrics = (selectBy = '*', searchBy = '') => {
     })
 }
 
-const createUserMetric = (user_id, number_of_posts, number_of_captioned_posts, number_of_hashtags, mean_hashtags_per_post, captioned_uncaptioned_ratio, caption_careerfocused_words, caption_entertainment_words, caption_careerfocused_entertainment_ratio, posts_per_day_recent, most_recent_post_date, oldest_post_date, mean_days_between_all_posts, portrait_to_noperson_ratio, facial_expression_smile_other_ratio, photo_careerfocused_words, photo_entertainment_words, photo_careerfocused_entertainment_ratio) => {
+const createUserMetric = (user_id, number_of_posts, number_of_captioned_posts, number_of_hashtags, mean_hashtags_per_post, captioned_uncaptioned_ratio, caption_careerfocused_words, caption_entertainment_words, caption_careerfocused_entertainment_ratio, posts_per_day_recent, most_recent_post_date, oldest_post_date, mean_days_between_all_posts, number_photos_annotated, number_portraits, number_noperson, portrait_to_noperson_ratio, photo_careerfocused_words, photo_entertainment_words, photo_careerfocused_entertainment_ratio, number_photos_with_facial_expressions, number_smiles, number_other_expressions, facial_expression_smile_other_ratio) => {
     return new Promise(async (resolve, reject) => {
         try {
             await createConnection()
             const table = 'user_psychometrics'
-            const sql = `INSERT INTO ${table} (user_id, number_of_posts, number_of_captioned_posts, number_of_hashtags, mean_hashtags_per_post, captioned_uncaptioned_ratio, caption_careerfocused_words, caption_entertainment_words, caption_careerfocused_entertainment_ratio, posts_per_day_recent, most_recent_post_date, oldest_post_date, mean_days_between_all_posts, portrait_to_noperson_ratio, facial_expression_smile_other_ratio, photo_careerfocused_words, photo_entertainment_words, photo_careerfocused_entertainment_ratio) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
-            const params = [user_id, number_of_posts, number_of_captioned_posts, number_of_hashtags, mean_hashtags_per_post, captioned_uncaptioned_ratio, caption_careerfocused_words, caption_entertainment_words, caption_careerfocused_entertainment_ratio, posts_per_day_recent, most_recent_post_date, oldest_post_date, mean_days_between_all_posts, portrait_to_noperson_ratio, facial_expression_smile_other_ratio, photo_careerfocused_words, photo_entertainment_words, photo_careerfocused_entertainment_ratio]
+            const sql = `INSERT INTO ${table} (user_id, number_of_posts, number_of_captioned_posts, number_of_hashtags, mean_hashtags_per_post, captioned_uncaptioned_ratio, caption_careerfocused_words, caption_entertainment_words, caption_careerfocused_entertainment_ratio, posts_per_day_recent, most_recent_post_date, oldest_post_date, mean_days_between_all_posts, number_photos_annotated, number_portraits, number_noperson, portrait_to_noperson_ratio, photo_careerfocused_words, photo_entertainment_words, photo_careerfocused_entertainment_ratio, number_photos_with_facial_expressions, number_smiles, number_other_expressions, facial_expression_smile_other_ratio) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+            const params = [user_id, number_of_posts, number_of_captioned_posts, number_of_hashtags, mean_hashtags_per_post, captioned_uncaptioned_ratio, caption_careerfocused_words, caption_entertainment_words, caption_careerfocused_entertainment_ratio, posts_per_day_recent, most_recent_post_date, oldest_post_date, mean_days_between_all_posts, number_photos_annotated, number_portraits, number_noperson, portrait_to_noperson_ratio, photo_careerfocused_words, photo_entertainment_words, photo_careerfocused_entertainment_ratio, number_photos_with_facial_expressions, number_smiles, number_other_expressions, facial_expression_smile_other_ratio]
             db.query(sql, params, (error, result) => {
                 if (error) {
                     console.log(`${error} Problem creating user metric and inserting into ${table}.`)

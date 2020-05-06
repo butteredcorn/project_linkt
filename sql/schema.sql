@@ -64,11 +64,17 @@ CREATE TABLE user_psychometrics (
     most_recent_post_date                       VARCHAR(255),
     oldest_post_date                            VARCHAR(255),
     mean_days_between_all_posts                 FLOAT,
+    number_photos_annotated                     INT,
+    number_portraits                            INT,
+    number_noperson                             INT,
     portrait_to_noperson_ratio                  FLOAT,
-    facial_expression_smile_other_ratio         FLOAT,
     photo_careerfocused_words                   INT,
     photo_entertainment_words                   INT,
     photo_careerfocused_entertainment_ratio     FLOAT,
+    number_photos_with_facial_expressions       INT,
+    number_smiles                               INT,
+    number_other_expressions                    INT,
+    facial_expression_smile_other_ratio         FLOAT,
     created_at                                  TIMESTAMP NOT NULL DEFAULT NOW(),
     FOREIGN KEY (user_id)                       REFERENCES users(id)
 );

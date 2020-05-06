@@ -226,7 +226,8 @@ const selectPhotos = (instagramData) => {
 const labelKeywordChecker = (labels, counters) => {
     return new Promise(async(resolve, reject) => {
         try {
-            
+            //reference to actual number of photos selected
+            counters.number_photos_annotated = labels.length
             //check if caption contains keywords
             for (let label of labels) { 
                 if (label.label.toLowerCase() == 'no person') {
@@ -276,7 +277,7 @@ const calculatePhotoDependentData = (instagramData, result) => {
                     post.general_labels = labels //raw data
                 }
 
-                console.log(keywordCounters)
+                //console.log(keywordCounters)
                 let portraitToNoPersonRatio
                 let photoCareerFocusedEntertainmentRatio
                 let facialExpressionSmileOtherRatio
@@ -307,6 +308,7 @@ const calculatePhotoDependentData = (instagramData, result) => {
                     //photo_careerfocused_entertainment_ratio
                 
                 const photo_data = {
+                    number_photos_annotated: keywordCounters.number_photos_annotated,
                     number_portraits: keywordCounters.numPortraitLabels,
                     number_noperson: keywordCounters.numNoPersonLabels,
                     portrait_to_noperson_ratio: portraitToNoPersonRatio,
