@@ -212,6 +212,36 @@ const selectPhotos = (instagramData) => {
     })
 }
 
+/**
+ * 
+ * @param {array} labels -- array of label objects
+ */
+const labelKeywordChecker = (labels, {numPortraitLabels, numNoPersonLabels, numPhotoCareerFocusedWords, numPhotoEntertainmentWords}) => {
+    return new Promise(async(resolve, reject) => {
+        try {
+            
+            //check if caption contains keywords
+            for (let label of labels) { 
+                if (label.label.toLowerCase() == 'no person') {
+                    numNoPersonLabels++
+                } else if (label.label.toLowerCase() == 'portrait') {
+                    numPortraitLabels++
+                }
+
+                if (CAREER_FOCUSED_KEYWORDS.includes(label.label)) {
+                    numPhotoCareerFocusedWords++
+                } else if (ENTERTAINMENT_KEYWORDS.includes(label.label)) {
+                    numPhotoEntertainmentWords++
+                }
+            }
+
+            resolve({numPortraitLabels, numNoPersonLabels, numPhotoCareerFocusedWords, numPhotoEntertainmentWords})
+
+        } catch (error) {
+            reject(error)
+        }
+    })
+} 
 
 
 /**
@@ -222,6 +252,7 @@ const calculatePhotoDependentData = (instagramData) => {
     return new Promise( async(resolve, reject) => {
         try {
             if (instagramData && instagramData.length > 0) {
+                const keywordCounters = { numPortraitLabels: 0, numNoPersonLabels: 0, numPhotoCareerFocusedWords: 0, numPhotoEntertainmentWords: 0 }
 
                 //logic for selecting posts from instagram array of posts
                 const filteredInstagramData = await selectPhotos(instagramData)
@@ -233,11 +264,16 @@ const calculatePhotoDependentData = (instagramData) => {
                         labels = await generalLabelDetection(post.thumbnail_url)
                     } else {
                         labels = await generalLabelDetection(post.media_url)
-                    } 
+                    }
+                    const result = await labelKeywordChecker(labels, keywordCounters) 
+                    console.log(result)
+                    console.log(keywordCounters)
                     post.general_labels = labels //raw data
                 }
 
-
+                let portraitToNoPersonRatio
+                let photoCareerFocusedEntertainmentRatio
+                let facialExpressionSmileOtherRatio
 
                 //determin the following:
                     //portrait_to_noperson_ratio
