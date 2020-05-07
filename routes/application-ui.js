@@ -24,12 +24,15 @@ router.get('/dashboard', protectedRoute, async(req, res) => {
         //else redirect to dashboard
         } else {
             let userPersonalityAspect = await db.getUserPersonalityAspects(undefined, `WHERE user_id = ${req.user.id}`)
+
+            // user's personality aspects
             if (userPersonalityAspect.length == 0) {
                 userPersonalityAspect = await determineUserPersonalityAspects(req.user)
                 console.log(userPersonalityAspect)
             }
+
             res.render('dashboard', {
-                user_personality_aspects: userPersonalityAspect
+                userPersonalityAspect: userPersonalityAspect
             })
         }
             

@@ -16,12 +16,20 @@ router.get('/', authUserRedirect, (req, res) => {
 })
 
 router.post('/', (req, res) => {
-    console.log(req.body)
     const email = req.body.email
     const password = req.body.password
+    const currentLatitude = req.body.latitude
+    const currentLongitude = req.body.longitude
+
+    const currentLocation = {
+        latitude: currentLatitude,
+        longitude: currentLongitude
+    }
+
     if(email && password) {
         loginUser(email, password)
             .then((user) => {
+                user.current_location = currentLocation
                 return createNewToken({...user})
             })
             .then((token) => {
