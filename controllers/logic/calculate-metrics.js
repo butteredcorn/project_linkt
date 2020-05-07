@@ -27,7 +27,7 @@ const trimAndPushToDB = (instagramData, user) => {
                 //if photo doesn't already exist --> create photo
                 if (photo.length == 0) {
                     //await omitted here for optimal performance, handle createConnection/closeConnection manually
-                    db.createUserPhotoNonHandled(obj.id, user.id, obj.media_url, obj.timestamp, obj.caption, obj.media_type, obj.thumbnail_url)
+                    await db.createUserPhotoNonHandled(obj.id, user.id, obj.media_url, obj.timestamp, obj.caption, obj.media_type, obj.thumbnail_url)
                 }
                 
 
@@ -35,9 +35,9 @@ const trimAndPushToDB = (instagramData, user) => {
                     const labelsArray = obj.general_labels.labels
                     for (let label of labelsArray) {
                         //awaits currently not handled, so time out the creation
-                        setTimeout(() => {
-                            db.createPhotoLabelNonHandled(obj.id, label.label, label.score)
-                        }, TIMEOUT * TIMEOUT_FACTOR)
+                        //setTimeout(() => {
+                            await db.createPhotoLabelNonHandled(obj.id, label.label, label.score)
+                        //}, TIMEOUT * TIMEOUT_FACTOR)
                     }
                 }
             }
@@ -47,10 +47,10 @@ const trimAndPushToDB = (instagramData, user) => {
         } catch (error) {
             reject(error)
         } finally {
-            setTimeout(() => {
-                console.log('Database connection closed manually. If enqueue error exists, consider modifying the closeConnection() handler.')
+            //setTimeout(() => {
+                //console.log('Database connection closed manually. If enqueue error exists, consider modifying the closeConnection() handler.')
                 db.closeConnection()
-            }, TIMEOUT)
+            //}, TIMEOUT)
         }
     })
 }
