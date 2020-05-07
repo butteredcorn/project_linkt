@@ -6,11 +6,11 @@ const determineUserPersonalityAspects = (user) => {
     return new Promise(async (resolve, reject) => {
         try {
             const userPersonalityAspects = {
-                openess: undefined,
-                conscientiousness: undefined,
-                extraversion: undefined,
-                agreeableness: undefined,
-                neuroticism: undefined
+                openess: null,
+                conscientiousness: null,
+                extraversion: null,
+                agreeableness: null,
+                neuroticism: null
             }
 
             const userMetrics = await db.getUserMetrics(undefined, `WHERE user_id = ${user.id}`)
@@ -55,7 +55,7 @@ const determineOpeness = (portrait_to_noperson_ratio, userPersonalityAspects) =>
 const determineConscientiousness = (caption_careerfocused_entertainment_ratio, photo_careerfocused_entertainment_ratio, userPersonalityAspects) => {
     return new Promise(async (resolve, reject) => {
         try {
-            if (caption_careerfocused_entertainment_ratio && photo_careerfocused_entertainment_ratio) {
+            if ((caption_careerfocused_entertainment_ratio || caption_careerfocused_entertainment_ratio == 0) && (photo_careerfocused_entertainment_ratio || photo_careerfocused_entertainment_ratio == 0)) {
                 let combinedCareerFocusedEntertainmentRatio = ((caption_careerfocused_entertainment_ratio + photo_careerfocused_entertainment_ratio) / 2)
                 let rawConscientiousness = combinedCareerFocusedEntertainmentRatio * CONSCIENTIOUSNESS_PHOTO_PRESENCE_ADJUSTMENT_FACTOR
                 if (rawConscientiousness > 1) {
@@ -64,9 +64,9 @@ const determineConscientiousness = (caption_careerfocused_entertainment_ratio, p
                     userPersonalityAspects.conscientiousness = rawConscientiousness
                 }
                 
-            } else if (caption_careerfocused_entertainment_ratio) {
+            } else if (caption_careerfocused_entertainment_ratio || caption_careerfocused_entertainment_ratio == 0) {
                 userPersonalityAspects.conscientiousness = caption_careerfocused_entertainment_ratio
-            } else if (photo_careerfocused_entertainment_ratio) {
+            } else if (photo_careerfocused_entertainment_ratio || photo_careerfocused_entertainment_ratio == 0) {
                 let rawConscientiousness = photo_careerfocused_entertainment_ratio * CONSCIENTIOUSNESS_PHOTO_PRESENCE_ADJUSTMENT_FACTOR
                 if (rawConscientiousness > 1) {
                     userPersonalityAspects.conscientiousness = 1
