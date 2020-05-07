@@ -112,6 +112,8 @@ const dropAndRecreateTables = () => {
                 last_name               VARCHAR(255) NOT NULL,
                 age                     INT NOT NULL,
                 city_of_residence       VARCHAR(255),
+                current_latitude        FLOAT,
+                current_longitude       FLOAT,
                 max_distance            INT,
                 gender                  VARCHAR(255),     
                 created_at              TIMESTAMP NOT NULL DEFAULT NOW()
@@ -337,6 +339,29 @@ const updateUserGenderAndMaxDistance = (id, max_distance, gender) => {
             db.query(sql, params, (error, result) => {
                 if (error) {
                     console.log(new Error(`${error} Problem updating user setting for ${id} in ${table}.`))
+                    reject(error)
+                }
+                resolve(rawDataPacketConverter(result))
+            })
+        } catch (error) {
+            console.log(error)
+            reject(error)
+        } finally {
+            closeConnection()
+        }
+    })
+}
+
+const updateUserCoordinates = (id, current_latitude, current_longitude) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            await createConnection()
+            const table = 'users'
+            const sql = `UPDATE ${table} SET current_latitude = ?, current_longitude = ? WHERE id = ?`
+            const params = [current_latitude, current_longitude, id]
+            db.query(sql, params, (error, result) => {
+                if (error) {
+                    console.log(new Error(`${error} Problem updating user location for ${id} in ${table}.`))
                     reject(error)
                 }
                 resolve(rawDataPacketConverter(result))
@@ -736,6 +761,7 @@ module.exports = {
     getUserByID,
     createUser,
     updateUserGenderAndMaxDistance,
+    updateUserCoordinates,
     getUserInstagrams,
     createUserIG,
     updateUserIG,

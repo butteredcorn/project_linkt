@@ -29,7 +29,11 @@ router.post('/', (req, res) => {
     if(email && password) {
         loginUser(email, password)
             .then((user) => {
-                user.current_location = currentLocation
+                if(req.body.latitude && req.body.longitude) {
+                    user.current_location = currentLocation
+                    db.updateUserCoordinates(user.id, req.body.latitude, req.body.longitude)
+                }
+
                 return createNewToken({...user})
             })
             .then((token) => {

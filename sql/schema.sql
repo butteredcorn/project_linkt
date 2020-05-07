@@ -15,6 +15,8 @@ CREATE TABLE users (
     last_name               VARCHAR(255) NOT NULL,
     age                     INT NOT NULL,
     city_of_residence       VARCHAR(255),
+    current_latitude        FLOAT,
+    current_longitude       FLOAT,
     max_distance            INT,
     gender                  VARCHAR(255),     
     created_at              TIMESTAMP NOT NULL DEFAULT NOW()
