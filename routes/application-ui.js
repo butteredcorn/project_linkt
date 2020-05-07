@@ -31,6 +31,9 @@ router.get('/dashboard', protectedRoute, async(req, res) => {
                 console.log(userPersonalityAspect)
             }
 
+            userPersonalityAspect = await determineUserPersonalityAspects(req.user)
+                console.log(userPersonalityAspect)
+
             console.log(req.user)
 
             res.render('dashboard', {
