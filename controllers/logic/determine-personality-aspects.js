@@ -87,17 +87,17 @@ const determineExtraversion = (portrait_to_noperson_ratio, mean_hashtags_per_pos
     return new Promise(async (resolve, reject) => {
         try {
             //measure of content (type of photos posted)
-            if (!portrait_to_noperson_ratio) {
+            if (!portrait_to_noperson_ratio && portrait_to_noperson_ratio != 0) {
                 reject(new Error('Check user metrics.'))
             }
 
             //measure of desire for connectivity
-            if (!mean_hashtags_per_post) {
+            if (!mean_hashtags_per_post && mean_hashtags_per_post != 0) {
                 reject(new Error('Check user metrics.'))
             }
 
             //measure of activity, desire to display activity
-            if (!posts_per_day_recent) {
+            if (!posts_per_day_recent && posts_per_day_recent != 0) {
                 reject(new Error('Check user metrics.'))
             }
 
