@@ -16,6 +16,8 @@ const determineUserPersonalityAspects = (user) => {
             const userMetrics = await db.getUserMetrics(undefined, `WHERE user_id = ${user.id}`)
             const latestMetrics = userMetrics[userMetrics.length - 1]
 
+            console.log(latestMetrics)
+
             const { mean_hashtags_per_post, captioned_uncaptioned_ratio, caption_careerfocused_entertainment_ratio, posts_per_day_recent, mean_days_between_all_posts, portrait_to_noperson_ratio, photo_careerfocused_entertainment_ratio, facial_expression_smile_other_ratio } = latestMetrics
         
             determineOpeness(portrait_to_noperson_ratio, userPersonalityAspects)
