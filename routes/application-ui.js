@@ -6,6 +6,7 @@ const querystring = require('querystring')
 const { determineUserPersonalityAspects } = require('../controllers/logic/determine-personality-aspects')
 
 const userSettings = '/user-settings?'
+const instagramEndpoint = '/instagram/login'
 
 const { errors } = require('../globals')
 const { UI_ROUTE_ERROR } = errors
@@ -14,6 +15,7 @@ const { UI_ROUTE_ERROR } = errors
 router.get('/dashboard', protectedRoute, async(req, res) => {
     try {
         const userPreferences = await db.getUserPreferences(undefined, `WHERE user_id = ${req.user.id}`)
+        const userInstagram = await db.getUserInstagrams(undefined, `WHERE user_id = ${req.user.id}`)
 
         //if user-settings doesn't exist, then redirect to set user settings
         if (userPreferences && userPreferences.length == 0) {
@@ -21,18 +23,21 @@ router.get('/dashboard', protectedRoute, async(req, res) => {
                 newUser: true
             })
             res.redirect(userSettings + query) //send querystring
+
+        } else if (userInstagram && userInstagram.length == 0) {
+
+            res.redirect(instagramEndpoint)
+
         //else redirect to dashboard
         } else {
             let userPersonalityAspect = await db.getUserPersonalityAspects(undefined, `WHERE user_id = ${req.user.id}`)
 
             // user's personality aspects
+            //implement time constraint here, to auto update if personalityaspects are too old***
             if (userPersonalityAspect.length == 0) {
                 userPersonalityAspect = await determineUserPersonalityAspects(req.user)
                 console.log(userPersonalityAspect)
             }
-
-            userPersonalityAspect = await determineUserPersonalityAspects(req.user)
-                console.log(userPersonalityAspect)
 
             console.log(req.user)
 
@@ -58,8 +63,11 @@ router.get('/match-profile', protectedRoute, async(req, res) => {
 
 router.post('/match-profile', protectedRoute, async(req, res) => {
     try {
+
+        console.log(req.body)
+
         res.render('match-profile', {
-            
+            matchProfile: req.body
         })
     } catch (error) {
         console.log(error)
