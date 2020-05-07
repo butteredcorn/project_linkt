@@ -3,6 +3,7 @@ const router = express.Router()
 const { protectedRoute } = require('../controllers/authentication')
 const db = require('../sql/database-interface')
 const querystring = require('querystring')
+const { determineUserPersonalityAspects } = require('../controllers/logic/determine-personality-aspects')
 
 const userSettings = '/user-settings?'
 
@@ -22,8 +23,12 @@ router.get('/dashboard', protectedRoute, async(req, res) => {
             res.redirect(userSettings + query) //send querystring
         //else redirect to dashboard
         } else {
+            let userPersonalityAspect = await db.getUserPersonalityAspects(undefined, `WHERE user_id = ${req.user.id}`)
+            if (!userPersonalityAspect) {
+                userPersonalityAspect = await determineUserPersonalityAspects(req.user)
+            }
             res.render('dashboard', {
-
+                user_personality_aspects: userPersonalityAspect
             })
         }
             

@@ -81,10 +81,10 @@ router.get('/processData', protectedRoute, async (req, res) => {
         //save raw instagram data (do this inbetween non-photo-dependent data calc and photo-dependent data calc for db enqueue)
         trimAndPushToDB(instagramData, req.user)
 
-
+        console.log(instagramData)
         console.log(metrics)
         
-        res.send(instagramData)
+        res.redirect('/dashboard')
 
     } catch (error) {
         console.log(error)

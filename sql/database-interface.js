@@ -194,6 +194,7 @@ const dropAndRecreateTables = () => {
                 extroversion            VARCHAR(255),
                 agreeableness           VARCHAR(255),
                 neuroticism             VARCHAR(255),
+                created_at              TIMESTAMP NOT NULL DEFAULT NOW(),
                 FOREIGN KEY (user_id)   REFERENCES users(id)
             )`)
         })
@@ -676,6 +677,57 @@ const createUserPreference = (user_id, partner_gender, partner_age_min, partner_
 }
 
 
+/**
+ * user_personality_aspects
+ * @param {*} selectBy 
+ * @param {*} searchBy 
+ */
+const getUserPersonalityAspects = (selectBy = '*', searchBy = '') => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            await createConnection()
+            const table = 'user_personality_aspects'
+            const sql = `SELECT ${selectBy} FROM ${table} ${searchBy}`
+            db.query(sql, (error, result) => {
+                if (error) {
+                    console.log(`Problem searching for ${table} by ${searchBy}.`)
+                    reject(error)
+                }
+                resolve(rawDataPacketConverter(result))
+            })
+        } catch (error) {
+            console.log(error)
+            reject(error)
+        } finally {
+            closeConnection()
+        }
+    })
+}
+
+const createUserPersonalityAspects = (user_id, openess, conscientiousness, extroversion, agreeableness, neuroticism) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            await createConnection()
+            const table = 'user_personality_aspects'
+            const sql = `INSERT INTO ${table} (user_id, openess, conscientiousness, extroversion, agreeableness, neuroticism) VALUES (?, ?, ?, ?, ?, ?)`
+            const params = [user_id, openess, conscientiousness, extroversion, agreeableness, neuroticism]
+            db.query(sql, params, (error, result) => {
+                if (error) {
+                    console.log(`${error} Problem creating user preference and inserting into ${table}.`)
+                    reject(error)
+                }
+                resolve(rawDataPacketConverter(result))
+            })
+        } catch (error) {
+            console.log(error)
+            reject(error)
+        } finally {
+            closeConnection()
+        }     
+    })
+}
+
+
 module.exports = {
     createConnection,
     closeConnection,
@@ -696,6 +748,8 @@ module.exports = {
     getUserMetrics,
     createUserMetric,
     getUserPreferences,
-    createUserPreference
+    createUserPreference,
+    getUserPersonalityAspects,
+    createUserPersonalityAspects,
 }
 

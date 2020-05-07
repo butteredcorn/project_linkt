@@ -92,6 +92,7 @@ CREATE TABLE user_personality_aspects (
     extroversion            VARCHAR(255),
     agreeableness           VARCHAR(255),
     neuroticism             VARCHAR(255),
+    created_at              TIMESTAMP NOT NULL DEFAULT NOW(),
     FOREIGN KEY (user_id)   REFERENCES users(id)
 );
 

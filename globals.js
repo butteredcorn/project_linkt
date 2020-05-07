@@ -30,6 +30,10 @@ module.exports = {
         TIMEOUT_FACTOR: 0.1,
     },
 
+    personality_aspects_constants: {
+        CONSCIENTIOUSNESS_PHOTO_PRESENCE_ADJUSTMENT_FACTOR: 1.1
+    },
+
     errors: {
         UI_ROUTE_ERROR: new Error("There appears to be some error. We apologize.")
     },
