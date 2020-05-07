@@ -6,11 +6,11 @@ const determineUserPersonalityAspects = (user) => {
     return new Promise(async (resolve, reject) => {
         try {
             const userPersonalityAspects = {
-                openess,
-                conscientiousness,
-                extraversion,
-                agreeableness,
-                neuroticism
+                openess: undefined,
+                conscientiousness: undefined,
+                extraversion: undefined,
+                agreeableness: undefined,
+                neuroticism: undefined
             }
 
             const userMetrics = await db.getUserMetrics(undefined, `WHERE user_id = ${user.id}`)
