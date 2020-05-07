@@ -36,7 +36,7 @@ const determineUserPersonalityAspects = (user) => {
 const determineOpeness = (portrait_to_noperson_ratio, userPersonalityAspects) => {
     return new Promise(async (resolve, reject) => {
         try {
-            if (portrait_to_noperson_ratio) {
+            if (portrait_to_noperson_ratio || portrait_to_noperson_ratio == 0) {
                 userPersonalityAspects.openess = Math.abs(1 - portrait_to_noperson_ratio)
             } else {
                 userPersonalityAspects.openess = null
