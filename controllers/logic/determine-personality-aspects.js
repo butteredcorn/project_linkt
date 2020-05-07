@@ -61,7 +61,13 @@ const determineConscientiousness = (caption_careerfocused_entertainment_ratio, p
                 } else {
                     userPersonalityAspects.conscientiousness = rawConscientiousness
                 }
+                
+            } else if (caption_careerfocused_entertainment_ratio) {
+                userPersonalityAspects.conscientiousness = caption_careerfocused_entertainment_ratio
             }
+
+            resolve(userPersonalityAspects.conscientiousness)
+
         } catch (error) {
             reject(error)            
         }
