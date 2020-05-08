@@ -141,6 +141,8 @@ html body {
     background: none;
     color: white;
     font-size: 24pt;
+    outline: none;
+    border: none;
 }
 
 
