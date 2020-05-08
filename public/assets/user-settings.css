@@ -293,3 +293,40 @@ html body {
   input[type=range]:focus::-ms-fill-upper {
     background: #3BA3A8;
   }
+
+
+@media only screen and (max-width: 500px) {
+  * {
+      font-size: 12px;
+  }
+
+  .Title {
+    font-size: 24px;
+  }
+
+  .TitleDiv {
+    max-height: 50px;
+  }
+
+  .title1 {
+    font-size: 16px;
+  }
+
+  #QuestionTitle {
+    font-size: 16px;
+  }
+
+  .button_container_inner {
+    font-size: 16px;
+  }
+
+  .units, .result, span {
+    font-size: 14px;
+  }
+
+}
+@media only screen and (min-width: 501px) {
+  * {
+    font-size: 16px;
+  }
+}
