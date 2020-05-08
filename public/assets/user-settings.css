@@ -299,15 +299,20 @@ html body {
 
 @media only screen and (max-width: 500px) {
   * {
-      font-size: 12px;
+      font-size: 14px;
   }
 
   .Title {
-    font-size: 24px;
+    padding-top: 15px;
+    font-size: 32px;
   }
 
   .TitleDiv {
     max-height: 50px;
+  }
+
+  .QuestionBox {
+    width: 80%;
   }
 
   .title1 {

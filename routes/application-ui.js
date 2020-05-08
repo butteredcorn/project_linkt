@@ -119,7 +119,7 @@ router.get('/user-settings', protectedRoute, async(req, res) => {
             res.render('user-settings', newUserMessage)
         } else {
             res.render('user-settings', {
-                heading: 'Preferences Questions',
+                heading: 'Preferences',
                 subHeading: ''
             })
         }
