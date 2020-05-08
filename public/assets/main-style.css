@@ -57,12 +57,10 @@ header {
 .header-text {
     font-size: 2em;
     font-weight: bold;
-    padding-left: 4em;
 }
 
 .header-logo {
     font-size: 3em;
-    padding-right: 4em;
     height: 50px;
     margin-bottom: 0.3em;
 }
@@ -137,6 +135,15 @@ footer {
     }
 }
 @media only screen and (min-width: 800px) {
+
+    .back-button {
+        font-size: 3em;
+        margin-left: 4em;
+    }
+
+    .header-logo {
+        padding-right: 4em;
+    }
 
     header {
         max-width: 1000px;

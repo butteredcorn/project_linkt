@@ -1,5 +1,5 @@
 .main-container {
-    padding-top: 6em;
+    padding-top: 8em;
     padding-bottom: 6em;
 }
 
@@ -96,6 +96,10 @@
 
     .profile-photo {
         max-width: 300px;
+    }
+
+    .main-container {
+        padding-bottom: 3em;
     }
 
     main {
