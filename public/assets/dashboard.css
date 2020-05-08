@@ -68,10 +68,14 @@ main > * {
 
 .view-profile {
     background-color: #3BA3A8;
+    padding-left: 0.2em;
+    padding-right: 0.2em;
 }
 
 .message {
     background-color: #ED2265;
+    padding-left: 0.2em;
+    padding-right: 0.2em;
 }
 
 
