@@ -8,7 +8,6 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <link href="https://fonts.googleapis.com/css?family=Lato&display=swap" rel="stylesheet">
     <link href="/assets/main-style.css" rel="stylesheet" type="text/css">
-    <link href="/assets/match-profile.css" rel="stylesheet" type="text/css">
     <link href="/assets/user-profile.css" rel="stylesheet" type="text/css">
     <title>Linkt</title>
 </head>
@@ -26,6 +25,10 @@
         </header>
     </div>
 
+    <!-- `Latitude: ${user.current_latitude} Longitude: ${user.current_longitude}` -->
+
+
+    
      <!-- main -->
      <div class="main-container">
         <main>
@@ -37,7 +40,7 @@
                     <p class="name"><%=`${user.first_name} ${user.last_name}`%></p>
                     <p class="headline">Lorem Ipsum</p>
                     <div class="profile-ribbon-container">
-                        <div class="profile-ribbon"><img class="profile-icon" src="assets/icons/pin.png" alt="location"><p class="ribbon-content"><%=`Latitude: ${user.current_latitude} Longitude: ${user.current_longitude}`%></p></div>
+                        <div class="profile-ribbon"><img class="profile-icon" src="assets/icons/pin.png" alt="location"><input class="ribbon-content" id="location-coordinates" type="hidden" value="<%=`${user.current_latitude},${user.current_longitude}`%>"><p class="raw-location"><%=`Latitude: ${user.current_latitude} Longitude: ${user.current_longitude}`%></p></div>
                         <div class="profile-ribbon"><img class="profile-icon" src="assets/icons/home-run.png" alt="place-of-origin"><p class="ribbon-content">From Lorem, Ipsum</p></div>
                         <div class="profile-ribbon"><img class="profile-icon" src="assets/icons/work.png" alt="career"><p class="ribbon-content"></p>Lorem Ipsum</div>
                         <div class="profile-ribbon"><img class="profile-icon" src="assets/icons/student.png" alt="education"><p class="ribbon-content">Lorem Ipsum</p></div>
@@ -90,5 +93,6 @@
 </body>
 <!-- <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script> -->
+<script src="assets/client-side-google-maps.js"></script>
 <script src="assets/user-profile.js"></script>
 </html>

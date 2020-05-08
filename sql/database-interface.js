@@ -307,13 +307,13 @@ const getUserByID = (id) => {
     })
 }
 
-const createUser = (email, password_hash, first_name, last_name, age, city_of_residence, max_distance = defaultMaxDistanceKMs, gender) => {
+const createUser = (email, password_hash, first_name, last_name, age, current_latitude, current_longitude, city_of_residence, max_distance = defaultMaxDistanceKMs, gender) => {
     return new Promise(async (resolve, reject) => {
         try {
             await createConnection()
             const table = 'users'
-            const sql = `INSERT INTO ${table} (email, password_hash, first_name, last_name, age, city_of_residence, max_distance, gender) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`
-            const params = [email, password_hash, first_name, last_name, age, city_of_residence, max_distance, gender]
+            const sql = `INSERT INTO ${table} (email, password_hash, first_name, last_name, age, current_latitude, current_longitude, city_of_residence, max_distance, gender) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+            const params = [email, password_hash, first_name, last_name, age, current_latitude, current_longitude, city_of_residence, max_distance, gender]
             db.query(sql, params, (error, result) => {
                 if (error) {
                     console.log(`${error} Problem creating user and inserting into ${table}.`)

@@ -78,3 +78,13 @@ form {
     font-weight: bold;
     cursor: pointer;
 }
+
+#modal-title {
+    display: flex;
+    justify-content: center;
+    color: #303030;
+}
+
+.modal-input {
+    margin-bottom:0.5em;
+}

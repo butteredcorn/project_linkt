@@ -4,7 +4,9 @@
 }
 
 main {
-    margin-top: 8em;
+    height: 100vh;
+    padding-top: 6em;
+    padding-bottom: 4em;
     margin-left: auto;
     margin-right: auto;
 }
