@@ -31,16 +31,16 @@
         <main>
             <div class="profile-container">
                 <div class="profile-image-container">
-                <button class="profile-picture-button" onclick="showProfilePictureGrid()"><img class="profile-photo" src="assets/meme/kizuna-ai-profile.jpg" alt="profile-picture"></button>
+                <button class="profile-picture-button" onclick="showProfilePictureGrid()"><img class="profile-photo" src="<%=user.current_profile_picture%>" alt="profile-picture"></button>
                 </div>
                 <div class="profile-info-container">
-                    <p class="name">Kizuna Ai</p>
-                    <p class="headline">A highly advanced AI</p>
+                    <p class="name"><%=`${user.first_name} ${user.last_name}`%></p>
+                    <p class="headline">Lorem Ipsum</p>
                     <div class="profile-ribbon-container">
-                        <div class="profile-ribbon"><img class="profile-icon" src="assets/icons/pin.png" alt="location"><p class="ribbon-content">Vancouver, BC</p></div>
-                        <div class="profile-ribbon"><img class="profile-icon" src="assets/icons/home-run.png" alt="place-of-origin"><p class="ribbon-content">From Digital Space, Youtube</p></div>
-                        <div class="profile-ribbon"><img class="profile-icon" src="assets/icons/work.png" alt="career"><p class="ribbon-content"></p>Youtube Star</div>
-                        <div class="profile-ribbon"><img class="profile-icon" src="assets/icons/student.png" alt="education"><p class="ribbon-content">Tomitake</p></div>
+                        <div class="profile-ribbon"><img class="profile-icon" src="assets/icons/pin.png" alt="location"><p class="ribbon-content"><%=`Latitude: ${user.current_latitude} Longitude: ${user.current_longitude}`%></p></div>
+                        <div class="profile-ribbon"><img class="profile-icon" src="assets/icons/home-run.png" alt="place-of-origin"><p class="ribbon-content">From Lorem, Ipsum</p></div>
+                        <div class="profile-ribbon"><img class="profile-icon" src="assets/icons/work.png" alt="career"><p class="ribbon-content"></p>Lorem Ipsum</div>
+                        <div class="profile-ribbon"><img class="profile-icon" src="assets/icons/student.png" alt="education"><p class="ribbon-content">Lorem Ipsum</p></div>
                         <!-- <div class="profile-ribbon"><img class="profile-icon" src="" alt="education"><p class="ribbon-content"></p></div> -->
                     </div>
                 </div>

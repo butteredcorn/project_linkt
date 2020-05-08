@@ -10,6 +10,13 @@
 
 .profile-container > * {
     max-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.profile-info-container {
+    width: 80%;
+    padding-left: 0.5em;
 }
 
 .profile-ribbon-container {

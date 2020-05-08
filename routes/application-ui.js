@@ -171,9 +171,10 @@ router.post('/user-settings-page', protectedRoute, async(req, res) => {
 
 router.get('/user-profile', protectedRoute, async(req, res) => {
     try {
-        const userPhotos = await loadUserProfile(req.user)
+        const {userObject, userPhotos} = await loadUserProfile(req.user)
         console.log(userPhotos)
         res.render('user-profile', {
+            user: userObject,
             userPhotos: userPhotos
         })
 
@@ -185,7 +186,6 @@ router.get('/user-profile', protectedRoute, async(req, res) => {
 
 router.post('/user-profile-picture', protectedRoute, async(req, res) => {
     try {
-        console.log(req.body)
         await db.updateUserProfilePhoto(req.user.id, req.body.selectedProfilePicture)
         
         res.redirect('/user-profile')
