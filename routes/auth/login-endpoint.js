@@ -28,10 +28,10 @@ router.post('/', (req, res) => {
 
     if(email && password) {
         loginUser(email, password)
-            .then((user) => {
+            .then(async (user) => {
                 if(req.body.latitude && req.body.longitude) {
                     user.current_location = currentLocation
-                    db.updateUserCoordinates(user.id, req.body.latitude, req.body.longitude)
+                    await db.updateUserCoordinates(user.id, req.body.latitude, req.body.longitude)
                 }
 
                 return createNewToken({...user})

@@ -1,0 +1,23 @@
+#home_button {
+    margin: 50px 0 50px 0;
+    height: 35px;
+    width: 125px;
+    background-color: #ED2265;
+    border-radius: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.profile-picture-button, .profile-picture-button:focus, .profile-picture-button:hover, .profile-picture-button:visited, .profile-picture-button:active {
+    border: none;
+    box-shadow: none;
+    outline: none;
+}
+
+.modal-profile-picture-thumbnail {
+    width: 250px;
+    height: 250px;
+}

@@ -18,7 +18,8 @@ CREATE TABLE users (
     current_latitude        FLOAT,
     current_longitude       FLOAT,
     max_distance            INT,
-    gender                  VARCHAR(255),     
+    gender                  VARCHAR(255),
+    current_profile_picture VARCHAR(255),     
     created_at              TIMESTAMP NOT NULL DEFAULT NOW()
 );
 

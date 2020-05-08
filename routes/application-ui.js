@@ -4,7 +4,8 @@ const { protectedRoute } = require('../controllers/authentication')
 const db = require('../sql/database-interface')
 const querystring = require('querystring')
 const { loadDashboard } = require('../controllers/data-compilation/dashboard')
-
+const { loadUserSettings } = require('../controllers/data-compilation/user-settings')
+const { loadUserProfile } = require('../controllers/data-compilation/user-profile')
 
 const userSettings = '/user-settings?'
 const instagramEndpoint = '/instagram/login'
@@ -138,6 +139,44 @@ router.post('/user-settings', protectedRoute, async(req, res) => {
         } else {
             console.log(new Error('req.body undefined.'))
         }
+    } catch (error) {
+        console.log(error)
+        res.send(UI_ROUTE_ERROR)
+    }
+})
+
+router.get('/user-settings-page', protectedRoute, async(req, res) => {
+    try {
+        const user = await loadUserSettings(req.user)
+        console.log(user)
+        res.render('user-settings-page', {
+            user: user
+        })
+
+    } catch (error) {
+        console.log(error)
+        res.send(UI_ROUTE_ERROR)
+    }
+})
+
+router.post('/user-settings-page', protectedRoute, async(req, res) => {
+    try {
+        res.redirect('/dashboard')
+
+    } catch (error) {
+        console.log(error)
+        res.send(UI_ROUTE_ERROR)
+    }
+})
+
+router.get('/user-profile', protectedRoute, async(req, res) => {
+    try {
+        const userPhotos = await loadUserProfile(req.user)
+        console.log(userPhotos)
+        res.render('user-profile', {
+            userPhotos: userPhotos
+        })
+
     } catch (error) {
         console.log(error)
         res.send(UI_ROUTE_ERROR)
