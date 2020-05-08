@@ -3,7 +3,8 @@ const router = express.Router()
 const { protectedRoute } = require('../controllers/authentication')
 const db = require('../sql/database-interface')
 const querystring = require('querystring')
-const { determineUserPersonalityAspects } = require('../controllers/logic/determine-personality-aspects')
+const { loadDashboard } = require('../controllers/data-compilation/dashboard')
+
 
 const userSettings = '/user-settings?'
 const instagramEndpoint = '/instagram/login'
@@ -30,19 +31,25 @@ router.get('/dashboard', protectedRoute, async(req, res) => {
 
         //else redirect to dashboard
         } else {
-            let userPersonalityAspect = await db.getUserPersonalityAspects(undefined, `WHERE user_id = ${req.user.id}`)
+            // let userPersonalityAspect = await db.getUserPersonalityAspects(undefined, `WHERE user_id = ${req.user.id}`)
 
-            // user's personality aspects
-            //implement time constraint here, to auto update if personalityaspects are too old***
-            if (userPersonalityAspect.length == 0) {
-                userPersonalityAspect = await determineUserPersonalityAspects(req.user)
-                console.log(userPersonalityAspect)
-            }
+            // // user's personality aspects
+            // //implement time constraint here, to auto update if personalityaspects are too old***
+            // if (userPersonalityAspect.length == 0) {
+            //     userPersonalityAspect = await determineUserPersonalityAspects(req.user)
+            //     console.log(userPersonalityAspect)
+            // }
 
-            console.log(req.user)
+            //console.log(req.user)
+
+            const {matches, userPersonalityAspects} = await loadDashboard(req.user)
+
+            console.log(matches)
+            console.log(userPersonalityAspects)
 
             res.render('dashboard', {
-                userPersonalityAspect: userPersonalityAspect
+                userPersonalityAspects: userPersonalityAspects,
+                matches: matches
             })
         }
             

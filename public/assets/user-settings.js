@@ -15,3 +15,11 @@ function updateMaxAge(value) {
         document.querySelector(".maxAgeValue").innerText = value
     }
 }
+
+function updateUserGender(value) {
+    document.querySelector(".userGenderValue").innerText = (value[0].toUpperCase() + value.slice(1))
+}
+
+function updatePartnerGenderPreference(value) {
+    document.querySelector(".partnerGenderValue").innerText = (value[0].toUpperCase() + value.slice(1))
+}

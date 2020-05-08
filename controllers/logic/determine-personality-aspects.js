@@ -24,7 +24,7 @@ const determineUserPersonalityAspects = (user) => {
             determineConscientiousness(caption_careerfocused_entertainment_ratio, photo_careerfocused_entertainment_ratio, userPersonalityAspects)
             determineExtraversion(portrait_to_noperson_ratio, mean_hashtags_per_post, posts_per_day_recent, userPersonalityAspects)
 
-            db.createUserPersonalityAspects(user.id, userPersonalityAspects.openess, userPersonalityAspects.conscientiousness, userPersonalityAspects.extraversion)
+            await db.createUserPersonalityAspects(user.id, userPersonalityAspects.openess, userPersonalityAspects.conscientiousness, userPersonalityAspects.extraversion)
 
             resolve(userPersonalityAspects)
         } catch (error) {

@@ -19,37 +19,39 @@
 
             <div class="QuestionBox">
                 <div class="QuestionTextBox">
-                    <p id="QuestionTitle">I identify as a</p>
+                    <p id="QuestionTitle">I identify as</p>
+                    <div class="result"><span class="userGender userGenderValue"></div>
                 </div>
                 <div class="QuestionTextBox">
-                    <p class="QuestionText">Woman</p>
-                    <input type="radio" class="Dot" name="gender" value="woman" required></input>
+                    <p class="QuestionText">Female</p>
+                    <input type="radio" class="Dot" name="gender" value="female" oninput={updateUserGender(this.value)} required></input>
                 </div>
                 <div class="QuestionTextBox">
-                    <p class="QuestionText">Man</p>
-                    <input type="radio" class="Dot" name="gender" value="man" required></input>
+                    <p class="QuestionText">Male</p>
+                    <input type="radio" class="Dot" name="gender" value="male" oninput={updateUserGender(this.value)} required></input>
                 </div>
                 <div class="QuestionTextBox">
                     <p class="QuestionText">Other</p>
-                    <input type="radio" class="Dot" name="gender" value="other" required></input>
+                    <input type="radio" class="Dot" name="gender" value="other" oninput={updateUserGender(this.value)} required></input>
                 </div>
             </div>
 
             <div class="QuestionBox">
                 <div class="QuestionTextBox">
                     <p id="QuestionTitle">Show me</p>
+                    <div class="result"><span class="partneGender partnerGenderValue"></div>
                 </div>
                 <div class="QuestionTextBox">
                     <p class="QuestionText">Woman</p>
-                    <input type="radio" class="Dot" name="gender_preference" value="woman" required></input>
+                    <input type="radio" class="Dot" name="gender_preference" value="women" oninput={updatePartnerGenderPreference(this.value)} required></input>
                 </div>
                 <div class="QuestionTextBox">
                     <p class="QuestionText">Man</p>
-                    <input type="radio" class="Dot" name="gender_preference" value="man" required></input>
+                    <input type="radio" class="Dot" name="gender_preference" value="men" oninput={updatePartnerGenderPreference(this.value)} required></input>
                 </div>
                 <div class="QuestionTextBox">
                     <p class="QuestionText">Both</p>
-                    <input type="radio" class="Dot" name="gender_preference" value="both" required></input>
+                    <input type="radio" class="Dot" name="gender_preference" value="both" oninput={updatePartnerGenderPreference(this.value)} required></input>
                 </div>
             </div>
 
