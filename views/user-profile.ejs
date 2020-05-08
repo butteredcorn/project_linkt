@@ -59,7 +59,7 @@
                 <button class="modal-profile-picture-selector" value="<%= userPhotos[i].photo_link %>" onclick="selectUserPhoto(this.value)"><img class="modal-profile-picture-thumbnail"src="<%= userPhotos[i].photo_link %>" alt="profile photo"></button>
              <% } %>
             </div>
-        <form class="modal-footer" action='/user-profile-picture'>
+        <form class="modal-footer" method="post" action='/user-profile-picture'>
             <input id="selected-profile-picture" name="selectedProfilePicture" type="hidden" value="">
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
           <button type="submit" class="btn btn-primary">Save Changes</button>
