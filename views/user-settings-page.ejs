@@ -30,7 +30,7 @@
             <div class="page">
                 <div class="profile-settings">
                     <div class="ribbon header-ribbon"><h2 class="profile-settings-header">ACCOUNT SETTINGS</h2></div>
-                    <div class="ribbon"><img src="" alt="profile thumbnail"><p class="profile-name"><%=`${user.first_name} ${user.last_name}`%></p><a href="/user-profile">Edit Profile</a></div>
+                    <div class="ribbon"><img class="profile-photo-thumbnail" src="<%=user.current_profile_picture%>" alt="profile thumbnail"><p class="profile-name"><%=`${user.first_name} ${user.last_name}`%></p><a href="/user-profile">Edit Profile</a></div>
                     <div class="ribbon"><h4>Email</h4><p class="profile-email"><%= user.email%></p></div>
                 </div>
     
@@ -61,7 +61,7 @@
     <div class="footer-container">
         <footer class="main-footer">
             <nav class="footer-navigation-icons">
-                <a class="footer-link" href=""><img src="assets/icons/profileIcon.png" alt="profile-icon"></a>
+                <a class="footer-link" href="/user-profile"><img src="assets/icons/profileIcon.png" alt="profile-icon"></a>
                 <a class="footer-link" href=""><img src="assets/icons/messageIcon.png" alt="message-icon"></a>
                 <a class="footer-link" href="/user-settings-page"><img src="assets/icons/settingIcon.png" alt="settings-icon"></a>
             </nav>
