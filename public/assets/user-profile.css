@@ -99,10 +99,12 @@
     }
 
     .main-container {
-        padding-bottom: 3em;
+        height: 100vh;
     }
 
     main {
+        padding-top: 6em;
+        padding-bottom: 3em;
         width: 100vw;
     }
 }
