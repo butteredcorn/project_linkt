@@ -376,6 +376,29 @@ const updateUserCoordinates = (id, current_latitude, current_longitude) => {
     })
 }
 
+const updateUserProfilePhoto = (id, current_profile_picture) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            await createConnection()
+            const table = 'users'
+            const sql = `UPDATE ${table} SET current_profile_picture = ? WHERE id = ?`
+            const params = [current_profile_picture, id]
+            db.query(sql, params, (error, result) => {
+                if (error) {
+                    console.log(new Error(`${error} Problem updating user profile photo for ${id} in ${table}.`))
+                    reject(error)
+                }
+                resolve(rawDataPacketConverter(result))
+            })
+        } catch (error) {
+            console.log(error)
+            reject(error)
+        } finally {
+            closeConnection()
+        }
+    })
+}
+
 /**
  * user_instagram
  * @param {*} instagram_id 
@@ -763,6 +786,7 @@ module.exports = {
     createUser,
     updateUserGenderAndMaxDistance,
     updateUserCoordinates,
+    updateUserProfilePhoto,
     getUserInstagrams,
     createUserIG,
     updateUserIG,

@@ -183,6 +183,19 @@ router.get('/user-profile', protectedRoute, async(req, res) => {
     }
 })
 
+router.post('/user-profile-picture', protectedRoute, async(req, res) => {
+    try {
+        console.log(req.body)
+        await db.updateUserProfilePhoto(req.user.id, req.body.selectedProfilePicture)
+        
+        res.redirect('/user-profile')
+
+    } catch (error) {
+        console.log(error)
+        res.send(UI_ROUTE_ERROR)
+    }
+})
+
 router.get('/questionnaire', protectedRoute, async(req, res) => {
     try {
         res.render('questionnaire', {

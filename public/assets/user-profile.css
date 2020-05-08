@@ -21,3 +21,14 @@
     width: 250px;
     height: 250px;
 }
+
+.modal-profile-picture-thumbnail:focus {
+    outline-width: 2px;
+    outline-style: dashed;
+    outline-color: #3f729b;
+}
+
+.modal-profile-picture-selector {
+    border: none;
+    box-shadow: none;
+}
