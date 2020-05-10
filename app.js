@@ -7,11 +7,53 @@ module.exports = function () {
     const { verifyExistingToken } = require('./controllers/json-web-token')
 
     const app = express()
-    const messageServer = require('http').createServer(app);
-    const io = require('socket.io')(messageServer);
+    const server = require('http').createServer(app);
+    const io = require('socket.io')(server);
+
+    io.use(async (socket, next) => {
+        // check the user id from the socket 
+        //console.log(socket.handshake.headers.cookie)
+        try {
+            if (socket.handshake.query && socket.handshake.query.token) {
+                const jwt = (socket.handshake.query.token).replace('token=', '')
+                //console.log(jwt)
+                const user = await verifyExistingToken(jwt)
+
+                if (user) {
+                    next()
+                } else {
+                    next(new Error('Authentication error.'));
+                }
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    })
+
+    const messages = []
+    const currentUsers = {}
+
+    io.on('connection', (socket) => {
+        console.log('some client connected');
+        socket.emit('new message', {text: "connected to messaging server."})
+      
+        // currentUsers[socket.user_id] = socket;
+      
+        // socket.emit('old messages', messages)
+            
+        // socket.on('new message', data => {
+        //   console.log(data)
+        //   messages.push(data)
+      
+        //   socket.broadcast.emit('new message', data);
+      
+        //   if (data.type === 'private') {
+        //     currentUsers[data.to_user].emit('new message', data)
+        //   }
+        //})
+    });
 
     app.set('view engine', 'ejs')
-
 
     app.use(express.static('./public'));
     app.use(bodyParser.json())
@@ -31,14 +73,12 @@ module.exports = function () {
     app.use('/', applicationUIRoute)
 
     app.get('/', protectedRoute, async (req, res) => {
-        const decode = require('jwt-decode')
-        console.log('hello world!')
-        const user = decode(req.cookies.token)
-        if (req.cookies.token && verifyExistingToken(req.cookies.token)) {
-            console.log('Token accepted.')
+        try {
+            res.redirect('/dashboard')
+        } catch (error) {
+            console.log(error)
+            res.redirect('/login')
         }
-        console.log(user)
-        res.redirect('/dashboard')
     })
 
     app.get('/api', async(req, res) => {
@@ -50,17 +90,7 @@ module.exports = function () {
         }
     })
 
-
-
-
-    io.on('connection', function(socket) {
-        console.log('a user connected');
-        socket.on('chat message', function(msg){
-            console.log('message: ' + msg);
-        });
-    });
-    
-    return app
+    return server
 }
 
 

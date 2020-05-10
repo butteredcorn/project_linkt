@@ -32,7 +32,7 @@ router.post('/', authUserRedirect, async (req, res) => {
             res.redirect(dashboard)
         } catch (error) {
             console.log(error)
-            res.send("Error!")
+            res.send(error)
         }
     }
 })
