@@ -30,7 +30,7 @@ const trimAndPushToDB = (instagramData, user) => {
                     db.createUserPhotoNonHandled(obj.id, user.id, obj.media_url, obj.timestamp, obj.caption, obj.media_type, obj.thumbnail_url)
                 } else if (photo) {
                     //need to update every photo link or you will get a BAD URL TIMESTAMP ERROR!!!
-                    
+                    db.updateUserPhotoNonHandles(obj.id, user.id, obj.media_url, obj.thumbnail_url)
                     //reject(new Error('Error: duplicate instagram_post_id identified.'))
                 }
                 
