@@ -48,6 +48,7 @@ const trimAndPushToDB = (instagramData, user) => {
 
             resolve('Uploaded to database.')
         } catch (error) {
+            console.log(error)
             reject(error)
         } finally {
             // setTimeout(() => {
