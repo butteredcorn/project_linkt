@@ -27,7 +27,7 @@ const trimAndPushToDB = (instagramData, user) => {
                 //if photo doesn't already exist --> create photo
                 if (photo.length == 0) {
                     //await omitted here for optimal performance, handle createConnection/closeConnection manually
-                    await db.createUserPhotoNonHandled(obj.id, user.id, obj.media_url, obj.timestamp, obj.caption, obj.media_type, obj.thumbnail_url)
+                    db.createUserPhotoNonHandled(obj.id, user.id, obj.media_url, obj.timestamp, obj.caption, obj.media_type, obj.thumbnail_url)
                 } else {
                     reject(new Error('Error: duplicate instagram_post_id identified.'))
                 }
