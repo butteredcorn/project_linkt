@@ -579,6 +579,29 @@ const createUserPhotoNonHandled = (instagram_post_id, user_id, photo_link, photo
     })
 }
 
+const updateUserPhotoNonHandles = (instagram_post_id, user_id, photo_link) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            //await createConnection()
+            const table = 'user_photos'
+            const sql = `UPDATE ${table} SET photo_link = ? WHERE instagram_post_id =? AND user_id = ?`
+            const params = [photo_link, instagram_post_id, user_id]
+            db.query(sql, params, (error, result) => {
+                if (error) {
+                    console.log(`${error} Problem creating updating user_instagram for ${table}.`)
+                    reject(error)
+                }
+                resolve(rawDataPacketConverter(result))
+            })
+        } catch (error) {
+            console.log(error)
+            reject(error)
+        } finally {
+            //closeConnection()
+        }     
+    })
+}
+
 /**
  * photo_labels
  * @param {*} selectBy 

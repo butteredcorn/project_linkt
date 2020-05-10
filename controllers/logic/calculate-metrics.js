@@ -28,8 +28,10 @@ const trimAndPushToDB = (instagramData, user) => {
                 if (photo.length == 0) {
                     //await omitted here for optimal performance, handle createConnection/closeConnection manually
                     db.createUserPhotoNonHandled(obj.id, user.id, obj.media_url, obj.timestamp, obj.caption, obj.media_type, obj.thumbnail_url)
-                } else {
-                    reject(new Error('Error: duplicate instagram_post_id identified.'))
+                } else if (photo) {
+                    //need to update every photo link or you will get a BAD URL TIMESTAMP ERROR!!!
+                    
+                    //reject(new Error('Error: duplicate instagram_post_id identified.'))
                 }
                 
 

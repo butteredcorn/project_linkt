@@ -5,6 +5,7 @@ const { getInstagramAuthWindow, getInstagramAccessToken, getUserInstagramData } 
 const { verifyExistingToken } = require('../controllers/json-web-token')
 const { trimAndPushToDB, processInstagramData } = require('../controllers/logic/calculate-metrics')
 const db = require('../sql/database-interface')
+const { MINIMUM_IG_PHOTOS } = require('../globals')
 
 router.get('/login', protectedRoute, async (req, res) => {
     try {
@@ -87,6 +88,12 @@ router.get('/processData', protectedRoute, async (req, res) => {
         res.redirect('/dashboard')
 
     } catch (error) {
+        if (error.message) {
+            const message = error.message
+            if (message.includes('MINIMUM_IG_PHOTOS')) {
+                res.send(`Error: Instagram must have at least ${MINIMUM_IG_PHOTOS} posts.`)
+            }
+        }
         console.log(error)
         res.send(new Error('Error with data retrieval or processing data.'))
     }
