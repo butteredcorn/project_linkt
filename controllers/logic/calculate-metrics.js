@@ -16,18 +16,20 @@ const trimAndPushToDB = (instagramData, user) => {
             if(instagramData.length > NUM_IG_PHOTOS_PUSHED_TO_DB) {
                 instagramData = instagramData.slice(0, NUM_IG_PHOTOS_PUSHED_TO_DB)
             }
-            await db.createConnection()
+            //await db.createConnection()
 
             //console.log(instagramData)
 
             //could also filter out all photos without captions instead of just by recency
             for (let obj of instagramData) { //raw instagram data
 
-                const photo = await db.getUserPhotosUnhandled(undefined, `WHERE instagram_post_id = ${obj.id}`)
+                const photo = await db.getUserPhotos(undefined, `WHERE instagram_post_id = ${obj.id}`)
                 //if photo doesn't already exist --> create photo
                 if (photo.length == 0) {
                     //await omitted here for optimal performance, handle createConnection/closeConnection manually
-                    await db.createUserPhotoNonHandled(obj.id, user.id, obj.media_url, obj.timestamp, obj.caption, obj.media_type, obj.thumbnail_url)
+                    await db.createUserPhoto(obj.id, user.id, obj.media_url, obj.timestamp, obj.caption, obj.media_type, obj.thumbnail_url)
+                } else {
+                    reject(new Error('Error: duplicate instagram_post_id identified.'))
                 }
                 
 
@@ -36,7 +38,7 @@ const trimAndPushToDB = (instagramData, user) => {
                     for (let label of labelsArray) {
                         //awaits currently not handled, so time out the creation
                         //setTimeout(() => {
-                            await db.createPhotoLabelNonHandled(obj.id, label.label, label.score)
+                            await db.createUserPhoto(obj.id, label.label, label.score)
                         //}, TIMEOUT * TIMEOUT_FACTOR)
                     }
                 }
@@ -46,10 +48,10 @@ const trimAndPushToDB = (instagramData, user) => {
         } catch (error) {
             reject(error)
         } finally {
-            setTimeout(() => {
-                console.log('Database connection closed manually. If enqueue error exists, consider modifying the closeConnection() handler.')
-                db.closeConnection()
-            }, TIMEOUT)
+            // setTimeout(() => {
+            //     console.log('Database connection closed manually. If enqueue error exists, consider modifying the closeConnection() handler.')
+            //     db.closeConnection()
+            // }, TIMEOUT)
         }
     })
 }
