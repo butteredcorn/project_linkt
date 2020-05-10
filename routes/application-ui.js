@@ -16,8 +16,9 @@ const { UI_ROUTE_ERROR } = errors
 
 router.get('/dashboard', protectedRoute, async(req, res) => {
     try {
-        const userPreferences = await db.getUserPreferences(undefined, `WHERE user_id = ${req.user.id}`)
-        const userInstagram = await db.getUserInstagrams(undefined, `WHERE user_id = ${req.user.id}`)
+        await db.createConnection()
+        const userPreferences = await db.getUserPreferencesNonHandled(undefined, `WHERE user_id = ${req.user.id}`)
+        const userInstagram = await db.getUserInstagramsNonHandled(undefined, `WHERE user_id = ${req.user.id}`)
 
         //if user-settings doesn't exist, then redirect to set user settings
         if (userPreferences && userPreferences.length == 0) {

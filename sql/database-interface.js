@@ -482,6 +482,28 @@ const getUserInstagrams = (selectBy = '*', searchBy = '') => {
     })
 }
 
+const getUserInstagramsNonHandled = (selectBy = '*', searchBy = '') => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            //await createConnection()
+            const table = 'user_instagram'
+            const sql = `SELECT ${selectBy} FROM ${table} ${searchBy}`
+            db.query(sql, (error, result) => {
+                if (error) {
+                    console.log(`Problem searching for ${table} by ${searchBy}.`)
+                    reject(error)
+                }
+                resolve(rawDataPacketConverter(result))
+            })
+        } catch (error) {
+            console.log(error)
+            reject(error)
+        } finally {
+            //closeConnection()
+        }
+    })
+}
+
 
 
 /**
@@ -732,6 +754,28 @@ const getUserPreferences = (selectBy = '*', searchBy = '') => {
     })
 }
 
+const getUserPreferencesNonHandled = (selectBy = '*', searchBy = '') => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            //await createConnection()
+            const table = 'user_preferences'
+            const sql = `SELECT ${selectBy} FROM ${table} ${searchBy}`
+            db.query(sql, (error, result) => {
+                if (error) {
+                    console.log(`Problem searching for ${table} by ${searchBy}.`)
+                    reject(error)
+                }
+                resolve(rawDataPacketConverter(result))
+            })
+        } catch (error) {
+            console.log(error)
+            reject(error)
+        } finally {
+            //closeConnection()
+        }
+    })
+}
+
 const createUserPreference = (user_id, partner_gender, partner_age_min, partner_age_max) => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -818,6 +862,7 @@ module.exports = {
     updateUserCoordinates,
     updateUserProfilePhoto,
     getUserInstagrams,
+    getUserInstagramsNonHandled,
     createUserIG,
     updateUserIG,
     getUserPhotos,
@@ -830,6 +875,7 @@ module.exports = {
     getUserMetrics,
     createUserMetric,
     getUserPreferences,
+    getUserPreferencesNonHandled,
     createUserPreference,
     getUserPersonalityAspects,
     createUserPersonalityAspects,
