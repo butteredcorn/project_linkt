@@ -52,7 +52,14 @@ const createConnection = (hostAddress = default_hostAddress, port = default_port
 }
 
 const closeConnection = () => {
-    db.end()
+    return new Promise(async (resolve, reject) => {
+        try {
+            db.end()
+            resolve('connection closed.')
+        } catch (error) {
+            reject(error)
+        }
+    })
 }
 
 const sqlCallback = (sql) => {
