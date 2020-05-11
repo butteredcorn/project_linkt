@@ -91,7 +91,7 @@ router.get('/processData', protectedRoute, async (req, res) => {
             delayDBHandling: true
         })
         
-        res.redirect('/dashboard' + query)
+        res.redirect('/dashboard' + '?' + query)
 
     } catch (error) {
         if (error.message) {
