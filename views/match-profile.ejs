@@ -24,14 +24,15 @@
     </div>
 
      <!-- main -->
+    <% const { username, first_name, last_name, age, profile_picture } = matchProfile %>
      <div class="main-container">
         <main>
             <div class="profile-container">
                 <div class="profile-image-container">
-                    <img class="profile-photo" src="assets/meme/kizuna-ai-profile.jpg" alt="profile-picture">
+                    <img class="profile-photo" src="<%=profile_picture%>" alt="profile-picture">
                 </div>
                 <div class="profile-info-container">
-                    <p class="name">Kizuna Ai</p>
+                    <p class="name"><%`${first_name} ${last_name}`%></p>
                     <p class="headline">A highly advanced AI</p>
                     <div class="profile-ribbon-container">
                         <div class="profile-ribbon"><img class="profile-icon" src="assets/icons/pin.png" alt="location"><p class="ribbon-content">Vancouver, BC</p></div>

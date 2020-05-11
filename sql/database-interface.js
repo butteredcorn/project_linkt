@@ -76,7 +76,11 @@ const sqlCallback = (sql) => {
 
 const dropAndRecreateTables = () => {
     return new Promise((resolve, reject) => {
-        sqlCallback('DROP TABLE IF EXISTS user_career_and_education')
+        sqlCallback('DROP TABLE IF EXISTS user_tags')
+        .then((result) => {
+            console.log(result.message)
+            return sqlCallback('DROP TABLE IF EXISTS user_career_and_education')
+        })
         .then((result) => {
             console.log(result.message)
             return sqlCallback('DROP TABLE IF EXISTS user_preferences')
@@ -123,7 +127,8 @@ const dropAndRecreateTables = () => {
                 current_longitude       FLOAT,
                 max_distance            INT,
                 gender                  VARCHAR(255),
-                current_profile_picture VARCHAR(255),     
+                current_profile_picture VARCHAR(255),
+                bio                     VARCHAR(255),     
                 created_at              TIMESTAMP NOT NULL DEFAULT NOW()
             )`)
         })
@@ -232,6 +237,15 @@ const dropAndRecreateTables = () => {
                 income_range_low        INT,
                 income_range_high       INT,
                 last_updated            TIMESTAMP NOT NULL DEFAULT NOW(),
+                FOREIGN KEY (user_id)   REFERENCES users(id)
+            )`)
+        })
+        .then((result) => {
+            console.log(result.message)
+            return sqlCallback(`CREATE TABLE user_tags (
+                id                      INT PRIMARY KEY AUTO_INCREMENT,
+                user_id                 INT NOT NULL,
+                tag                     VARCHAR(255) NOT NULL,
                 FOREIGN KEY (user_id)   REFERENCES users(id)
             )`)
         })
@@ -393,6 +407,29 @@ const updateUserProfilePhoto = (id, current_profile_picture) => {
             db.query(sql, params, (error, result) => {
                 if (error) {
                     console.log(new Error(`${error} Problem updating user profile photo for ${id} in ${table}.`))
+                    reject(error)
+                }
+                resolve(rawDataPacketConverter(result))
+            })
+        } catch (error) {
+            console.log(error)
+            reject(error)
+        } finally {
+            closeConnection()
+        }
+    })
+}
+
+const updateUserProfileBio = (id, bio) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            await createConnection()
+            const table = 'users'
+            const sql = `UPDATE ${table} SET bio = ? WHERE id = ?`
+            const params = [bio, id]
+            db.query(sql, params, (error, result) => {
+                if (error) {
+                    console.log(new Error(`${error} Problem updating user profile bio for ${id} in ${table}.`))
                     reject(error)
                 }
                 resolve(rawDataPacketConverter(result))
@@ -861,6 +898,7 @@ module.exports = {
     updateUserGenderAndMaxDistance,
     updateUserCoordinates,
     updateUserProfilePhoto,
+    updateUserProfileBio,
     getUserInstagrams,
     getUserInstagramsNonHandled,
     createUserIG,

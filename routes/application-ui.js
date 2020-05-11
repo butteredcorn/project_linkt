@@ -98,8 +98,9 @@ router.get('/match-message', protectedRoute, async(req, res) => {
 
 router.post('/match-message', protectedRoute, async(req, res) => {
     try {
+        console.log(req.body)
         res.render('match-message', {
-            
+            username: req.body.username
         })
     } catch (error) {
         console.log(error)

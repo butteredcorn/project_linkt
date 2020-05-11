@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS user_tags;
 DROP TABLE IF EXISTS user_career_and_education;
 DROP TABLE IF EXISTS user_preferences;
 DROP TABLE IF EXISTS user_personality_aspects;
@@ -19,7 +20,8 @@ CREATE TABLE users (
     current_longitude       FLOAT,
     max_distance            INT,
     gender                  VARCHAR(255),
-    current_profile_picture VARCHAR(255),     
+    current_profile_picture VARCHAR(255),
+    bio                     VARCHAR(255),
     created_at              TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
@@ -119,5 +121,12 @@ CREATE TABLE user_career_and_education (
     income_range_low        INT,
     income_range_high       INT,
     last_updated            TIMESTAMP NOT NULL DEFAULT NOW(),
+    FOREIGN KEY (user_id)   REFERENCES users(id)
+);
+
+CREATE TABLE user_tags (
+    id                      INT PRIMARY KEY AUTO_INCREMENT,
+    user_id                 INT NOT NULL,
+    tag                     VARCHAR(255) NOT NULL,
     FOREIGN KEY (user_id)   REFERENCES users(id)
 );
