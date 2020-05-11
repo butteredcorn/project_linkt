@@ -10,7 +10,8 @@ const { loadUserProfile } = require('../controllers/data-compilation/user-profil
 const userSettings = '/user-settings?'
 const instagramEndpoint = '/instagram/login'
 
-const { errors } = require('../globals')
+const { errors, metric_calculation_constants } = require('../globals')
+const { TIMEOUT } = metric_calculation_constants
 const { UI_ROUTE_ERROR } = errors
 
 
@@ -69,7 +70,9 @@ router.get('/dashboard', protectedRoute, async(req, res) => {
         console.log(error)
         res.send(UI_ROUTE_ERROR)
     } finally {
-        db.closeConnection()
+        setTimeout(() => {
+            db.closeConnection()
+        }, TIMEOUT/3)
     }
 })
 
