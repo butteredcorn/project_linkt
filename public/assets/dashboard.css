@@ -1,10 +1,12 @@
 .main-container {
     padding-top: 4em;
     padding-bottom: 8em;
+
 }
 
 main > * {
     padding-top: 4em;
+
 }
 
 .card-container {

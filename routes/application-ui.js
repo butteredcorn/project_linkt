@@ -10,7 +10,8 @@ const { loadUserProfile } = require('../controllers/data-compilation/user-profil
 const userSettings = '/user-settings?'
 const instagramEndpoint = '/instagram/login'
 
-const { errors } = require('../globals')
+const { errors, metric_calculation_constants } = require('../globals')
+const { TIMEOUT } = metric_calculation_constants
 const { UI_ROUTE_ERROR } = errors
 
 
@@ -22,6 +23,7 @@ router.get('/dashboard', protectedRoute, async(req, res) => {
         //db.createConnection() created at instagram-endpoint through calculate-metrics
         //db.closeConnection also handled via timer
         if (req.query.delayDBHandling) {
+            const db = require('../routes/instagram-endpoint').db
             console.log(`delayed db handling invoked.`)
             userPreferences = await db.getUserPreferencesNonHandled(undefined, `WHERE user_id = ${req.user.id}`)
             userInstagram = await db.getUserInstagramsNonHandled(undefined, `WHERE user_id = ${req.user.id}`)
@@ -67,6 +69,10 @@ router.get('/dashboard', protectedRoute, async(req, res) => {
     } catch (error) {
         console.log(error)
         res.send(UI_ROUTE_ERROR)
+    } finally {
+        // setTimeout(() => {
+        //     db.closeConnection()
+        // }, TIMEOUT/3)
     }
 })
 
