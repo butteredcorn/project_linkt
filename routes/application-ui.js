@@ -55,8 +55,8 @@ router.get('/dashboard', protectedRoute, async(req, res) => {
                 data = await loadDashboard(req.user)
             }
 
-            console.log(matches)
-            //console.log(userPersonalityAspects)
+            console.log(data.matches)
+            //console.log(data.userPersonalityAspects)
 
             res.render('dashboard', {
                 userPersonalityAspects: data.userPersonalityAspects,
