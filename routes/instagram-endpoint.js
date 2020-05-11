@@ -105,7 +105,6 @@ router.get('/processData', protectedRoute, async (req, res) => {
     }
 })
 
-module.exports = {
-    router,
-    db
-}
+module.exports = router
+
+module.exports.db = db

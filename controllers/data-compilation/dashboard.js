@@ -27,7 +27,7 @@ const getUserPersonalityAspects = (user) => {
 const getUserPersonalityAspectsUnhandled = (user) => {
     return new Promise(async (resolve, reject) => {
         try {
-            const {db} = require('../../routes/instagram-endpoint')
+            const db = require('../../routes/instagram-endpoint').db
             let userPersonalityAspect = await db.getUserPersonalityAspectsUnhandled(undefined, `WHERE user_id = ${user.id}`)
 
             //if not found, determine userPersonalityAspects and push to database
@@ -70,7 +70,7 @@ const getUserMatches = (user) => {
 const getUserMatchesUnhandled = (user) => {
     return new Promise(async (resolve, reject) => {
         try {
-            const {db} = require('../../routes/instagram-endpoint')
+            const db = require('../../routes/instagram-endpoint').db
             const userUserPreferences = (await db.getUsersUnhandled(undefined, `JOIN user_preferences ON users.id=user_preferences.user_id WHERE users.id = ${user.id}`))
             const latestUserPreference = userUserPreferences[userUserPreferences.length - 1]
 
