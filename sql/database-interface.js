@@ -304,6 +304,28 @@ const getUsers = (selectBy = '*', searchBy = '') => {
     })
 }
 
+const getUsersUnhandled = (selectBy = '*', searchBy = '') => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            //await createConnection()
+            const table = 'users'
+            const sql = `SELECT ${selectBy} FROM ${table} ${searchBy}`
+            db.query(sql, (error, result) => {
+                if (error) {
+                    console.log(`Problem searching for ${table} by ${searchBy}.`)
+                    reject(error)
+                }
+                resolve(rawDataPacketConverter(result))
+            })
+        } catch (error) {
+            console.log(error)
+            reject(error)
+        } finally {
+            //closeConnection()
+        }
+    })
+}
+
 const getUserByID = (id) => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -739,6 +761,28 @@ const getUserMetrics = (selectBy = '*', searchBy = '') => {
     })
 }
 
+const getUserMetricsUnhandled = (selectBy = '*', searchBy = '') => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            //await createConnection()
+            const table = 'user_psychometrics'
+            const sql = `SELECT ${selectBy} FROM ${table} ${searchBy}`
+            db.query(sql, (error, result) => {
+                if (error) {
+                    console.log(`Problem searching for ${table} by ${searchBy}.`)
+                    reject(error)
+                }
+                resolve(rawDataPacketConverter(result))
+            })
+        } catch (error) {
+            console.log(error)
+            reject(error)
+        } finally {
+            //closeConnection()
+        }
+    })
+}
+
 const createUserMetric = (user_id, number_of_posts, number_of_captioned_posts, number_of_hashtags, mean_hashtags_per_post, captioned_uncaptioned_ratio, caption_careerfocused_words, caption_entertainment_words, caption_careerfocused_entertainment_ratio, posts_per_day_recent, most_recent_post_date, oldest_post_date, mean_days_between_all_posts, number_photos_annotated, number_portraits, number_noperson, portrait_to_noperson_ratio, photo_careerfocused_words, photo_entertainment_words, photo_careerfocused_entertainment_ratio, number_photos_with_facial_expressions, number_smiles, number_other_expressions, facial_expression_smile_other_ratio) => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -864,6 +908,28 @@ const getUserPersonalityAspects = (selectBy = '*', searchBy = '') => {
     })
 }
 
+const getUserPersonalityAspectsUnhandled = (selectBy = '*', searchBy = '') => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            //await createConnection()
+            const table = 'user_personality_aspects'
+            const sql = `SELECT ${selectBy} FROM ${table} ${searchBy}`
+            db.query(sql, (error, result) => {
+                if (error) {
+                    console.log(`Problem searching for ${table} by ${searchBy}.`)
+                    reject(error)
+                }
+                resolve(rawDataPacketConverter(result))
+            })
+        } catch (error) {
+            console.log(error)
+            reject(error)
+        } finally {
+            //closeConnection()
+        }
+    })
+}
+
 const createUserPersonalityAspects = (user_id, openess, conscientiousness, extroversion, agreeableness, neuroticism) => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -887,12 +953,36 @@ const createUserPersonalityAspects = (user_id, openess, conscientiousness, extro
     })
 }
 
+const createUserPersonalityAspectsUnhandled = (user_id, openess, conscientiousness, extroversion, agreeableness, neuroticism) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            //await createConnection()
+            const table = 'user_personality_aspects'
+            const sql = `INSERT INTO ${table} (user_id, openess, conscientiousness, extroversion, agreeableness, neuroticism) VALUES (?, ?, ?, ?, ?, ?)`
+            const params = [user_id, openess, conscientiousness, extroversion, agreeableness, neuroticism]
+            db.query(sql, params, (error, result) => {
+                if (error) {
+                    console.log(`${error} Problem creating user preference and inserting into ${table}.`)
+                    reject(error)
+                }
+                resolve(rawDataPacketConverter(result))
+            })
+        } catch (error) {
+            console.log(error)
+            reject(error)
+        } finally {
+            //closeConnection()
+        }     
+    })
+}
+
 
 module.exports = {
     createConnection,
     closeConnection,
     resetDatabase,
     getUsers,
+    getUsersUnhandled,
     getUserByID,
     createUser,
     updateUserGenderAndMaxDistance,
@@ -911,11 +1001,14 @@ module.exports = {
     getPhotoLabels,
     createPhotoLabelNonHandled,
     getUserMetrics,
+    getUserMetricsUnhandled,
     createUserMetric,
     getUserPreferences,
     getUserPreferencesNonHandled,
     createUserPreference,
     getUserPersonalityAspects,
+    getUserPersonalityAspectsUnhandled,
     createUserPersonalityAspects,
+    createUserPersonalityAspectsUnhandled
 }
 

@@ -3,7 +3,7 @@ const router = express.Router()
 const { protectedRoute } = require('../controllers/authentication')
 const db = require('../sql/database-interface')
 const querystring = require('querystring')
-const { loadDashboard } = require('../controllers/data-compilation/dashboard')
+const { loadDashboard, loadDashboardUnhandled } = require('../controllers/data-compilation/dashboard')
 const { loadUserSettings } = require('../controllers/data-compilation/user-settings')
 const { loadUserProfile } = require('../controllers/data-compilation/user-profile')
 
@@ -47,16 +47,20 @@ router.get('/dashboard', protectedRoute, async(req, res) => {
         } else {
 
             //console.log(req.user)
+            let data
 
-            //for optimal performance, need to have true false handler here too
-            const {matches, userPersonalityAspects} = await loadDashboard(req.user)
+            if (req.query.delayDBHandling) {
+                data = await loadDashboardUnhandled(req.user)
+            } else {
+                data = await loadDashboard(req.user)
+            }
 
             console.log(matches)
             //console.log(userPersonalityAspects)
 
             res.render('dashboard', {
-                userPersonalityAspects: userPersonalityAspects,
-                matches: matches
+                userPersonalityAspects: data.userPersonalityAspects,
+                matches: data.matches
             })
         }
             
