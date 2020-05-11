@@ -3,7 +3,7 @@ const hash = require('./bcrypt').hashFunction
 const compare = require('./bcrypt').compareHashAndPassword
 const { admins } = require('../globals')
 
-const signUpUser = (email, password, first_name, last_name, age) => {
+const signUpUser = (email, password, first_name, last_name, age, current_latitude, current_longitude) => {
     return new Promise((resolve, reject) => {
         //check to see if email (which is a unique alternate key) already taken
         emailAlreadyExist(email)
@@ -13,7 +13,7 @@ const signUpUser = (email, password, first_name, last_name, age) => {
         .then(async (hashedPassword) => {
             try {
                 //await db.createConnection()
-                const newUser = await db.createUser(email, hashedPassword, first_name, last_name, age) //implement
+                const newUser = await db.createUser(email, hashedPassword, first_name, last_name, age, current_latitude, current_longitude) //implement
                 //confirmation message from db.createUser   -->  now go create token
                 resolve(newUser)
             } catch (error) {

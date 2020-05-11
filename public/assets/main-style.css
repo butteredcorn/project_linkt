@@ -1,5 +1,7 @@
 * {
-    font-family: Lato, Helvetica, sans-serif
+    font-family: Lato, Helvetica, sans-serif;
+    margin: 0;
+    padding: 0;
 }
 
 html {
@@ -55,18 +57,19 @@ header {
 .header-text {
     font-size: 2em;
     font-weight: bold;
-    padding-left: 4em;
 }
 
 .header-logo {
     font-size: 3em;
-    padding-right: 4em;
     height: 50px;
     margin-bottom: 0.3em;
 }
 
-main {
+.main-container {
     background-color: #FAFAFA;
+}
+
+main {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -99,6 +102,26 @@ footer {
     align-items: center;
 }
 
+.footer-container {
+
+}
+
+.main-footer {
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;    
+}
+
+.footer-navigation-icons {
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.footer-link {
+    display: flex;
+}
+
 
 
 
@@ -112,6 +135,15 @@ footer {
     }
 }
 @media only screen and (min-width: 800px) {
+
+    .back-button {
+        font-size: 3em;
+        margin-left: 4em;
+    }
+
+    .header-logo {
+        padding-right: 4em;
+    }
 
     header {
         max-width: 1000px;

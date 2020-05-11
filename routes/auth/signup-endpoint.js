@@ -17,16 +17,22 @@ router.post('/', authUserRedirect, async (req, res) => {
     const firstName = req.body.firstName
     const lastName = req.body.lastName
     const age = req.body.age
+    const latitude = req.body.latitude
+    const longitude = req.body.longitude
+
+    // console.log(latitude)
+    // console.log(longitude)
+
     //implement auto detection of city_of_residence
     const city_of_residence = undefined || req.body.city_of_residence
     
     if(email && password) {
         try {
-            await signUpUser(email, password, firstName, lastName, age)
+            await signUpUser(email, password, firstName, lastName, age, latitude, longitude)
             res.redirect(dashboard)
         } catch (error) {
             console.log(error)
-            res.send("Error!")
+            res.send(error)
         }
     }
 })

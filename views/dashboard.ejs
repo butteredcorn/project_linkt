@@ -27,8 +27,6 @@
         <main>
             <div class="cards-container">
 
-
-
                 <div class="card-container">
                     <div class="card">
                         <div class="profile-image-column">
@@ -39,88 +37,56 @@
                             <p class="age">Age: 18</p>
                             <p class="bio">Bio: a Japanese virtual YouTuber and self-proclaimed artificial intelligence. As of 2019, she operates three YouTube channels.</p>
                             <div class="card-buttons-container">
+
+                                <!-- pass on profile info to next page -->
                                 <form action="/match-profile" method="POST">
-                                    <input id="profile-selected" name="profile-selected" type="hidden" value="">
+                                    <input class="profile-selected" name="profile-selected" type="hidden" value="">
                                     <button type="submit" class="view-profile">View Profile</button>
                                 </form>
+
+                                <!-- pass on profile info to next page -->
                                 <form action="/match-message" method="POST">
-                                    <input id="message-selected" name="message-selected" type="hidden" value="">
+                                    <input class="message-selected" name="message-selected" type="hidden" value="">
                                     <button class="message">Message!</button>
                                 </form>
+
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="card-container">
-                    <div class="card">
-                        <div class="profile-image-column">
-                            <img class="profile-image" src="/assets/meme/kizuna-ai.jpg" alt="profile picture">
-                        </div>
-                        <div class="info-column">
-                            <p class="name">Kizuna Ai</p>
-                            <p class="age">Age: 18</p>
-                            <p class="bio">Bio: a Japanese virtual YouTuber and self-proclaimed artificial intelligence. As of 2019, she operates three YouTube channels.</p>
-                            <div class="card-buttons-container">
-                                <form action="/match-profile" method="POST">
-                                    <input id="profile-selected" name="profile-selected" type="hidden" value="">
-                                    <button type="submit" class="view-profile">View Profile</button>
-                                </form>
-                                <form action="/match-message" method="POST">
-                                    <input id="message-selected" name="message-selected" type="hidden" value="">
-                                    <button class="message">Message!</button>
-                                </form>
+                <%for (let match of matches) { %>
+                    <% const { first_name, last_name, age, current_profile_picture, openess, conscientiousness, extroversion} = match %>
+                    <% match.username = `${first_name} ${last_name}` %>
+                    <div class="card-container">
+                        <div class="card">
+                            <div class="profile-image-column">
+                                <img class="profile-image" src="<%=current_profile_picture%>" alt="profile picture">
+                            </div>
+                            <div class="info-column">
+                                <p class="name"><%=`${first_name} ${last_name}`%></p>
+                                <p class="age">Age: <%=age%></p>
+                                <p class="bio">Bio: a Japanese virtual YouTuber and self-proclaimed artificial intelligence. As of 2019, she operates three YouTube channels.</p>
+                                <div class="card-buttons-container">
+                                    <form action="/match-profile" method="POST">
+                                        <input class="profile-selected" name="username" type="hidden" value="<%=match.username%>">
+                                        <input class="profile-selected" name="first_name" type="hidden" value="<%=first_name%>">
+                                        <input class="profile-selected" name="last_name" type="hidden" value="<%=last_name%>">
+                                        <input class="profile-selected" name="age" type="hidden" value="<%=age%>">
+                                        <input class="message-selected" name="profile_picture" type="hidden" value="<%=current_profile_picture%>">
+                                        <button type="submit" class="view-profile">View Profile</button>
+                                    </form>
+                                    <form action="/match-message" method="POST">
+                                        <input class="message-selected" name="username" type="hidden" value="<%=match.username%>">
+                                        <input class="message-selected" name="profile_picture" type="hidden" value="<%=current_profile_picture%>">
+                                        <button class="message">Message!</button>
+                                    </form>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-
-                <div class="card-container">
-                    <div class="card">
-                        <div class="profile-image-column">
-                            <img class="profile-image" src="/assets/meme/kizuna-ai.jpg" alt="profile picture">
-                        </div>
-                        <div class="info-column">
-                            <p class="name">Kizuna Ai</p>
-                            <p class="age">Age: 18</p>
-                            <p class="bio">Bio: a Japanese virtual YouTuber and self-proclaimed artificial intelligence. As of 2019, she operates three YouTube channels.</p>
-                            <div class="card-buttons-container">
-                                <form action="/match-profile" method="POST">
-                                    <input id="profile-selected" name="profile-selected" type="hidden" value="">
-                                    <button type="submit" class="view-profile">View Profile</button>
-                                </form>
-                                <form action="/match-message" method="POST">
-                                    <input id="message-selected" name="message-selected" type="hidden" value="">
-                                    <button class="message">Message!</button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card-container">
-                    <div class="card">
-                        <div class="profile-image-column">
-                            <img class="profile-image" src="/assets/meme/kizuna-ai.jpg" alt="profile picture">
-                        </div>
-                        <div class="info-column">
-                            <p class="name">Kizuna Ai</p>
-                            <p class="age">Age: 18</p>
-                            <p class="bio">Bio: a Japanese virtual YouTuber and self-proclaimed artificial intelligence. As of 2019, she operates three YouTube channels.</p>
-                            <div class="card-buttons-container">
-                                <form action="/match-profile" method="POST">
-                                    <input id="profile-selected" name="profile-selected" type="hidden" value="">
-                                    <button type="submit" class="view-profile">View Profile</button>
-                                </form>
-                                <form action="/match-message" method="POST">
-                                    <input id="message-selected" name="message-selected" type="hidden" value="">
-                                    <button class="message">Message!</button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
+                <%}%>
+                
 
                 <!-- card container end -->
             </div>
@@ -128,12 +94,11 @@
     </div>
 
     <div class="footer-container">
-        <footer>
-            <nav>
-                <a href="">a</a>
-                <a href="">b</a>
-                <a href="">c</a>
-
+        <footer class="main-footer">
+            <nav class="footer-navigation-icons">
+                <a class="footer-link" href="/user-profile"><img src="assets/icons/profileIcon.png" alt="profile-icon"></a>
+                <a class="footer-link" href=""><img src="assets/icons/messageIcon.png" alt="message-icon"></a>
+                <a class="footer-link" href="/user-settings-page"><img src="assets/icons/settingIcon.png" alt="settings-icon"></a>
             </nav>
         </footer>
     </div>

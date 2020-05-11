@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS user_tags;
 DROP TABLE IF EXISTS user_career_and_education;
 DROP TABLE IF EXISTS user_preferences;
 DROP TABLE IF EXISTS user_personality_aspects;
@@ -15,8 +16,12 @@ CREATE TABLE users (
     last_name               VARCHAR(255) NOT NULL,
     age                     INT NOT NULL,
     city_of_residence       VARCHAR(255),
+    current_latitude        FLOAT,
+    current_longitude       FLOAT,
     max_distance            INT,
-    gender                  VARCHAR(255),     
+    gender                  VARCHAR(255),
+    current_profile_picture VARCHAR(255),
+    bio                     VARCHAR(255),
     created_at              TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
@@ -64,11 +69,17 @@ CREATE TABLE user_psychometrics (
     most_recent_post_date                       VARCHAR(255),
     oldest_post_date                            VARCHAR(255),
     mean_days_between_all_posts                 FLOAT,
+    number_photos_annotated                     INT,
+    number_portraits                            INT,
+    number_noperson                             INT,
     portrait_to_noperson_ratio                  FLOAT,
-    facial_expression_smile_other_ratio         FLOAT,
     photo_careerfocused_words                   INT,
     photo_entertainment_words                   INT,
     photo_careerfocused_entertainment_ratio     FLOAT,
+    number_photos_with_facial_expressions       INT,
+    number_smiles                               INT,
+    number_other_expressions                    INT,
+    facial_expression_smile_other_ratio         FLOAT,
     created_at                                  TIMESTAMP NOT NULL DEFAULT NOW(),
     FOREIGN KEY (user_id)                       REFERENCES users(id)
 );
@@ -86,6 +97,7 @@ CREATE TABLE user_personality_aspects (
     extroversion            VARCHAR(255),
     agreeableness           VARCHAR(255),
     neuroticism             VARCHAR(255),
+    created_at              TIMESTAMP NOT NULL DEFAULT NOW(),
     FOREIGN KEY (user_id)   REFERENCES users(id)
 );
 
@@ -109,5 +121,12 @@ CREATE TABLE user_career_and_education (
     income_range_low        INT,
     income_range_high       INT,
     last_updated            TIMESTAMP NOT NULL DEFAULT NOW(),
+    FOREIGN KEY (user_id)   REFERENCES users(id)
+);
+
+CREATE TABLE user_tags (
+    id                      INT PRIMARY KEY AUTO_INCREMENT,
+    user_id                 INT NOT NULL,
+    tag                     VARCHAR(255) NOT NULL,
     FOREIGN KEY (user_id)   REFERENCES users(id)
 );

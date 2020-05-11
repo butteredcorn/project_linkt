@@ -16,12 +16,24 @@ router.get('/', authUserRedirect, (req, res) => {
 })
 
 router.post('/', (req, res) => {
-    console.log(req.body)
     const email = req.body.email
     const password = req.body.password
+    const currentLatitude = req.body.latitude
+    const currentLongitude = req.body.longitude
+
+    const currentLocation = {
+        latitude: currentLatitude,
+        longitude: currentLongitude
+    }
+
     if(email && password) {
         loginUser(email, password)
-            .then((user) => {
+            .then(async (user) => {
+                if(req.body.latitude && req.body.longitude) {
+                    user.current_location = currentLocation
+                    await db.updateUserCoordinates(user.id, req.body.latitude, req.body.longitude)
+                }
+
                 return createNewToken({...user})
             })
             .then((token) => {

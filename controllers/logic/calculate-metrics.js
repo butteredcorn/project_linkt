@@ -28,6 +28,10 @@ const trimAndPushToDB = (instagramData, user) => {
                 if (photo.length == 0) {
                     //await omitted here for optimal performance, handle createConnection/closeConnection manually
                     db.createUserPhotoNonHandled(obj.id, user.id, obj.media_url, obj.timestamp, obj.caption, obj.media_type, obj.thumbnail_url)
+                } else if (photo) {
+                    //need to update every photo link or you will get a BAD URL TIMESTAMP ERROR!!!
+                    db.updateUserPhotoNonHandles(obj.id, user.id, obj.media_url, obj.thumbnail_url)
+                    //reject(new Error('Error: duplicate instagram_post_id identified.'))
                 }
                 
 
@@ -42,9 +46,9 @@ const trimAndPushToDB = (instagramData, user) => {
                 }
             }
 
-            resolve('Uploaded to database.') //resolve back the same data as inputted
-
+            resolve('Uploaded to database.')
         } catch (error) {
+            console.log(error)
             reject(error)
         } finally {
             setTimeout(() => {
@@ -226,7 +230,6 @@ const selectPhotos = (instagramData) => {
 const labelKeywordChecker = (labels, counters) => {
     return new Promise(async(resolve, reject) => {
         try {
-            
             //check if caption contains keywords
             for (let label of labels) { 
                 if (label.label.toLowerCase() == 'no person') {
@@ -276,7 +279,7 @@ const calculatePhotoDependentData = (instagramData, result) => {
                     post.general_labels = labels //raw data
                 }
 
-                console.log(keywordCounters)
+                //console.log(keywordCounters)
                 let portraitToNoPersonRatio
                 let photoCareerFocusedEntertainmentRatio
                 let facialExpressionSmileOtherRatio
@@ -299,14 +302,11 @@ const calculatePhotoDependentData = (instagramData, result) => {
                     photoCareerFocusedEntertainmentRatio = keywordCounters.numPhotoCareerFocusedWords / keywordCounters.numPhotoEntertainmentWords
                 }
 
-                //determin the following:
-                    //portrait_to_noperson_ratio
+                //determin the following:***
                     //facial_expression_smile_other_ratio
-                    //photo_careerfocused_words
-                    //photo_entertainment_words
-                    //photo_careerfocused_entertainment_ratio
                 
                 const photo_data = {
+                    number_photos_annotated: filteredInstagramData.length,
                     number_portraits: keywordCounters.numPortraitLabels,
                     number_noperson: keywordCounters.numNoPersonLabels,
                     portrait_to_noperson_ratio: portraitToNoPersonRatio,

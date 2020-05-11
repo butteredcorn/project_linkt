@@ -6,7 +6,9 @@
       <meta name='viewport' content='width=device-width, initial-scale=1.0'>
       <meta http-equiv='X-UA-Compatible' content='ie=edge'>
       <title>Sign In</title>
-      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
       <link rel="stylesheet" type="text/css" href="assets/login2.css">
     </head>
     
@@ -23,6 +25,8 @@
                     <form method='post' action='/login'>
                         <div class="form">E-mail <input type="text" name='email' placeholder="E-mail" required></div>
                         <div class="form">Password <input type="password" name='password' placeholder="Password" required></div>
+                        <input class="location" id="latitude" name="latitude" type="hidden" value="">
+                        <input class="location" id="longitude" name="longitude" type="hidden" value="">
                         <button id="login_button" type='submit'>Login</button>
                     </form>
                 </div>
@@ -30,8 +34,38 @@
                 
 
                 <div id="account_signup">
-                    Don't have an account? <a href="/signup">Sign Up Here!</a>
+                    Don't have an account? <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#sign-up-modal">Sign Up Here!</button>
+                    <!-- <a href="/signup">Sign Up Here!</a> -->
+                </div>
+
+                <!-- Modal -->
+                <div class="modal fade" id="sign-up-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                    <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="modal-title">Get Ready to Get Linkt Up!</h4>
+                        </div>
+                        <form class="modal-footer" method="post" action='/signup'>
+                            <input class="modal-input" type='text' placeholder='Email' name='email' required>
+                            <input class="modal-input" type='password' placeholder='Password' name='password' required>
+                            <input class="modal-input" type='text' placeholder='First Name' name='firstName' required>
+                            <input class="modal-input" type='text' placeholder='Last Name' name='lastName' required>
+                            <input class="modal-input" type='number' placeholder='Age' name='age' min="0" max="200" required>
+                            
+                            <input class="location" id="modal-latitude" name="latitude" type="hidden" value="">
+                            <input class="location" id="modal-longitude" name="longitude" type="hidden" value="">
+                            <div>
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                            </div>
+                        </form>
+                    </div>
+                    </div>
                 </div>
             </div>
         </div>
     </body>
+    <!-- <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script> -->
+    <script src="assets/current-location.js"></script>
+</html>

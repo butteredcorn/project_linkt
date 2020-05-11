@@ -3,8 +3,12 @@ const router = express.Router()
 const { protectedRoute } = require('../controllers/authentication')
 const db = require('../sql/database-interface')
 const querystring = require('querystring')
+const { loadDashboard, loadDashboardUnhandled } = require('../controllers/data-compilation/dashboard')
+const { loadUserSettings } = require('../controllers/data-compilation/user-settings')
+const { loadUserProfile } = require('../controllers/data-compilation/user-profile')
 
 const userSettings = '/user-settings?'
+const instagramEndpoint = '/instagram/login'
 
 const { errors } = require('../globals')
 const { UI_ROUTE_ERROR } = errors
@@ -12,7 +16,21 @@ const { UI_ROUTE_ERROR } = errors
 
 router.get('/dashboard', protectedRoute, async(req, res) => {
     try {
-        const userPreferences = await db.getUserPreferences(undefined, `WHERE user_id = ${req.user.id}`)
+        let userPreferences
+        let userInstagram
+        
+        //db.createConnection() created at instagram-endpoint through calculate-metrics
+        //db.closeConnection also handled via timer
+        if (req.query.delayDBHandling) {
+            console.log(`delayed db handling invoked.`)
+            userPreferences = await db.getUserPreferencesNonHandled(undefined, `WHERE user_id = ${req.user.id}`)
+            userInstagram = await db.getUserInstagramsNonHandled(undefined, `WHERE user_id = ${req.user.id}`)
+        } else {
+        //use handled version
+            userPreferences = await db.getUserPreferences(undefined, `WHERE user_id = ${req.user.id}`)
+            userInstagram = await db.getUserInstagrams(undefined, `WHERE user_id = ${req.user.id}`)
+        }
+        
 
         //if user-settings doesn't exist, then redirect to set user settings
         if (userPreferences && userPreferences.length == 0) {
@@ -20,10 +38,29 @@ router.get('/dashboard', protectedRoute, async(req, res) => {
                 newUser: true
             })
             res.redirect(userSettings + query) //send querystring
+
+        } else if (userInstagram && userInstagram.length == 0) {
+
+            res.redirect(instagramEndpoint)
+
         //else redirect to dashboard
         } else {
-            res.render('dashboard', {
 
+            //console.log(req.user)
+            let data
+
+            if (req.query.delayDBHandling) {
+                data = await loadDashboardUnhandled(req.user)
+            } else {
+                data = await loadDashboard(req.user)
+            }
+
+            console.log(data.matches)
+            //console.log(data.userPersonalityAspects)
+
+            res.render('dashboard', {
+                userPersonalityAspects: data.userPersonalityAspects,
+                matches: data.matches
             })
         }
             
@@ -44,8 +81,11 @@ router.get('/match-profile', protectedRoute, async(req, res) => {
 
 router.post('/match-profile', protectedRoute, async(req, res) => {
     try {
+
+        console.log(req.body)
+
         res.render('match-profile', {
-            
+            matchProfile: req.body
         })
     } catch (error) {
         console.log(error)
@@ -67,8 +107,9 @@ router.get('/match-message', protectedRoute, async(req, res) => {
 
 router.post('/match-message', protectedRoute, async(req, res) => {
     try {
+        console.log(req.body)
         res.render('match-message', {
-            
+            username: req.body.username
         })
     } catch (error) {
         console.log(error)
@@ -89,7 +130,7 @@ router.get('/user-settings', protectedRoute, async(req, res) => {
             res.render('user-settings', newUserMessage)
         } else {
             res.render('user-settings', {
-                heading: 'Preferences Questions',
+                heading: 'Preferences',
                 subHeading: ''
             })
         }
@@ -109,6 +150,57 @@ router.post('/user-settings', protectedRoute, async(req, res) => {
         } else {
             console.log(new Error('req.body undefined.'))
         }
+    } catch (error) {
+        console.log(error)
+        res.send(UI_ROUTE_ERROR)
+    }
+})
+
+router.get('/user-settings-page', protectedRoute, async(req, res) => {
+    try {
+        const user = await loadUserSettings(req.user)
+        console.log(user)
+        res.render('user-settings-page', {
+            user: user
+        })
+
+    } catch (error) {
+        console.log(error)
+        res.send(UI_ROUTE_ERROR)
+    }
+})
+
+router.post('/user-settings-page', protectedRoute, async(req, res) => {
+    try {
+        res.redirect('/dashboard')
+
+    } catch (error) {
+        console.log(error)
+        res.send(UI_ROUTE_ERROR)
+    }
+})
+
+router.get('/user-profile', protectedRoute, async(req, res) => {
+    try {
+        const {userObject, userPhotos} = await loadUserProfile(req.user)
+        console.log(userPhotos)
+        res.render('user-profile', {
+            user: userObject,
+            userPhotos: userPhotos
+        })
+
+    } catch (error) {
+        console.log(error)
+        res.send(UI_ROUTE_ERROR)
+    }
+})
+
+router.post('/user-profile-picture', protectedRoute, async(req, res) => {
+    try {
+        await db.updateUserProfilePhoto(req.user.id, req.body.selectedProfilePicture)
+        
+        res.redirect('/user-profile')
+
     } catch (error) {
         console.log(error)
         res.send(UI_ROUTE_ERROR)

@@ -2,9 +2,9 @@ module.exports = {
     admins: [ process.env.DATABASE_ADMIN ],
     bcryptSaltRounds: parseInt(process.env.SALT_ROUNDS),
 
-    MINIMUM_IG_PHOTOS: 0,
+    MINIMUM_IG_PHOTOS: 5,
 
-    NUM_IG_PHOTOS_PUSHED_TO_DB: 20, //default from IG is 25 post objects
+    NUM_IG_PHOTOS_PUSHED_TO_DB: 25, //default from IG is 25 post objects
 
     maximumInstagramPhotosForProcessing: 5,
 
@@ -26,8 +26,12 @@ module.exports = {
 
     metric_calculation_constants: {
         SAVE_LABEL_DATA: false,
-        TIMEOUT: 5000,
+        TIMEOUT: 6000,
         TIMEOUT_FACTOR: 0.1,
+    },
+
+    personality_aspects_constants: {
+        CONSCIENTIOUSNESS_PHOTO_PRESENCE_ADJUSTMENT_FACTOR: 1.1
     },
 
     errors: {

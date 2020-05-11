@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Linkt</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link href="/assets/main-style.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="assets/user-settings-page.css" type="text/css">
+</head>
+<body>
+    <!-- header -->
+    <div class="header-container">
+        <header class="main-header">
+            <div class="header-element">
+                <a href="/dashboard"><img class="back-button" src="assets/icons/left-arrow.png" alt="back-button"></a>
+            </div>
+            <div class="header-element">
+                <p class="header-text">User Settings</p>
+            </div>
+            <div class="header-element">
+                <img class="header-logo" src="/assets/icons/logo.png" alt="linkt-logo">
+            </div>
+        </header>
+    </div>
+
+    <!-- main -->
+    <div class="main-container">
+        <main>
+            <div class="page">
+                <div class="profile-settings">
+                    <div class="ribbon header-ribbon"><h2 class="profile-settings-header">ACCOUNT SETTINGS</h2><a href="/user-profile">Edit Profile</a></div>
+                    <div class="ribbon"><img class="profile-photo-thumbnail" src="<%=user.current_profile_picture%>" alt="profile thumbnail"><p class="profile-name"><%=`${user.first_name} ${user.last_name}`%></p></div>
+                    <div class="ribbon"><h4>Email</h4><p class="profile-email"><%= user.email%></p></div>
+                    <div class="ribbon"><h4>Location</h4><p><%=`Latitude: ${user.current_latitude} Longitude: ${user.current_longitude}`%></p></div>
+                </div>
+    
+                <div class="discovery-settings">
+                    <div class="ribbon header-ribbon"><h2 class="discovery-settings-header">DISCOVERY SETTINGS</h2><a href="/user-settings">Edit Discovery</a></div>
+                    <div class="ribbon"><h4>Maximum Distance</h4><p><%=`${user.max_distance} KMs`%></p></div>
+                    <div class="ribbon"><h4>Show Me</h4><p><%=user.partner_gender%></p></div>
+                    <div class="ribbon"><h4>Age Range</h4><p><%=`${user.partner_age_min} - ${user.partner_age_max}`%></p></div>
+                </div>
+    
+                <div class="other-settings">
+                    <div class="ribbon header-ribbon"><h2 class="other-settings-header">OTHER SETTINGS</h2></div>
+                    <div class="ribbon"><h4>Show me on Linkt</h4></div>
+                </div>
+
+                <div id="user_settings_form">
+                    <form method='post' action='/user-settings-page'>
+                        <input class="" id="" name="" type="hidden" value="">
+                        <button id="home_button" type='submit'>Save</button>
+                    </form>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <div class="footer-container">
+        <footer class="main-footer">
+            <nav class="footer-navigation-icons">
+                <a class="footer-link" href="/user-profile"><img src="assets/icons/profileIcon.png" alt="profile-icon"></a>
+                <a class="footer-link" href=""><img src="assets/icons/messageIcon.png" alt="message-icon"></a>
+                <a class="footer-link" href="/user-settings-page"><img src="assets/icons/settingIcon.png" alt="settings-icon"></a>
+            </nav>
+        </footer>
+    </div>
+</body>
+</html>

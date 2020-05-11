@@ -52,7 +52,14 @@ const createConnection = (hostAddress = default_hostAddress, port = default_port
 }
 
 const closeConnection = () => {
-    db.end()
+    return new Promise(async (resolve, reject) => {
+        try {
+            db.end()
+            resolve('connection closed.')
+        } catch (error) {
+            reject(error)
+        }
+    })
 }
 
 const sqlCallback = (sql) => {
@@ -69,7 +76,11 @@ const sqlCallback = (sql) => {
 
 const dropAndRecreateTables = () => {
     return new Promise((resolve, reject) => {
-        sqlCallback('DROP TABLE IF EXISTS user_career_and_education')
+        sqlCallback('DROP TABLE IF EXISTS user_tags')
+        .then((result) => {
+            console.log(result.message)
+            return sqlCallback('DROP TABLE IF EXISTS user_career_and_education')
+        })
         .then((result) => {
             console.log(result.message)
             return sqlCallback('DROP TABLE IF EXISTS user_preferences')
@@ -112,8 +123,12 @@ const dropAndRecreateTables = () => {
                 last_name               VARCHAR(255) NOT NULL,
                 age                     INT NOT NULL,
                 city_of_residence       VARCHAR(255),
+                current_latitude        FLOAT,
+                current_longitude       FLOAT,
                 max_distance            INT,
-                gender                  VARCHAR(255),     
+                gender                  VARCHAR(255),
+                current_profile_picture VARCHAR(255),
+                bio                     VARCHAR(255),     
                 created_at              TIMESTAMP NOT NULL DEFAULT NOW()
             )`)
         })
@@ -169,11 +184,17 @@ const dropAndRecreateTables = () => {
                 most_recent_post_date                       VARCHAR(255),
                 oldest_post_date                            VARCHAR(255),
                 mean_days_between_all_posts                 FLOAT,
+                number_photos_annotated                     INT,
+                number_portraits                            INT,
+                number_noperson                             INT,
                 portrait_to_noperson_ratio                  FLOAT,
-                facial_expression_smile_other_ratio         FLOAT,
                 photo_careerfocused_words                   INT,
                 photo_entertainment_words                   INT,
                 photo_careerfocused_entertainment_ratio     FLOAT,
+                number_photos_with_facial_expressions       INT,
+                number_smiles                               INT,
+                number_other_expressions                    INT,
+                facial_expression_smile_other_ratio         FLOAT,
                 created_at                                  TIMESTAMP NOT NULL DEFAULT NOW(),
                 FOREIGN KEY (user_id)                       REFERENCES users(id)
             )`)
@@ -188,6 +209,7 @@ const dropAndRecreateTables = () => {
                 extroversion            VARCHAR(255),
                 agreeableness           VARCHAR(255),
                 neuroticism             VARCHAR(255),
+                created_at              TIMESTAMP NOT NULL DEFAULT NOW(),
                 FOREIGN KEY (user_id)   REFERENCES users(id)
             )`)
         })
@@ -215,6 +237,15 @@ const dropAndRecreateTables = () => {
                 income_range_low        INT,
                 income_range_high       INT,
                 last_updated            TIMESTAMP NOT NULL DEFAULT NOW(),
+                FOREIGN KEY (user_id)   REFERENCES users(id)
+            )`)
+        })
+        .then((result) => {
+            console.log(result.message)
+            return sqlCallback(`CREATE TABLE user_tags (
+                id                      INT PRIMARY KEY AUTO_INCREMENT,
+                user_id                 INT NOT NULL,
+                tag                     VARCHAR(255) NOT NULL,
                 FOREIGN KEY (user_id)   REFERENCES users(id)
             )`)
         })
@@ -273,6 +304,28 @@ const getUsers = (selectBy = '*', searchBy = '') => {
     })
 }
 
+const getUsersUnhandled = (selectBy = '*', searchBy = '') => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            //await createConnection()
+            const table = 'users'
+            const sql = `SELECT ${selectBy} FROM ${table} ${searchBy}`
+            db.query(sql, (error, result) => {
+                if (error) {
+                    console.log(`Problem searching for ${table} by ${searchBy}.`)
+                    reject(error)
+                }
+                resolve(rawDataPacketConverter(result))
+            })
+        } catch (error) {
+            console.log(error)
+            reject(error)
+        } finally {
+            //closeConnection()
+        }
+    })
+}
+
 const getUserByID = (id) => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -297,13 +350,13 @@ const getUserByID = (id) => {
     })
 }
 
-const createUser = (email, password_hash, first_name, last_name, age, city_of_residence, max_distance = defaultMaxDistanceKMs, gender) => {
+const createUser = (email, password_hash, first_name, last_name, age, current_latitude, current_longitude, city_of_residence, max_distance = defaultMaxDistanceKMs, gender) => {
     return new Promise(async (resolve, reject) => {
         try {
             await createConnection()
             const table = 'users'
-            const sql = `INSERT INTO ${table} (email, password_hash, first_name, last_name, age, city_of_residence, max_distance, gender) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`
-            const params = [email, password_hash, first_name, last_name, age, city_of_residence, max_distance, gender]
+            const sql = `INSERT INTO ${table} (email, password_hash, first_name, last_name, age, current_latitude, current_longitude, city_of_residence, max_distance, gender) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+            const params = [email, password_hash, first_name, last_name, age, current_latitude, current_longitude, city_of_residence, max_distance, gender]
             db.query(sql, params, (error, result) => {
                 if (error) {
                     console.log(`${error} Problem creating user and inserting into ${table}.`)
@@ -330,6 +383,75 @@ const updateUserGenderAndMaxDistance = (id, max_distance, gender) => {
             db.query(sql, params, (error, result) => {
                 if (error) {
                     console.log(new Error(`${error} Problem updating user setting for ${id} in ${table}.`))
+                    reject(error)
+                }
+                resolve(rawDataPacketConverter(result))
+            })
+        } catch (error) {
+            console.log(error)
+            reject(error)
+        } finally {
+            closeConnection()
+        }
+    })
+}
+
+const updateUserCoordinates = (id, current_latitude, current_longitude) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            await createConnection()
+            const table = 'users'
+            const sql = `UPDATE ${table} SET current_latitude = ?, current_longitude = ? WHERE id = ?`
+            const params = [current_latitude, current_longitude, id]
+            db.query(sql, params, (error, result) => {
+                if (error) {
+                    console.log(new Error(`${error} Problem updating user location for ${id} in ${table}.`))
+                    reject(error)
+                }
+                resolve(rawDataPacketConverter(result))
+            })
+        } catch (error) {
+            console.log(error)
+            reject(error)
+        } finally {
+            closeConnection()
+        }
+    })
+}
+
+const updateUserProfilePhoto = (id, current_profile_picture) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            await createConnection()
+            const table = 'users'
+            const sql = `UPDATE ${table} SET current_profile_picture = ? WHERE id = ?`
+            const params = [current_profile_picture, id]
+            db.query(sql, params, (error, result) => {
+                if (error) {
+                    console.log(new Error(`${error} Problem updating user profile photo for ${id} in ${table}.`))
+                    reject(error)
+                }
+                resolve(rawDataPacketConverter(result))
+            })
+        } catch (error) {
+            console.log(error)
+            reject(error)
+        } finally {
+            closeConnection()
+        }
+    })
+}
+
+const updateUserProfileBio = (id, bio) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            await createConnection()
+            const table = 'users'
+            const sql = `UPDATE ${table} SET bio = ? WHERE id = ?`
+            const params = [bio, id]
+            db.query(sql, params, (error, result) => {
+                if (error) {
+                    console.log(new Error(`${error} Problem updating user profile bio for ${id} in ${table}.`))
                     reject(error)
                 }
                 resolve(rawDataPacketConverter(result))
@@ -415,6 +537,28 @@ const getUserInstagrams = (selectBy = '*', searchBy = '') => {
             reject(error)
         } finally {
             closeConnection()
+        }
+    })
+}
+
+const getUserInstagramsNonHandled = (selectBy = '*', searchBy = '') => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            //await createConnection()
+            const table = 'user_instagram'
+            const sql = `SELECT ${selectBy} FROM ${table} ${searchBy}`
+            db.query(sql, (error, result) => {
+                if (error) {
+                    console.log(`Problem searching for ${table} by ${searchBy}.`)
+                    reject(error)
+                }
+                resolve(rawDataPacketConverter(result))
+            })
+        } catch (error) {
+            console.log(error)
+            reject(error)
+        } finally {
+            //closeConnection()
         }
     })
 }
@@ -516,6 +660,29 @@ const createUserPhotoNonHandled = (instagram_post_id, user_id, photo_link, photo
     })
 }
 
+const updateUserPhotoNonHandles = (instagram_post_id, user_id, photo_link, video_thumbnail_url) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            //await createConnection()
+            const table = 'user_photos'
+            const sql = `UPDATE ${table} SET photo_link = ?, video_thumbnail_url = ? WHERE instagram_post_id =? AND user_id = ?`
+            const params = [photo_link, video_thumbnail_url, instagram_post_id, user_id]
+            db.query(sql, params, (error, result) => {
+                if (error) {
+                    console.log(`${error} Problem creating updating user photo for ${table}.`)
+                    reject(error)
+                }
+                resolve(rawDataPacketConverter(result))
+            })
+        } catch (error) {
+            console.log(error)
+            reject(error)
+        } finally {
+            //closeConnection()
+        }     
+    })
+}
+
 /**
  * photo_labels
  * @param {*} selectBy 
@@ -594,13 +761,35 @@ const getUserMetrics = (selectBy = '*', searchBy = '') => {
     })
 }
 
-const createUserMetric = (user_id, number_of_posts, number_of_captioned_posts, number_of_hashtags, mean_hashtags_per_post, captioned_uncaptioned_ratio, caption_careerfocused_words, caption_entertainment_words, caption_careerfocused_entertainment_ratio, posts_per_day_recent, most_recent_post_date, oldest_post_date, mean_days_between_all_posts, portrait_to_noperson_ratio, facial_expression_smile_other_ratio, photo_careerfocused_words, photo_entertainment_words, photo_careerfocused_entertainment_ratio) => {
+const getUserMetricsUnhandled = (selectBy = '*', searchBy = '') => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            //await createConnection()
+            const table = 'user_psychometrics'
+            const sql = `SELECT ${selectBy} FROM ${table} ${searchBy}`
+            db.query(sql, (error, result) => {
+                if (error) {
+                    console.log(`Problem searching for ${table} by ${searchBy}.`)
+                    reject(error)
+                }
+                resolve(rawDataPacketConverter(result))
+            })
+        } catch (error) {
+            console.log(error)
+            reject(error)
+        } finally {
+            //closeConnection()
+        }
+    })
+}
+
+const createUserMetric = (user_id, number_of_posts, number_of_captioned_posts, number_of_hashtags, mean_hashtags_per_post, captioned_uncaptioned_ratio, caption_careerfocused_words, caption_entertainment_words, caption_careerfocused_entertainment_ratio, posts_per_day_recent, most_recent_post_date, oldest_post_date, mean_days_between_all_posts, number_photos_annotated, number_portraits, number_noperson, portrait_to_noperson_ratio, photo_careerfocused_words, photo_entertainment_words, photo_careerfocused_entertainment_ratio, number_photos_with_facial_expressions, number_smiles, number_other_expressions, facial_expression_smile_other_ratio) => {
     return new Promise(async (resolve, reject) => {
         try {
             await createConnection()
             const table = 'user_psychometrics'
-            const sql = `INSERT INTO ${table} (user_id, number_of_posts, number_of_captioned_posts, number_of_hashtags, mean_hashtags_per_post, captioned_uncaptioned_ratio, caption_careerfocused_words, caption_entertainment_words, caption_careerfocused_entertainment_ratio, posts_per_day_recent, most_recent_post_date, oldest_post_date, mean_days_between_all_posts, portrait_to_noperson_ratio, facial_expression_smile_other_ratio, photo_careerfocused_words, photo_entertainment_words, photo_careerfocused_entertainment_ratio) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
-            const params = [user_id, number_of_posts, number_of_captioned_posts, number_of_hashtags, mean_hashtags_per_post, captioned_uncaptioned_ratio, caption_careerfocused_words, caption_entertainment_words, caption_careerfocused_entertainment_ratio, posts_per_day_recent, most_recent_post_date, oldest_post_date, mean_days_between_all_posts, portrait_to_noperson_ratio, facial_expression_smile_other_ratio, photo_careerfocused_words, photo_entertainment_words, photo_careerfocused_entertainment_ratio]
+            const sql = `INSERT INTO ${table} (user_id, number_of_posts, number_of_captioned_posts, number_of_hashtags, mean_hashtags_per_post, captioned_uncaptioned_ratio, caption_careerfocused_words, caption_entertainment_words, caption_careerfocused_entertainment_ratio, posts_per_day_recent, most_recent_post_date, oldest_post_date, mean_days_between_all_posts, number_photos_annotated, number_portraits, number_noperson, portrait_to_noperson_ratio, photo_careerfocused_words, photo_entertainment_words, photo_careerfocused_entertainment_ratio, number_photos_with_facial_expressions, number_smiles, number_other_expressions, facial_expression_smile_other_ratio) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+            const params = [user_id, number_of_posts, number_of_captioned_posts, number_of_hashtags, mean_hashtags_per_post, captioned_uncaptioned_ratio, caption_careerfocused_words, caption_entertainment_words, caption_careerfocused_entertainment_ratio, posts_per_day_recent, most_recent_post_date, oldest_post_date, mean_days_between_all_posts, number_photos_annotated, number_portraits, number_noperson, portrait_to_noperson_ratio, photo_careerfocused_words, photo_entertainment_words, photo_careerfocused_entertainment_ratio, number_photos_with_facial_expressions, number_smiles, number_other_expressions, facial_expression_smile_other_ratio]
             db.query(sql, params, (error, result) => {
                 if (error) {
                     console.log(`${error} Problem creating user metric and inserting into ${table}.`)
@@ -646,6 +835,28 @@ const getUserPreferences = (selectBy = '*', searchBy = '') => {
     })
 }
 
+const getUserPreferencesNonHandled = (selectBy = '*', searchBy = '') => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            //await createConnection()
+            const table = 'user_preferences'
+            const sql = `SELECT ${selectBy} FROM ${table} ${searchBy}`
+            db.query(sql, (error, result) => {
+                if (error) {
+                    console.log(`Problem searching for ${table} by ${searchBy}.`)
+                    reject(error)
+                }
+                resolve(rawDataPacketConverter(result))
+            })
+        } catch (error) {
+            console.log(error)
+            reject(error)
+        } finally {
+            //closeConnection()
+        }
+    })
+}
+
 const createUserPreference = (user_id, partner_gender, partner_age_min, partner_age_max) => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -670,26 +881,134 @@ const createUserPreference = (user_id, partner_gender, partner_age_min, partner_
 }
 
 
+/**
+ * user_personality_aspects
+ * @param {*} selectBy 
+ * @param {*} searchBy 
+ */
+const getUserPersonalityAspects = (selectBy = '*', searchBy = '') => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            await createConnection()
+            const table = 'user_personality_aspects'
+            const sql = `SELECT ${selectBy} FROM ${table} ${searchBy}`
+            db.query(sql, (error, result) => {
+                if (error) {
+                    console.log(`Problem searching for ${table} by ${searchBy}.`)
+                    reject(error)
+                }
+                resolve(rawDataPacketConverter(result))
+            })
+        } catch (error) {
+            console.log(error)
+            reject(error)
+        } finally {
+            closeConnection()
+        }
+    })
+}
+
+const getUserPersonalityAspectsUnhandled = (selectBy = '*', searchBy = '') => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            //await createConnection()
+            const table = 'user_personality_aspects'
+            const sql = `SELECT ${selectBy} FROM ${table} ${searchBy}`
+            db.query(sql, (error, result) => {
+                if (error) {
+                    console.log(`Problem searching for ${table} by ${searchBy}.`)
+                    reject(error)
+                }
+                resolve(rawDataPacketConverter(result))
+            })
+        } catch (error) {
+            console.log(error)
+            reject(error)
+        } finally {
+            //closeConnection()
+        }
+    })
+}
+
+const createUserPersonalityAspects = (user_id, openess, conscientiousness, extroversion, agreeableness, neuroticism) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            await createConnection()
+            const table = 'user_personality_aspects'
+            const sql = `INSERT INTO ${table} (user_id, openess, conscientiousness, extroversion, agreeableness, neuroticism) VALUES (?, ?, ?, ?, ?, ?)`
+            const params = [user_id, openess, conscientiousness, extroversion, agreeableness, neuroticism]
+            db.query(sql, params, (error, result) => {
+                if (error) {
+                    console.log(`${error} Problem creating user preference and inserting into ${table}.`)
+                    reject(error)
+                }
+                resolve(rawDataPacketConverter(result))
+            })
+        } catch (error) {
+            console.log(error)
+            reject(error)
+        } finally {
+            closeConnection()
+        }     
+    })
+}
+
+const createUserPersonalityAspectsUnhandled = (user_id, openess, conscientiousness, extroversion, agreeableness, neuroticism) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            //await createConnection()
+            const table = 'user_personality_aspects'
+            const sql = `INSERT INTO ${table} (user_id, openess, conscientiousness, extroversion, agreeableness, neuroticism) VALUES (?, ?, ?, ?, ?, ?)`
+            const params = [user_id, openess, conscientiousness, extroversion, agreeableness, neuroticism]
+            db.query(sql, params, (error, result) => {
+                if (error) {
+                    console.log(`${error} Problem creating user preference and inserting into ${table}.`)
+                    reject(error)
+                }
+                resolve(rawDataPacketConverter(result))
+            })
+        } catch (error) {
+            console.log(error)
+            reject(error)
+        } finally {
+            //closeConnection()
+        }     
+    })
+}
+
+
 module.exports = {
     createConnection,
     closeConnection,
     resetDatabase,
     getUsers,
+    getUsersUnhandled,
     getUserByID,
     createUser,
     updateUserGenderAndMaxDistance,
+    updateUserCoordinates,
+    updateUserProfilePhoto,
+    updateUserProfileBio,
     getUserInstagrams,
+    getUserInstagramsNonHandled,
     createUserIG,
     updateUserIG,
     getUserPhotos,
     createUserPhoto,
     getUserPhotosUnhandled,
     createUserPhotoNonHandled,
+    updateUserPhotoNonHandles,
     getPhotoLabels,
     createPhotoLabelNonHandled,
     getUserMetrics,
+    getUserMetricsUnhandled,
     createUserMetric,
     getUserPreferences,
-    createUserPreference
+    getUserPreferencesNonHandled,
+    createUserPreference,
+    getUserPersonalityAspects,
+    getUserPersonalityAspectsUnhandled,
+    createUserPersonalityAspects,
+    createUserPersonalityAspectsUnhandled
 }
 

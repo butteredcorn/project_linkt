@@ -17,6 +17,7 @@ Assumptions:
 Theory:
 * Higher ratio corresponds to **greater extraversion**
 * Higher ratio corresponds to less modestry -> **lesser agreeableness**
+* * Using this ratio to model 'bokeh', and artistic filters, improve by measuring these filters directly
 * Lower ratio corresponds to more artistic interest -> **greater openness**
 
 
