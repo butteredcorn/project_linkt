@@ -45,17 +45,10 @@ router.get('/dashboard', protectedRoute, async(req, res) => {
 
         //else redirect to dashboard
         } else {
-            // let userPersonalityAspect = await db.getUserPersonalityAspects(undefined, `WHERE user_id = ${req.user.id}`)
-
-            // // user's personality aspects
-            // //implement time constraint here, to auto update if personalityaspects are too old***
-            // if (userPersonalityAspect.length == 0) {
-            //     userPersonalityAspect = await determineUserPersonalityAspects(req.user)
-            //     console.log(userPersonalityAspect)
-            // }
 
             //console.log(req.user)
 
+            //for optimal performance, need to have true false handler here too
             const {matches, userPersonalityAspects} = await loadDashboard(req.user)
 
             console.log(matches)

@@ -6,6 +6,8 @@ const { verifyExistingToken } = require('../controllers/json-web-token')
 const { trimAndPushToDB, processInstagramData } = require('../controllers/logic/calculate-metrics')
 const db = require('../sql/database-interface')
 const { MINIMUM_IG_PHOTOS } = require('../globals')
+const querystring = require('querystring')
+
 
 router.get('/login', protectedRoute, async (req, res) => {
     try {
