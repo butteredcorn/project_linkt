@@ -5,6 +5,7 @@
 
 main > * {
     padding-top: 4em;
+    height: 100vh;
 }
 
 .card-container {
