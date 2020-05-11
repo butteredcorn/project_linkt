@@ -27,11 +27,13 @@ const getUserPersonalityAspects = (user) => {
 const getUserMatches = (user) => {
     return new Promise(async (resolve, reject) => {
         try {
-            const userObject = (await db.getUsers(undefined, `JOIN user_preferences ON users.id=user_preferences.user_id WHERE users.id = ${user.id}`))[0]
+            const userUserPreferences = (await db.getUsers(undefined, `JOIN user_preferences ON users.id=user_preferences.user_id WHERE users.id = ${user.id}`))
+            const latestUserPreference = userUserPreferences[userUserPreferences.length - 1]
 
-            const otherUsers = await db.getUsers(undefined, `JOIN user_personality_aspects ON users.id=user_personality_aspects.user_id WHERE users.gender = '${userObject.partner_gender}' AND users.age >= ${userObject.partner_age_min} AND users.age <= ${userObject.partner_age_max} AND users.id != ${user.id}`)
+            //note: users.id is getting overwritten by user_personality_aspects.id --> for user_id, call user_id, otherwise this object's id property refers to the id of user_personality_aspects
+            const otherUsers = await db.getUsers(undefined, `JOIN user_personality_aspects ON users.id=user_personality_aspects.user_id WHERE users.gender = '${latestUserPreference.partner_gender}' AND users.age >= ${latestUserPreference.partner_age_min} AND users.age <= ${latestUserPreference.partner_age_max} AND users.id != ${user.id}`)
         
-            // console.log(userObject)
+            // console.log(latestUserPreference)
             // console.log(otherUsers)
 
             //filters for user's gender setting, and age setting, joined with other users' personality aspects
