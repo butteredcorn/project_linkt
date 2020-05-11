@@ -37,14 +37,19 @@
                             <p class="age">Age: 18</p>
                             <p class="bio">Bio: a Japanese virtual YouTuber and self-proclaimed artificial intelligence. As of 2019, she operates three YouTube channels.</p>
                             <div class="card-buttons-container">
+
+                                <!-- pass on profile info to next page -->
                                 <form action="/match-profile" method="POST">
                                     <input id="profile-selected" name="profile-selected" type="hidden" value="">
                                     <button type="submit" class="view-profile">View Profile</button>
                                 </form>
+
+                                <!-- pass on profile info to next page -->
                                 <form action="/match-message" method="POST">
                                     <input id="message-selected" name="message-selected" type="hidden" value="">
                                     <button class="message">Message!</button>
                                 </form>
+
                             </div>
                         </div>
                     </div>

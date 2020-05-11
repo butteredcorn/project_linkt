@@ -11,7 +11,7 @@ module.exports = function () {
     const io = require('socket.io')(server);
 
     io.use(async (socket, next) => {
-        // check the user id from the socket 
+        // check the user id from the socket
         //console.log(socket.handshake.headers.cookie)
         try {
             if (socket.handshake.query && socket.handshake.query.token) {
@@ -19,7 +19,10 @@ module.exports = function () {
                 //console.log(jwt)
                 const user = await verifyExistingToken(jwt)
 
+                console.log(user)
+
                 if (user) {
+                    socket.user = user
                     next()
                 } else {
                     next(new Error('Authentication error.'));
@@ -30,27 +33,45 @@ module.exports = function () {
         }
     })
 
-    const messages = []
-    const currentUsers = {}
+    const messages = [{username: 'kizuna ai', message: 'ohio!'}] //all messages in existance from database
+    const users = {} //dictionary of online sockets
 
     io.on('connection', (socket) => {
-        console.log('some client connected');
-        socket.emit('new message', {text: "connected to messaging server."})
-      
-        // currentUsers[socket.user_id] = socket;
-      
-        // socket.emit('old messages', messages)
-            
-        // socket.on('new message', data => {
-        //   console.log(data)
-        //   messages.push(data)
-      
-        //   socket.broadcast.emit('new message', data);
-      
+        console.log(`user_id: ${socket.user.id} has connected.`);
+        socket.emit('new message', {username: `${socket.user.first_name} ${socket.user.last_name}`, text: "connected to messaging server."})
+        
+        users[socket.username] = socket; //save the socket as a key value pair to the 'user' object (storage mechanism ie. essentially a dictionary)
+
+        socket.emit('old messages', messages)
+
+        //incoming messages from client side
+        socket.on('new message', (data) => {
+          console.log(`user_id: ${socket.user.id}: ${data.message}`) //data also has data.token property with the full token (not parsed)
+          console.log(data)
+          //take received message and emit to the right user
+        //   if(data.receiver_username in users) {
+            //then: //io.to(socketId).emit(data.message);
+        //}
+          
+          
+
+
+          //messages.push(data) //save to database
+          
+
         //   if (data.type === 'private') {
         //     currentUsers[data.to_user].emit('new message', data)
         //   }
-        //})
+        })
+
+        socket.on('disconnect', (data) => {
+            if(!socket.username) {
+                return
+            } else {
+                delete users[socket.nickname]
+                //update...?
+            }
+        })
     });
 
     app.set('view engine', 'ejs')
@@ -65,7 +86,7 @@ module.exports = function () {
     const databaseRoute = require('./routes/database-endpoints')
     const instagramRoute = require('./routes/instagram-endpoint')
     const applicationUIRoute = require('./routes/application-ui')
-    
+
     app.use('/login', loginRoute)
     app.use('/signup', signUpRoute)
     app.use('/database', databaseRoute)

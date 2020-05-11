@@ -1,37 +1,45 @@
-//const user_id = localStorage.getItem('user_id')
+let username
 
 $(() => {
-const socket = io('http://localhost:5000', {
-  query: {
-    token: document.cookie
-  }
-})
+
+
+  const socket = io('http://localhost:5000', {
+    query: {
+      token: document.cookie //user JWT object here
+    }
+  })
 
   socket.on('connect', () => {
-    console.log("connected on the client side")
+    console.log("Client side messaging enabled.")
   })
 
    socket.on('new message', (message) => {
-    console.log(message)
+    username = message.username //passed from the req.user token
+    console.log(`new message from server: ${message.text}.`)
    })
 
-//   function newMessageComponent(message) {
-//     const className = message.user_id === user_id ? "my-message" : "other-message"
-//     $(`<li class="${className}">${user_id}: ${message.text}</li>`).appendTo("#messages")
-//   }
+  socket.on('old messages', (data) => {
+    console.log(`Old messages: ${data}.`)
+    for (let message of data) {
+      newMessageComponent(message)
+    }
+  })
 
-//   socket.on('old messages', messages => {
-//     messages.forEach(newMessageComponent)
-//   })
+  const outGoingMessage = $("#outGoingMessage")
+  $("#messageForm").on('submit', function(event) {
+    event.preventDefault()
+    const message = outGoingMessage.val()
 
-//   const outMessage = $("#outMessage")
-//   $("#messageForm").on('submit', function(event) {
-//     event.preventDefault()
-//     const text = outMessage.val()
-//     outMessage.val("")
-//     const message = {text, user_id}
-//     socket.emit('new message', message)
-//     newMessageComponent(message)
-//   })
+    const data = { username: username, message, token: document.cookie }
+    socket.emit('new message', data)
+    newMessageComponent(data)
+    outGoingMessage.val("")
+  })
 
 })
+
+function newMessageComponent(message) {
+  //needs to be unique here
+  const className = message.username === username ? "my-message" : "other-message"
+  $(`<li class="${className}">${message.username}: ${message.message}</li>`).appendTo("#messages")
+}
