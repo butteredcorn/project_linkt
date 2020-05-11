@@ -26,7 +26,7 @@ module.exports = {
 
     metric_calculation_constants: {
         SAVE_LABEL_DATA: false,
-        TIMEOUT: 8000,
+        TIMEOUT: 6000,
         TIMEOUT_FACTOR: 0.1,
     },
 

@@ -51,6 +51,7 @@ const trimAndPushToDB = (instagramData, user) => {
             console.log(error)
             reject(error)
         } finally {
+            //alternatively, switch back to await syntax, slow this section down, pass the db, to finally resolve db close???
             setTimeout(() => {
                 console.log('Database connection closed manually. If enqueue error exists, consider modifying the closeConnection() handler.')
                 db.closeConnection()

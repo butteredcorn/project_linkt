@@ -22,6 +22,7 @@ router.get('/dashboard', protectedRoute, async(req, res) => {
         //db.createConnection() created at instagram-endpoint through calculate-metrics
         //db.closeConnection also handled via timer
         if (req.query.delayDBHandling) {
+            await db.createConnection()
             console.log(`delayed db handling invoked.`)
             userPreferences = await db.getUserPreferencesNonHandled(undefined, `WHERE user_id = ${req.user.id}`)
             userInstagram = await db.getUserInstagramsNonHandled(undefined, `WHERE user_id = ${req.user.id}`)
@@ -67,6 +68,8 @@ router.get('/dashboard', protectedRoute, async(req, res) => {
     } catch (error) {
         console.log(error)
         res.send(UI_ROUTE_ERROR)
+    } finally {
+        db.closeConnection()
     }
 })
 
