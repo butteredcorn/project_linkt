@@ -58,6 +58,8 @@ router.get('/dashboard', protectedRoute, async(req, res) => {
     } catch (error) {
         console.log(error)
         res.send(UI_ROUTE_ERROR)
+    } finally {
+        db.closeConnection()
     }
 })
 

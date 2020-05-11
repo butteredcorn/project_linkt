@@ -51,10 +51,10 @@ const trimAndPushToDB = (instagramData, user) => {
             console.log(error)
             reject(error)
         } finally {
-            // setTimeout(() => {
-            //     console.log('Database connection closed manually. If enqueue error exists, consider modifying the closeConnection() handler.')
-            //     db.closeConnection()
-            // }, TIMEOUT)
+            setTimeout(() => {
+                console.log('Database connection closed manually. If enqueue error exists, consider modifying the closeConnection() handler.')
+                db.closeConnection()
+            }, TIMEOUT)
         }
     })
 }
