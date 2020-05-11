@@ -16,9 +16,21 @@ const { UI_ROUTE_ERROR } = errors
 
 router.get('/dashboard', protectedRoute, async(req, res) => {
     try {
-        await db.createConnection()
-        const userPreferences = await db.getUserPreferencesNonHandled(undefined, `WHERE user_id = ${req.user.id}`)
-        const userInstagram = await db.getUserInstagramsNonHandled(undefined, `WHERE user_id = ${req.user.id}`)
+        let userPreferences
+        let userInstagram
+        
+        //db.createConnection() created at instagram-endpoint through calculate-metrics
+        //db.closeConnection also handled via timer
+        if (req.query.delayDBHandling) {
+            console.log(`delayed db handling invoked.`)
+            userPreferences = await db.getUserPreferencesNonHandled(undefined, `WHERE user_id = ${req.user.id}`)
+            userInstagram = await db.getUserInstagramsNonHandled(undefined, `WHERE user_id = ${req.user.id}`)
+        } else {
+        //use handled version
+            userPreferences = await db.getUserPreferences(undefined, `WHERE user_id = ${req.user.id}`)
+            userInstagram = await db.getUserInstagrams(undefined, `WHERE user_id = ${req.user.id}`)
+        }
+        
 
         //if user-settings doesn't exist, then redirect to set user settings
         if (userPreferences && userPreferences.length == 0) {
@@ -58,8 +70,6 @@ router.get('/dashboard', protectedRoute, async(req, res) => {
     } catch (error) {
         console.log(error)
         res.send(UI_ROUTE_ERROR)
-    } finally {
-        db.closeConnection()
     }
 })
 

@@ -84,8 +84,12 @@ router.get('/processData', protectedRoute, async (req, res) => {
 
         console.log(instagramData)
         console.log(metrics)
+
+        const query = querystring.stringify({
+            delayDBHandling: true
+        })
         
-        res.redirect('/dashboard')
+        res.redirect('/dashboard' + query)
 
     } catch (error) {
         if (error.message) {
