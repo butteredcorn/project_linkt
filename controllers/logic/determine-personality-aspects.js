@@ -55,7 +55,8 @@ const determineUserPersonalityAspectsUnhandled = (user) => {
             determineConscientiousness(caption_careerfocused_entertainment_ratio, photo_careerfocused_entertainment_ratio, userPersonalityAspects)
             determineExtraversion(portrait_to_noperson_ratio, mean_hashtags_per_post, posts_per_day_recent, userPersonalityAspects)
 
-            await db.createUserPersonalityAspects(user.id, userPersonalityAspects.openess, userPersonalityAspects.conscientiousness, userPersonalityAspects.extraversion)
+            //this point gets to about post object 17 with heroku/heroku jawsdb
+            await db.createUserPersonalityAspectsUnhandled(user.id, userPersonalityAspects.openess, userPersonalityAspects.conscientiousness, userPersonalityAspects.extraversion)
 
             resolve(userPersonalityAspects)
         } catch (error) {
