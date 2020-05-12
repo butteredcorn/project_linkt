@@ -24,6 +24,16 @@ main {
     margin-right: auto;
 }
 
+.match-profile-photo-container {
+    display: flex;
+    justify-content: center;
+}
+
+.match-profile-photo {
+    border-radius: 100%;
+    max-width: 80vw;
+}
+
 .message-box-container {
     display: flex;
     justify-content: center;
@@ -60,11 +70,19 @@ main {
         font-size: 10px;
     }
 
+    .match-profile-photo {
+        width: 150px;
+    }
+
     main {
         width: 100vw;
     }
 }
 @media only screen and (min-width: 501px) {
+
+    .match-profile-photo {
+        width: 150px;
+    }
 
     header {
         max-width: 1000px;

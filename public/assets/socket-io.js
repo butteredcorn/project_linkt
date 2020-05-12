@@ -1,7 +1,9 @@
 let username
+let receiver_username
 
 $(() => {
-
+  receiver_username = $('#receiver_username').val()
+  //console.log(receiver_username)
 
   const socket = io('http://localhost:5000', {
     query: {
@@ -13,9 +15,10 @@ $(() => {
     console.log("Client side messaging enabled.")
   })
 
-   socket.on('new message', (message) => {
-    username = message.username //passed from the req.user token
-    console.log(`new message from server: ${message.text}.`)
+   socket.on('new message', (data) => {
+    username = data.username //passed from the req.user token
+    console.log(`new message from server: ${data[0].message}.`)
+    console.log(data[0])
    })
 
   socket.on('old messages', (data) => {
@@ -30,7 +33,7 @@ $(() => {
     event.preventDefault()
     const message = outGoingMessage.val()
 
-    const data = { username: username, message, token: document.cookie }
+    const data = { username: username, receiver_username: receiver_username, message, token: document.cookie }
     socket.emit('new message', data)
     newMessageComponent(data)
     outGoingMessage.val("")

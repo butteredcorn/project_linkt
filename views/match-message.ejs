@@ -25,6 +25,11 @@
     <!-- main -->
     <div class="main-container">
         <main>
+            <div class="match-profile-container">
+                <div class="match-username"><h2><%=match_username%></h2></div>
+                <input id="receiver_username" type="hidden" value="<%=match_username%>">
+                <div class="match-profile-photo-container"><img class="match-profile-photo" src="<%=match_profile_photo%>" alt="match-profile-photo"></div>
+            </div>
             <div class="message-box-container">
                 <div class="message-box">
                     <ul class="messages" id="messages"></ul>

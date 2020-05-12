@@ -116,7 +116,8 @@ router.post('/match-message', protectedRoute, async(req, res) => {
     try {
         console.log(req.body)
         res.render('match-message', {
-            username: req.body.username
+            match_username: req.body.username,
+            match_profile_photo: req.body.profile_picture
         })
     } catch (error) {
         console.log(error)
