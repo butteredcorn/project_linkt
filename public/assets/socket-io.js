@@ -15,10 +15,16 @@ $(() => {
     console.log("Client side messaging enabled.")
   })
 
+  socket.on('connection message', (data) => {
+    username = data[0].username //passed from the req.user token
+  })
+
    socket.on('new message', (data) => {
-    username = data.username //passed from the req.user token
-    console.log(`new message from server: ${data[0].message}.`)
-    console.log(data[0])
+    //console.log(`new message from server: ${data[0].message}.`)
+    //console.log(data[0])
+    for (let message of data) {
+      newMessageComponent(message)
+    }
    })
 
   socket.on('old messages', (data) => {
@@ -42,7 +48,13 @@ $(() => {
 })
 
 function newMessageComponent(message) {
+  console.log(message)
   //needs to be unique here
-  const className = message.username === username ? "my-message" : "other-message"
+  let className
+  if(message.username == username) {
+    className = "my-message"
+  } else if (message.username != username) {
+    className = "other-message"
+  }
   $(`<li class="${className}">${message.username}: ${message.message}</li>`).appendTo("#messages")
 }

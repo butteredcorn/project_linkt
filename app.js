@@ -39,7 +39,7 @@ module.exports = function () {
     io.on('connection', (socket) => {
         console.log(`user_id: ${socket.user.id} has connected.`);
         socket.username = `${socket.user.first_name} ${socket.user.last_name}`
-        socket.emit('new message', [{username: `${socket.user.first_name} ${socket.user.last_name}`, message: "connected to messaging server."}])
+        socket.emit('connection message', [{username: `${socket.user.first_name} ${socket.user.last_name}`, message: "connected to messaging server."}])
         
         users[socket.username] = socket; //save the socket as a key value pair to the 'user' object (storage mechanism ie. essentially a dictionary)
 
@@ -50,21 +50,15 @@ module.exports = function () {
             console.log(`user_id: ${socket.user.id} sender_username: ${socket.username} receiver_username: ${data.receiver_username} message: ${data.message}`) //data also has data.token property with the full token (not parsed)
             //take received message and emit to the right user
 
-            // for (let key in users) {
-            //     console.log(key)
-            //     console.log(users[key])
-            // }
-
             if(data.receiver_username in users) {
-                console.log(data)
                 // io.to(users[data.receiver_username]).emit('new message', [data])
                 // io.to(users[socket.username]).emit('new message', [data])
-                users[socket.username].emit('new message', [{username: socket.username, receiver_username: data.receiver_username, message: data.message}])
+                //users[socket.username].emit('new message', [{username: socket.username, receiver_username: data.receiver_username, message: data.message}])
                 users[data.receiver_username].emit('new message', [{username: socket.username, receiver_username: data.receiver_username, message: data.message}])                            
-            } else {
-                //push message to database, and have receiving user load messages upon socket initialization
-                console.log('i am pushing this message to the database!')
             }
+
+            //push message to database, and have receiving user load messages upon socket initialization
+            console.log('i am pushing this message to the database!')
           
 
             //messages.push(data) //save to database
