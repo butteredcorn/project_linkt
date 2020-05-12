@@ -22,6 +22,8 @@ const trimAndPushToDB = (instagramData, user) => {
 
             //could also filter out all photos without captions instead of just by recency
             for (let obj of instagramData) { //raw instagram data
+                //note that instagram post ids are dynamically generated, but the last few digits are just increments
+                obj.id = Math.floor(obj.id/100)
 
                 const photo = await db.getUserPhotosUnhandled(undefined, `WHERE instagram_post_id = ${obj.id}`)
                 //if photo doesn't already exist --> create photo
