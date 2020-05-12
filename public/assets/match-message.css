@@ -1,12 +1,18 @@
 /* test CSS */
 .other-message {
+    display: flex;
+    flex-direction: row-reverse;
     color: #3BA3A8;
   }
   
 .my-message {
+    display: flex;
     color: #303030;
 }
 
+ul {
+    list-style-type: none;
+}
 
 
 

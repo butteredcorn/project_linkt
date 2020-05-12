@@ -7,7 +7,8 @@ $(() => {
 
   const socket = io('http://localhost:5000', {
     query: {
-      token: document.cookie //user JWT object here
+      token: document.cookie, //user JWT object here
+      match_username: receiver_username
     }
   })
 
@@ -41,7 +42,7 @@ $(() => {
 
     const data = { username: username, receiver_username: receiver_username, message, token: document.cookie }
     socket.emit('new message', data)
-    newMessageComponent(data)
+    //newMessageComponent(data)
     outGoingMessage.val("")
   })
 
