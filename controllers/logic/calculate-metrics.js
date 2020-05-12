@@ -22,6 +22,8 @@ const trimAndPushToDB = (instagramData, user) => {
 
             //could also filter out all photos without captions instead of just by recency
             for (let obj of instagramData) { //raw instagram data
+                //note that instagram post ids are dynamically generated, but the last few digits are just increments
+                obj.id = Math.floor(obj.id/100)
 
                 const photo = await db.getUserPhotosUnhandled(undefined, `WHERE instagram_post_id = ${obj.id}`)
                 //if photo doesn't already exist --> create photo
@@ -30,6 +32,7 @@ const trimAndPushToDB = (instagramData, user) => {
                     db.createUserPhotoNonHandled(obj.id, user.id, obj.media_url, obj.timestamp, obj.caption, obj.media_type, obj.thumbnail_url)
                 } else if (photo) {
                     //need to update every photo link or you will get a BAD URL TIMESTAMP ERROR!!!
+                    console.log(obj.id)
                     db.updateUserPhotoNonHandles(obj.id, user.id, obj.media_url, obj.thumbnail_url)
                     //reject(new Error('Error: duplicate instagram_post_id identified.'))
                 }

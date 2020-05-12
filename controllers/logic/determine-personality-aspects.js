@@ -55,7 +55,8 @@ const determineUserPersonalityAspectsUnhandled = (user) => {
             determineConscientiousness(caption_careerfocused_entertainment_ratio, photo_careerfocused_entertainment_ratio, userPersonalityAspects)
             determineExtraversion(portrait_to_noperson_ratio, mean_hashtags_per_post, posts_per_day_recent, userPersonalityAspects)
 
-            await db.createUserPersonalityAspects(user.id, userPersonalityAspects.openess, userPersonalityAspects.conscientiousness, userPersonalityAspects.extraversion)
+            //this point gets to about post object 17 with heroku/heroku jawsdb
+            await db.createUserPersonalityAspectsUnhandled(user.id, userPersonalityAspects.openess, userPersonalityAspects.conscientiousness, userPersonalityAspects.extraversion)
 
             resolve(userPersonalityAspects)
         } catch (error) {
@@ -132,7 +133,13 @@ const determineExtraversion = (portrait_to_noperson_ratio, mean_hashtags_per_pos
                 reject(new Error('Check user metrics.'))
             }
 
-            userPersonalityAspects.extraversion = portrait_to_noperson_ratio * 0.5 + mean_hashtags_per_post * 0.25 + posts_per_day_recent * 0.25
+            //handle null here
+            if (portrait_to_noperson_ratio === null) {
+                userPersonalityAspects.extraversion = null
+            } else {
+                userPersonalityAspects.extraversion = portrait_to_noperson_ratio * 0.5 + mean_hashtags_per_post * 0.25 + posts_per_day_recent * 0.25
+            }
+            
             resolve(userPersonalityAspects.extraversion)
         } catch (error) {
             reject(error)

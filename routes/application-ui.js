@@ -23,6 +23,7 @@ router.get('/dashboard', protectedRoute, async(req, res) => {
         //db.createConnection() created at instagram-endpoint through calculate-metrics
         //db.closeConnection also handled via timer
         if (req.query.delayDBHandling) {
+            //if using unhandled, reuse the same db object as the one originally started off with in instagramendpoint
             const db = require('../routes/instagram-endpoint').db
             console.log(`delayed db handling invoked.`)
             userPreferences = await db.getUserPreferencesNonHandled(undefined, `WHERE user_id = ${req.user.id}`)

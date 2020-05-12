@@ -74,7 +74,7 @@ router.get('/processData', protectedRoute, async (req, res) => {
 
         //get instagram data
         instagramData = await getUserInstagramData(req.user.instagram_access_token)
-        
+
         //non-photo dependent instagram data processing
         const metrics = await processInstagramData(instagramData)
 
