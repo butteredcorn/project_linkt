@@ -132,7 +132,13 @@ const determineExtraversion = (portrait_to_noperson_ratio, mean_hashtags_per_pos
                 reject(new Error('Check user metrics.'))
             }
 
-            userPersonalityAspects.extraversion = portrait_to_noperson_ratio * 0.5 + mean_hashtags_per_post * 0.25 + posts_per_day_recent * 0.25
+            //handle null here
+            if (portrait_to_noperson_ratio === null) {
+                userPersonalityAspects.extraversion = null
+            } else {
+                userPersonalityAspects.extraversion = portrait_to_noperson_ratio * 0.5 + mean_hashtags_per_post * 0.25 + posts_per_day_recent * 0.25
+            }
+            
             resolve(userPersonalityAspects.extraversion)
         } catch (error) {
             reject(error)
