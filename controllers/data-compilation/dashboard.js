@@ -58,6 +58,10 @@ const getUserMatches = (user) => {
             // console.log(latestUserPreference)
             // console.log(otherUsers)
 
+            for (let user of otherUsers) {
+                delete user.password_hash
+            }
+
             //filters for user's gender setting, and age setting, joined with other users' personality aspects
             resolve(otherUsers)
         

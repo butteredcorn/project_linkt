@@ -77,7 +77,8 @@
                                         <button type="submit" class="view-profile">View Profile</button>
                                     </form>
                                     <form action="/match-message" method="POST">
-                                        <input class="message-selected" name="username" type="hidden" value="<%=match.username%>">
+                                        <input class="message-selected" name="receiver_user_id" type="hidden" value="<%=match.user_id%>">
+                                        <input class="message-selected" name="receiver_username" type="hidden" value="<%=match.username%>">
                                         <input class="message-selected" name="profile_picture" type="hidden" value="<%=current_profile_picture%>">
                                         <button class="message">Message!</button>
                                     </form>

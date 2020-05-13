@@ -76,7 +76,11 @@ const sqlCallback = (sql) => {
 
 const dropAndRecreateTables = () => {
     return new Promise((resolve, reject) => {
-        sqlCallback('DROP TABLE IF EXISTS user_tags')
+        sqlCallback('DROP TABLE IF EXISTS user_messages')
+        .then((result) => {
+            console.log(result.message)
+            return sqlCallback('DROP TABLE IF EXISTS user_tags')
+        })
         .then((result) => {
             console.log(result.message)
             return sqlCallback('DROP TABLE IF EXISTS user_career_and_education')
@@ -128,7 +132,8 @@ const dropAndRecreateTables = () => {
                 max_distance            INT,
                 gender                  VARCHAR(255),
                 current_profile_picture VARCHAR(255),
-                bio                     VARCHAR(255),     
+                headline                VARCHAR(255),
+                bio                     VARCHAR(255),
                 created_at              TIMESTAMP NOT NULL DEFAULT NOW()
             )`)
         })
@@ -247,6 +252,18 @@ const dropAndRecreateTables = () => {
                 user_id                 INT NOT NULL,
                 tag                     VARCHAR(255) NOT NULL,
                 FOREIGN KEY (user_id)   REFERENCES users(id)
+            )`)
+        })
+        .then((result) => {
+            console.log(result.message)
+            return sqlCallback(`CREATE TABLE user_messages (
+                id                      INT PRIMARY KEY AUTO_INCREMENT,
+                sender_id               INT NOT NULL,
+                receiver_id             INT NOT NULL,
+                socket_key              VARCHAR(255) NOT NULL,
+                message_text            VARCHAR(255) NOT NULL,
+                FOREIGN KEY (sender_id)   REFERENCES users(id),
+                FOREIGN KEY (receiver_id)   REFERENCES users(id)
             )`)
         })
         //finally resolve/reject
@@ -976,6 +993,55 @@ const createUserPersonalityAspectsUnhandled = (user_id, openess, conscientiousne
     })
 }
 
+/**
+ * user_messages
+ * @param {*} selectBy 
+ * @param {*} searchBy 
+ */
+const getUserMessages = (selectBy = '*', searchBy = '') => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            await createConnection()
+            const table = 'user_messages'
+            const sql = `SELECT ${selectBy} FROM ${table} ${searchBy}`
+            db.query(sql, (error, result) => {
+                if (error) {
+                    console.log(`Problem searching for ${table} by ${searchBy}.`)
+                    reject(error)
+                }
+                resolve(rawDataPacketConverter(result))
+            })
+        } catch (error) {
+            console.log(error)
+            reject(error)
+        } finally {
+            closeConnection()
+        }
+    })
+}
+
+const createUserMessage = (sender_id, receiver_id, socket_key, message_text) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            await createConnection()
+            const table = 'user_messages'
+            const sql = `INSERT INTO ${table} (sender_id, receiver_id, socket_key, message_text) VALUES (?, ?, ?, ?)`
+            const params = [sender_id, receiver_id, socket_key, message_text]
+            db.query(sql, params, (error, result) => {
+                if (error) {
+                    console.log(`${error} Problem creating user message and inserting into ${table}.`)
+                    reject(error)
+                }
+                resolve(rawDataPacketConverter(result))
+            })
+        } catch (error) {
+            console.log(error)
+            reject(error)
+        } finally {
+            closeConnection()
+        }     
+    })
+}
 
 module.exports = {
     createConnection,
@@ -1009,6 +1075,8 @@ module.exports = {
     getUserPersonalityAspects,
     getUserPersonalityAspectsUnhandled,
     createUserPersonalityAspects,
-    createUserPersonalityAspectsUnhandled
+    createUserPersonalityAspectsUnhandled,
+    getUserMessages,
+    createUserMessage
 }
 

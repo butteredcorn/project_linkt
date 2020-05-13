@@ -5,6 +5,7 @@ module.exports = function () {
     const {protectedRoute } = require('./controllers/authentication')
     require('dotenv').config()
     const { verifyExistingToken } = require('./controllers/json-web-token')
+    const db = require('./sql/database-interface')
 
     const app = express()
     const server = require('http').createServer(app);
@@ -19,10 +20,11 @@ module.exports = function () {
                 //console.log(jwt)
                 const user = await verifyExistingToken(jwt)
 
-                console.log(user)
+                console.log(socket.handshake.query)
 
                 if (user) {
                     socket.user = user
+                    socket.receiver_user_id = socket.handshake.query.match_user_id
                     socket.receiver_username = socket.handshake.query.match_username
                     next()
                 } else {
@@ -36,9 +38,9 @@ module.exports = function () {
 
     const users = {} //dictionary of online sockets
 
-    io.on('connection', (socket) => {
+    io.on('connection', async (socket) => {
         //get old messages
-        const messageHistory = [{username: 'kizuna ai', message: 'ohio!'}] //all messages in existance from database
+        //const messageHistory = [{username: 'kizuna ai', message: 'ohio!'}] //all messages in existance from database
 
         console.log(`user_id: ${socket.user.id} has connected.`);
         socket.username = `${socket.user.first_name} ${socket.user.last_name}`
@@ -46,8 +48,23 @@ module.exports = function () {
         
         //order matters
         const socketKey = JSON.stringify([socket.username, socket.receiver_username].sort())
-
+        const messageHistory = await db.getUserMessages('id, sender_id, receiver_id, message_text', `WHERE socket_key = '${socketKey}'`)
         users[socket.username] = socket; //save the socket as a key value pair to the 'user' object (storage mechanism ie. essentially a dictionary)
+
+
+        for (let message of messageHistory) {
+            if (message.sender_id == socket.user.id) {
+                message.username = socket.username
+            } else if (message.sender_id == socket.receiver_user_id) {
+                message.username = socket.receiver_username
+            }
+
+            if (message.receiver_id == socket.user.id) {
+                message.receiver_username = socket.username
+            } else if (message.receiver_id == socket.receiver_user_id) {
+                message.receiver_username = socket.receiver_username
+            }
+        }
 
         socket.emit('old messages', messageHistory)
 
@@ -55,7 +72,7 @@ module.exports = function () {
         users[socket.username].join(socketKey);
         
         //incoming messages from client side
-        socket.on('new message', (data) => {
+        socket.on('new message', async (data) => {
             console.log(`user_id: ${socket.user.id} sender_username: ${socket.username} receiver_username: ${data.receiver_username} message: ${data.message}`) //data also has data.token property with the full token (not parsed)
 
             //take received message and emit to the right user
@@ -71,11 +88,12 @@ module.exports = function () {
                 //users[data.receiver_username].emit('new message', [{username: socket.username, receiver_username: data.receiver_username, message: data.message}])                            
             }
 
-            //message the 'room' socket
-            io.sockets.in(socketKey).emit('new message', [{username: socket.username, receiver_username: data.receiver_username, message: data.message}]);
-
             //push message to database, and have receiving user load messages upon socket initialization
-            console.log('i am pushing this message to the database!')
+            await db.createUserMessage(socket.user.id, data.receiver_user_id, socketKey, data.message)
+
+            //message the 'room' socket
+            //don't need user_id for data?
+            io.sockets.in(socketKey).emit('new message', [{username: socket.username, receiver_username: data.receiver_username, message: data.message}]);
         })
 
         socket.on('disconnect', (data) => {

@@ -1,13 +1,15 @@
 let username
+let receiver_user_id
 let receiver_username
 
 $(() => {
+  receiver_user_id = $('#receiver_user_id').val()
   receiver_username = $('#receiver_username').val()
-  //console.log(receiver_username)
 
   const socket = io('http://localhost:5000', {
     query: {
       token: document.cookie, //user JWT object here
+      match_user_id: receiver_user_id,
       match_username: receiver_username
     }
   })
@@ -29,8 +31,20 @@ $(() => {
    })
 
   socket.on('old messages', (data) => {
-    console.log(`Old messages: ${data}.`)
+    const formattedData = []
+
     for (let message of data) {
+      const formattedMessage = {
+        username: message.username,
+        receiver_username: message.receiver_username,
+        message: message.message_text
+      }
+      formattedData.push(formattedMessage)
+    }
+
+    console.log(`Old messages: ${formattedData}.`)
+
+    for (let message of formattedData) {
       newMessageComponent(message)
     }
   })
@@ -40,7 +54,7 @@ $(() => {
     event.preventDefault()
     const message = outGoingMessage.val()
 
-    const data = { username: username, receiver_username: receiver_username, message, token: document.cookie }
+    const data = { username: username, receiver_user_id: receiver_user_id, receiver_username: receiver_username, message, token: document.cookie }
     socket.emit('new message', data)
     //newMessageComponent(data)
     outGoingMessage.val("")
