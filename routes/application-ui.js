@@ -124,8 +124,8 @@ router.get('/match-message', protectedRoute, async(req, res) => {
 
 router.post('/match-message', protectedRoute, async(req, res) => {
     try {
-        console.log(req.body)
-        
+        //console.log(req.body)
+
         res.render('match-message', {
             match_user_id: req.body.receiver_user_id,
             match_username: req.body.receiver_username,
@@ -144,23 +144,41 @@ router.get('/user-messages', protectedRoute, async(req, res) => {
 
         for (let user of otherUsers) {
             for (let message of userMessages) {
-                if (user.user_id == message.sender_id || user.user_id == message.receiver_id) {
+                message.match_username = user.first_name + " " + user.last_name
+                message.match_profile_picture = user.current_profile_picture
+
+                if (user.user_id == message.sender_id) {
                     otherUsersThatHaveMessaged.push(user)
+                    message.username = user.first_name + " " + user.last_name
+                    break;
+                } else if (user.user_id == message.receiver_id) {
+                    otherUsersThatHaveMessaged.push(user)
+                    message.receiver_username = user.first_name + " " + user.last_name
                     break;
                 }
             }
         }
 
+        for (let message of userMessages) {
+            if (message.sender_id == req.user.id) {
+                message.username = req.user.first_name + " " + req.user.last_name
+            } else if (message.receiver_id == req.user.id) {
+                message.receiver_username = req.user.first_name + " " + req.user.last_name
+            }
+        }
+
         //console.log(otherUsers)
-        console.log(otherUsersThatHaveMessaged)
+        // console.log(otherUsersThatHaveMessaged)
         console.log(userMessages)
 
 
         //const otherUsersThatHaveMessaged = otherUsers
 
         res.render('user-messages', {
-            other_users: otherUsersThatHaveMessaged
+            other_users: otherUsersThatHaveMessaged,
+            user_messages: userMessages
         })
+
     } catch (error) {
         console.log(error)
         res.send(UI_ROUTE_ERROR)

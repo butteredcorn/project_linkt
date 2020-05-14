@@ -9,7 +9,9 @@ const { } = require('../../globals')
 const getUserMessages = (user) => {
     return new Promise(async (resolve, reject) => {
         try {
-            const userMessage = await db.getUserMessages(undefined, `WHERE sender_id = ${user.id} OR receiver_id = ${user.id}`)
+            const selectBy = 'DISTINCT socket_key, sender_id, receiver_id, message_text, date_created'
+            const searchBy = 'u1 WHERE date_created = (SELECT MAX(date_created) FROM user_messages u2 WHERE u1.socket_key = u2.socket_key) ORDER BY date_created DESC'
+            const userMessage = await db.getUserMessages(selectBy, searchBy)
 
             resolve(userMessage)
         } catch(error) {
@@ -61,3 +63,7 @@ const loadMessages = (user) => {
 module.exports = {
     loadMessages
 }
+
+
+
+//SELECT Y.* FROM (SELECT most_recent_message = MAX(date_created) FROM user_messages GROUP BY socket_key) AS X INNER JOIN user_messages AS Y ON Y.ID = X.most_recent_message

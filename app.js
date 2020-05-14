@@ -20,7 +20,7 @@ module.exports = function () {
                 //console.log(jwt)
                 const user = await verifyExistingToken(jwt)
 
-                console.log(socket.handshake.query)
+                //console.log(socket.handshake.query)
 
                 if (user) {
                     socket.user = user
