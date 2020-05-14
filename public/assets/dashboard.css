@@ -1,3 +1,14 @@
+.header-logo {
+    font-size: 2em;
+    margin-right: 4em;
+    padding-right: 0;
+}
+
+.header-text {
+    font-size: 2em;
+    margin-left: 4em;
+}
+
 .main-container {
     padding-top: 4em;
     padding-bottom: 8em;
