@@ -5,6 +5,7 @@ module.exports = function () {
     const {protectedRoute } = require('./controllers/authentication')
     require('dotenv').config()
     const { verifyExistingToken } = require('./controllers/json-web-token')
+    const db = require('./sql/database-interface')
 
     const app = express()
     const server = require('http').createServer(app);
@@ -19,10 +20,12 @@ module.exports = function () {
                 //console.log(jwt)
                 const user = await verifyExistingToken(jwt)
 
-                console.log(user)
+                //console.log(socket.handshake.query)
 
                 if (user) {
                     socket.user = user
+                    socket.receiver_user_id = socket.handshake.query.match_user_id
+                    socket.receiver_username = socket.handshake.query.match_username
                     next()
                 } else {
                     next(new Error('Authentication error.'));
@@ -33,43 +36,82 @@ module.exports = function () {
         }
     })
 
-    const messages = [{username: 'kizuna ai', message: 'ohio!'}] //all messages in existance from database
     const users = {} //dictionary of online sockets
 
-    io.on('connection', (socket) => {
+    io.on('connection', async (socket) => {
+        //get old messages
+        //const messageHistory = [{username: 'kizuna ai', message: 'ohio!'}] //all messages in existance from database
+
         console.log(`user_id: ${socket.user.id} has connected.`);
-        socket.emit('new message', {username: `${socket.user.first_name} ${socket.user.last_name}`, text: "connected to messaging server."})
-        
+        socket.username = `${socket.user.first_name} ${socket.user.last_name}`
         users[socket.username] = socket; //save the socket as a key value pair to the 'user' object (storage mechanism ie. essentially a dictionary)
+        socket.emit('connection message', [{username: socket.username, message: "connected to messaging server."}])
+        
+        //order matters
+        const socketKey = JSON.stringify([socket.username, socket.receiver_username].sort())
+        //currernt user join the private room
+        users[socket.username].join(socketKey);
 
-        socket.emit('old messages', messages)
+        //load message history
+        try {
+            const messageHistory = await db.getUserMessages('id, sender_id, receiver_id, message_text', `WHERE socket_key = '${socketKey}'`)
 
+            for (let message of messageHistory) {
+                if (message.sender_id == socket.user.id) {
+                    message.username = socket.username
+                } else if (message.sender_id == socket.receiver_user_id) {
+                    message.username = socket.receiver_username
+                }
+    
+                if (message.receiver_id == socket.user.id) {
+                    message.receiver_username = socket.username
+                } else if (message.receiver_id == socket.receiver_user_id) {
+                    message.receiver_username = socket.receiver_username
+                }
+            }
+    
+            socket.emit('old messages', messageHistory)
+        } catch (error) {
+            console.log(error)
+        }
+        
         //incoming messages from client side
-        socket.on('new message', (data) => {
-          console.log(`user_id: ${socket.user.id}: ${data.message}`) //data also has data.token property with the full token (not parsed)
-          console.log(data)
-          //take received message and emit to the right user
-        //   if(data.receiver_username in users) {
-            //then: //io.to(socketId).emit(data.message);
-        //}
-          
-          
+        socket.on('new message', async (data) => {
+            try {
+                console.log(`user_id: ${socket.user.id} sender_username: ${socket.username} receiver_username: ${data.receiver_username} message: ${data.message}`) //data also has data.token property with the full token (not parsed)
 
-
-          //messages.push(data) //save to database
-          
-
-        //   if (data.type === 'private') {
-        //     currentUsers[data.to_user].emit('new message', data)
-        //   }
+                //take received message and emit to the right user
+                if(data.receiver_username in users) {
+                    for (let key in users) {
+                        if(key == data.receiever_username) {
+                            //receiver user join the private room
+                            users[key].join(socketKey)
+                        }
+                    }
+                    //message the 'user' socket
+                    //users[socket.username].emit('new message', [{username: socket.username, receiver_username: data.receiver_username, message: data.message}])
+                    //users[data.receiver_username].emit('new message', [{username: socket.username, receiver_username: data.receiver_username, message: data.message}])                            
+                }
+    
+                //push message to database, and have receiving user load messages upon socket initialization
+                //alternative to data.receiver_user_id - socket.receiver_user_id
+                await db.createUserMessage(socket.user.id, socket.receiver_user_id, socketKey, data.message) 
+    
+                //message the 'room' socket
+                //don't need user_id for data?
+                io.sockets.in(socketKey).emit('new message', [{username: socket.username, receiver_username: data.receiver_username, message: data.message}]);
+            
+            } catch (error) {
+                console.log(error)
+            }
         })
 
         socket.on('disconnect', (data) => {
             if(!socket.username) {
                 return
             } else {
-                delete users[socket.nickname]
-                //update...?
+                delete users[socket.username]
+                console.log(`Remaining online sockets: ${Object.keys(users)}.`)
             }
         })
     });

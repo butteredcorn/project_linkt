@@ -6,9 +6,11 @@ const querystring = require('querystring')
 const { loadDashboard, loadDashboardUnhandled } = require('../controllers/data-compilation/dashboard')
 const { loadUserSettings } = require('../controllers/data-compilation/user-settings')
 const { loadUserProfile } = require('../controllers/data-compilation/user-profile')
+const { loadMessages } = require('../controllers/data-compilation/user-messages')
 
 const userSettings = '/user-settings?'
 const instagramEndpoint = '/instagram/login'
+const profileSettings = '/profile-settings'
 
 const { errors, metric_calculation_constants } = require('../globals')
 const { TIMEOUT } = metric_calculation_constants
@@ -19,6 +21,7 @@ router.get('/dashboard', protectedRoute, async(req, res) => {
     try {
         let userPreferences
         let userInstagram
+        let userBioAndHeadline
         
         //db.createConnection() created at instagram-endpoint through calculate-metrics
         //db.closeConnection also handled via timer
@@ -28,10 +31,14 @@ router.get('/dashboard', protectedRoute, async(req, res) => {
             console.log(`delayed db handling invoked.`)
             userPreferences = await db.getUserPreferencesNonHandled(undefined, `WHERE user_id = ${req.user.id}`)
             userInstagram = await db.getUserInstagramsNonHandled(undefined, `WHERE user_id = ${req.user.id}`)
+            userBioAndHeadline = await db.getUsersUnhandled('headline, bio', `WHERE id = ${req.user.id}`)
         } else {
         //use handled version
-            userPreferences = await db.getUserPreferences(undefined, `WHERE user_id = ${req.user.id}`)
-            userInstagram = await db.getUserInstagrams(undefined, `WHERE user_id = ${req.user.id}`)
+            await db.createConnection()
+            userPreferences = await db.getUserPreferencesNonHandled(undefined, `WHERE user_id = ${req.user.id}`)
+            userInstagram = await db.getUserInstagramsNonHandled(undefined, `WHERE user_id = ${req.user.id}`)
+            userBioAndHeadline = await db.getUsersUnhandled('headline, bio', `WHERE id = ${req.user.id}`)
+            await db.closeConnection()
         }
         
 
@@ -41,6 +48,9 @@ router.get('/dashboard', protectedRoute, async(req, res) => {
                 newUser: true
             })
             res.redirect(userSettings + query) //send querystring
+
+        } else if (userBioAndHeadline && userBioAndHeadline.length == 0) {
+            res.redirect(profileSettings)
 
         } else if (userInstagram && userInstagram.length == 0) {
 
@@ -114,10 +124,62 @@ router.get('/match-message', protectedRoute, async(req, res) => {
 
 router.post('/match-message', protectedRoute, async(req, res) => {
     try {
-        console.log(req.body)
+        //console.log(req.body)
+
         res.render('match-message', {
-            username: req.body.username
+            match_user_id: req.body.receiver_user_id,
+            match_username: req.body.receiver_username,
+            match_profile_photo: req.body.profile_picture
         })
+    } catch (error) {
+        console.log(error)
+        res.send(UI_ROUTE_ERROR)
+    }
+})
+
+router.get('/user-messages', protectedRoute, async(req, res) => {
+    try {
+        const {otherUsers, userMessages} = await loadMessages(req.user)
+        const otherUsersThatHaveMessaged = []
+
+        for (let user of otherUsers) {
+            for (let message of userMessages) {
+                message.match_id = user.user_id
+                message.match_username = user.first_name + " " + user.last_name
+                message.match_profile_picture = user.current_profile_picture
+
+                if (user.user_id == message.sender_id) {
+                    otherUsersThatHaveMessaged.push(user)
+                    message.username = user.first_name + " " + user.last_name
+                    break;
+                } else if (user.user_id == message.receiver_id) {
+                    otherUsersThatHaveMessaged.push(user)
+                    message.receiver_username = user.first_name + " " + user.last_name
+                    break;
+                }
+            }
+        }
+
+        for (let message of userMessages) {
+            if (message.sender_id == req.user.id) {
+                message.username = req.user.first_name + " " + req.user.last_name
+            } else if (message.receiver_id == req.user.id) {
+                message.receiver_username = req.user.first_name + " " + req.user.last_name
+            }
+        }
+
+        //console.log(otherUsers)
+        // console.log(otherUsersThatHaveMessaged)
+        console.log(userMessages)
+
+
+        //const otherUsersThatHaveMessaged = otherUsers
+
+        res.render('user-messages', {
+            other_users: otherUsersThatHaveMessaged,
+            user_messages: userMessages
+        })
+
     } catch (error) {
         console.log(error)
         res.send(UI_ROUTE_ERROR)
@@ -190,7 +252,7 @@ router.post('/user-settings-page', protectedRoute, async(req, res) => {
 router.get('/user-profile', protectedRoute, async(req, res) => {
     try {
         const {userObject, userPhotos} = await loadUserProfile(req.user)
-        console.log(userPhotos)
+        console.log(userObject)
         res.render('user-profile', {
             user: userObject,
             userPhotos: userPhotos
@@ -201,6 +263,43 @@ router.get('/user-profile', protectedRoute, async(req, res) => {
         res.send(UI_ROUTE_ERROR)
     }
 })
+
+router.get('/profile-settings', protectedRoute, async(req, res) => {
+    try {
+        res.render('profile-settings', {
+            
+        })
+
+    } catch (error) {
+        console.log(error)
+        res.send(UI_ROUTE_ERROR)
+    }
+})
+
+router.post('/profile-settings', protectedRoute, async(req, res) => {
+    try {
+        if(req.body) {
+            if (req.query.delayDBHandling) {
+
+            } else {
+                await db.updateUserProfileBioAndHeadline(req.user.id, req.body.bio, req.body.headline)
+                const userCareerEducation = await db.getUserCareerAndEducation(undefined, `WHERE user_id = ${req.user.id}`)
+                if (userCareerEducation && userCareerEducation.length ==0) {
+                    await db.createUserCareerAndEducation(req.user.id, req.body.education_level, req.body.occupation)    
+                } else {
+                    await db.updateUserCareerAndEducation(req.user.id, req.body.education_level, req.body.occupation)
+                }
+            }
+            res.redirect('/dashboard')
+        } else {
+            console.log(new Error('req.body undefined.'))
+        }
+    } catch (error) {
+        console.log(error)
+        res.send(UI_ROUTE_ERROR)
+    }
+})
+
 
 router.post('/user-profile-picture', protectedRoute, async(req, res) => {
     try {

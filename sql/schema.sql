@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS user_messages;
 DROP TABLE IF EXISTS user_tags;
 DROP TABLE IF EXISTS user_career_and_education;
 DROP TABLE IF EXISTS user_preferences;
@@ -21,6 +22,7 @@ CREATE TABLE users (
     max_distance            INT,
     gender                  VARCHAR(255),
     current_profile_picture VARCHAR(255),
+    headline                VARCHAR(255),
     bio                     VARCHAR(255),
     created_at              TIMESTAMP NOT NULL DEFAULT NOW()
 );
@@ -129,4 +131,15 @@ CREATE TABLE user_tags (
     user_id                 INT NOT NULL,
     tag                     VARCHAR(255) NOT NULL,
     FOREIGN KEY (user_id)   REFERENCES users(id)
+);
+
+CREATE TABLE user_messages (
+    id                      INT PRIMARY KEY AUTO_INCREMENT,
+    sender_id               INT NOT NULL,
+    receiver_id             INT NOT NULL,
+    socket_key              VARCHAR(255) NOT NULL,
+    message_text            VARCHAR(255) NOT NULL,
+    date_created            TIMESTAMP NOT NULL DEFAULT NOW(),
+    FOREIGN KEY (sender_id)   REFERENCES users(id),
+    FOREIGN KEY (receiver_id)   REFERENCES users(id)
 );

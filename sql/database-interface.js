@@ -76,7 +76,11 @@ const sqlCallback = (sql) => {
 
 const dropAndRecreateTables = () => {
     return new Promise((resolve, reject) => {
-        sqlCallback('DROP TABLE IF EXISTS user_tags')
+        sqlCallback('DROP TABLE IF EXISTS user_messages')
+        .then((result) => {
+            console.log(result.message)
+            return sqlCallback('DROP TABLE IF EXISTS user_tags')
+        })
         .then((result) => {
             console.log(result.message)
             return sqlCallback('DROP TABLE IF EXISTS user_career_and_education')
@@ -128,7 +132,8 @@ const dropAndRecreateTables = () => {
                 max_distance            INT,
                 gender                  VARCHAR(255),
                 current_profile_picture VARCHAR(255),
-                bio                     VARCHAR(255),     
+                headline                VARCHAR(255),
+                bio                     VARCHAR(255),
                 created_at              TIMESTAMP NOT NULL DEFAULT NOW()
             )`)
         })
@@ -249,6 +254,19 @@ const dropAndRecreateTables = () => {
                 FOREIGN KEY (user_id)   REFERENCES users(id)
             )`)
         })
+        .then((result) => {
+            console.log(result.message)
+            return sqlCallback(`CREATE TABLE user_messages (
+                id                      INT PRIMARY KEY AUTO_INCREMENT,
+                sender_id               INT NOT NULL,
+                receiver_id             INT NOT NULL,
+                socket_key              VARCHAR(255) NOT NULL,
+                message_text            VARCHAR(255) NOT NULL,
+                date_created            TIMESTAMP NOT NULL DEFAULT NOW(),
+                FOREIGN KEY (sender_id)   REFERENCES users(id),
+                FOREIGN KEY (receiver_id)   REFERENCES users(id)
+            )`)
+        })
         //finally resolve/reject
         .then((result) => {
             resolve(result)
@@ -277,6 +295,39 @@ const resetDatabase = () => {
             })
         } catch (error) {
             console.log(error)
+            reject(error)
+        }
+    })
+}
+
+const resetUserMessages = () => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            await createConnection()
+            sqlCallback('DROP TABLE IF EXISTS user_messages')
+            .then((result) => {
+                console.log(result.message)
+                return sqlCallback(`CREATE TABLE user_messages (
+                    id                      INT PRIMARY KEY AUTO_INCREMENT,
+                    sender_id               INT NOT NULL,
+                    receiver_id             INT NOT NULL,
+                    socket_key              VARCHAR(255) NOT NULL,
+                    message_text            VARCHAR(255) NOT NULL,
+                    date_created            TIMESTAMP NOT NULL DEFAULT NOW(),
+                    FOREIGN KEY (sender_id)   REFERENCES users(id),
+                    FOREIGN KEY (receiver_id)   REFERENCES users(id)
+                )`)
+                .then((result) => {
+                    resolve(result)
+                })
+                .catch((error) => {
+                    reject(error)
+                })
+                .finally(() => {
+                    closeConnection()
+                })
+            })
+        } catch (error) {
             reject(error)
         }
     })
@@ -442,16 +493,16 @@ const updateUserProfilePhoto = (id, current_profile_picture) => {
     })
 }
 
-const updateUserProfileBio = (id, bio) => {
+const updateUserProfileBioAndHeadline = (id, bio, headline) => {
     return new Promise(async (resolve, reject) => {
         try {
             await createConnection()
             const table = 'users'
-            const sql = `UPDATE ${table} SET bio = ? WHERE id = ?`
-            const params = [bio, id]
+            const sql = `UPDATE ${table} SET bio = ?, headline =? WHERE id = ?`
+            const params = [bio, headline, id]
             db.query(sql, params, (error, result) => {
                 if (error) {
-                    console.log(new Error(`${error} Problem updating user profile bio for ${id} in ${table}.`))
+                    console.log(new Error(`${error} Problem updating user profile bio and headline for ${id} in ${table}.`))
                     reject(error)
                 }
                 resolve(rawDataPacketConverter(result))
@@ -976,11 +1027,138 @@ const createUserPersonalityAspectsUnhandled = (user_id, openess, conscientiousne
     })
 }
 
+/**
+ * user_messages
+ * @param {*} selectBy 
+ * @param {*} searchBy 
+ */
+const getUserMessages = (selectBy = '*', searchBy = '') => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            await createConnection()
+            const table = 'user_messages'
+            const sql = `SELECT ${selectBy} FROM ${table} ${searchBy}`
+            db.query(sql, (error, result) => {
+                if (error) {
+                    console.log(`Problem searching for ${table} by ${searchBy}.`)
+                    reject(error)
+                }
+                resolve(rawDataPacketConverter(result))
+            })
+        } catch (error) {
+            console.log(error)
+            reject(error)
+        } finally {
+            closeConnection()
+        }
+    })
+}
+
+const createUserMessage = (sender_id, receiver_id, socket_key, message_text) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            await createConnection()
+            const table = 'user_messages'
+            const sql = `INSERT INTO ${table} (sender_id, receiver_id, socket_key, message_text) VALUES (?, ?, ?, ?)`
+            const params = [sender_id, receiver_id, socket_key, message_text]
+            db.query(sql, params, (error, result) => {
+                if (error) {
+                    console.log(`${error} Problem creating user message and inserting into ${table}.`)
+                    reject(error)
+                }
+                resolve(rawDataPacketConverter(result))
+            })
+        } catch (error) {
+            console.log(error)
+            reject(error)
+        } finally {
+            closeConnection()
+        }     
+    })
+}
+
+/**
+ * user_career_and_education
+ * @param {*} selectBy 
+ * @param {*} searchBy 
+ */
+const getUserCareerAndEducation = (selectBy = '*', searchBy = '') => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            await createConnection()
+            const table = 'user_career_and_education'
+            const sql = `SELECT ${selectBy} FROM ${table} ${searchBy}`
+            db.query(sql, (error, result) => {
+                if (error) {
+                    console.log(`Problem searching for ${table} by ${searchBy}.`)
+                    reject(error)
+                }
+                resolve(rawDataPacketConverter(result))
+            })
+        } catch (error) {
+            console.log(error)
+            reject(error)
+        } finally {
+            closeConnection()
+        }
+    })
+}
+
+const createUserCareerAndEducation = (user_id, highest_education_type, job_title) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            await createConnection()
+            const table = 'user_career_and_education'
+            const sql = `INSERT INTO ${table} (user_id, highest_education_type, job_title) VALUES (?, ?, ?)`
+            const params = [user_id, highest_education_type, job_title]
+            db.query(sql, params, (error, result) => {
+                if (error) {
+                    console.log(`${error} Problem creating user message and inserting into ${table}.`)
+                    reject(error)
+                }
+                resolve(rawDataPacketConverter(result))
+            })
+        } catch (error) {
+            console.log(error)
+            reject(error)
+        } finally {
+            closeConnection()
+        }     
+    })
+}
+
+const updateUserCareerAndEducation = (user_id, highest_education_type, job_title) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            await createConnection()
+            const table = 'user_career_and_education'
+            const sql = `UPDATE ${table} SET highest_education_type = ?, job_title = ? WHERE user_id = ?`
+            const params = [highest_education_type, job_title, user_id]
+            db.query(sql, params, (error, result) => {
+                if (error) {
+                    console.log(`${error} Problem updating user career and education for ${table}.`)
+                    reject(error)
+                }
+                resolve(rawDataPacketConverter(result))
+            })
+        } catch (error) {
+            console.log(error)
+            reject(error)
+        } finally {
+            closeConnection()
+        }     
+    })
+}
+
+
+
+
 
 module.exports = {
     createConnection,
     closeConnection,
     resetDatabase,
+    resetUserMessages,
     getUsers,
     getUsersUnhandled,
     getUserByID,
@@ -988,7 +1166,7 @@ module.exports = {
     updateUserGenderAndMaxDistance,
     updateUserCoordinates,
     updateUserProfilePhoto,
-    updateUserProfileBio,
+    updateUserProfileBioAndHeadline,
     getUserInstagrams,
     getUserInstagramsNonHandled,
     createUserIG,
@@ -1009,6 +1187,11 @@ module.exports = {
     getUserPersonalityAspects,
     getUserPersonalityAspectsUnhandled,
     createUserPersonalityAspects,
-    createUserPersonalityAspectsUnhandled
+    createUserPersonalityAspectsUnhandled,
+    getUserMessages,
+    createUserMessage,
+    getUserCareerAndEducation,
+    createUserCareerAndEducation,
+    updateUserCareerAndEducation
 }
 

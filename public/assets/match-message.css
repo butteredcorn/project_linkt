@@ -1,12 +1,18 @@
 /* test CSS */
 .other-message {
+    display: flex;
+    flex-direction: row-reverse;
     color: #3BA3A8;
   }
   
 .my-message {
+    display: flex;
     color: #303030;
 }
 
+ul {
+    list-style-type: none;
+}
 
 
 
@@ -24,6 +30,16 @@ main {
     margin-right: auto;
 }
 
+.match-profile-photo-container {
+    display: flex;
+    justify-content: center;
+}
+
+.match-profile-photo {
+    border-radius: 100%;
+    max-width: 80vw;
+}
+
 .message-box-container {
     display: flex;
     justify-content: center;
@@ -35,6 +51,10 @@ main {
     min-height: 30vw;
     min-width: 300px;
     margin-bottom: 2em;
+}
+
+#outGoingMessage {
+    border: 2px solid lightgray;
 }
 
 .message-submit-button {
@@ -60,11 +80,19 @@ main {
         font-size: 10px;
     }
 
+    .match-profile-photo {
+        width: 150px;
+    }
+
     main {
         width: 100vw;
     }
 }
 @media only screen and (min-width: 501px) {
+
+    .match-profile-photo {
+        width: 150px;
+    }
 
     header {
         max-width: 1000px;

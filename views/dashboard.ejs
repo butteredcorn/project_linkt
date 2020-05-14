@@ -16,9 +16,9 @@
             <div class="header-element">
                 <p class="header-text">Recommended</p>
             </div>
-            <div class="header-element">
+            <!-- <div class="header-element"> -->
                 <img class="header-logo" src="/assets/icons/logo.png" alt="linkt-logo">
-            </div>
+            <!-- </div> -->
         </header>
     </div>
 
@@ -56,7 +56,7 @@
                 </div>
 
                 <%for (let match of matches) { %>
-                    <% const { first_name, last_name, age, current_profile_picture, openess, conscientiousness, extroversion} = match %>
+                    <% const { first_name, last_name, age, current_profile_picture, headline, bio, current_latitude, current_longitude, openess, conscientiousness, extroversion} = match %>
                     <% match.username = `${first_name} ${last_name}` %>
                     <div class="card-container">
                         <div class="card">
@@ -73,11 +73,17 @@
                                         <input class="profile-selected" name="first_name" type="hidden" value="<%=first_name%>">
                                         <input class="profile-selected" name="last_name" type="hidden" value="<%=last_name%>">
                                         <input class="profile-selected" name="age" type="hidden" value="<%=age%>">
-                                        <input class="message-selected" name="profile_picture" type="hidden" value="<%=current_profile_picture%>">
+                                        <input class="profile-selected" name="profile_picture" type="hidden" value="<%=current_profile_picture%>">
+                                        <input class="profile-selected" name="current_latitude" type="hidden" value="<%=current_latitude%>">
+                                        <input class="profile-selected" name="current_longitude" type="hidden" value="<%=current_longitude%>">
+                                        <input class="profile-selected" name="headline" type="hidden" value="<%=headline%>">
+                                        <input class="profile-selected" name="bio" type="hidden" value="<%=bio%>">
+
                                         <button type="submit" class="view-profile">View Profile</button>
                                     </form>
                                     <form action="/match-message" method="POST">
-                                        <input class="message-selected" name="username" type="hidden" value="<%=match.username%>">
+                                        <input class="message-selected" name="receiver_user_id" type="hidden" value="<%=match.user_id%>">
+                                        <input class="message-selected" name="receiver_username" type="hidden" value="<%=match.username%>">
                                         <input class="message-selected" name="profile_picture" type="hidden" value="<%=current_profile_picture%>">
                                         <button class="message">Message!</button>
                                     </form>
@@ -97,7 +103,7 @@
         <footer class="main-footer">
             <nav class="footer-navigation-icons">
                 <a class="footer-link" href="/user-profile"><img src="assets/icons/profileIcon.png" alt="profile-icon"></a>
-                <a class="footer-link" href=""><img src="assets/icons/messageIcon.png" alt="message-icon"></a>
+                <a class="footer-link" href="/user-messages"><img src="assets/icons/messageIcon.png" alt="message-icon"></a>
                 <a class="footer-link" href="/user-settings-page"><img src="assets/icons/settingIcon.png" alt="settings-icon"></a>
             </nav>
         </footer>

@@ -4,15 +4,15 @@ html body {
     padding: 0px;
     width: 100%;
     height: 100%;
-}
-
-#AppMain {
+ }
+ 
+ #AppMain {
     position: absolute;
     width: 100%;
-
-}
-
-#App {
+ 
+ }
+ 
+ #App {
     top: 0;
     margin: 0px;
     padding: 0px;
@@ -24,13 +24,13 @@ html body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-}
-
-
-/* ----------------------------------------------------Titles-------------------------------------------------------- */
-
-
-.TitleDiv {
+ }
+ 
+ 
+ /* ----------------------------------------------------Titles-------------------------------------------------------- */
+ 
+ 
+ .TitleDiv {
     height: 200px;
     width: 50%;
     position: relative;
@@ -40,26 +40,26 @@ html body {
     flex-direction: column;
     margin: 15px;
     padding: 15px;
-}
-
-.Title {
+ }
+ 
+ .Title {
     position: relative;
     color: white;
     font-size: 42pt;
-}
-
-.SubText {
+ }
+ 
+ .SubText {
     position: relative;
     color: white;
-}
-
-
-
-/* ----------------------------------------------------Question Boxes-------------------------------------------------------- */
-
-
-
-.QuestionBox {
+ }
+ 
+ 
+ 
+ /* ----------------------------------------------------Question Boxes-------------------------------------------------------- */
+ 
+ 
+ 
+ .QuestionBox {
     height: auto;
     width: 50%;
     background-color: white;
@@ -72,9 +72,9 @@ html body {
     flex-direction: column;
     margin: 15px;
     padding: 15px;
-}
-
-#QuestionTitle {
+ }
+ 
+ #QuestionTitle {
     margin: 10px;
     margin-left: 25px;
     padding: 0px;
@@ -82,9 +82,9 @@ html body {
     color: #1E757E;
     font-size: 24px;
     font: bold;
-}
-
-.QuestionTextBox {
+ }
+ 
+ .QuestionTextBox {
     position: relative;
     display: inline-flex;
     flex-direction: row;
@@ -93,17 +93,17 @@ html body {
     width: 100%;
     margin: 0px;
     padding: 0px;
-}
-
-.QuestionText {
+ }
+ 
+ .QuestionText {
     margin: 10px;
     margin-left: 25px;
     padding: 0px;
     flex-grow: 2;
     color: #1E757E;
-}
-
-.Dot, .Dot:focus {
+ }
+ 
+ .Dot {
     position: absolute;
     background-color: #1E757E;
     height: 20px;
@@ -111,15 +111,15 @@ html body {
     border-radius: 100px;
     right: 25px;
     
-}
-
-
-
-/* ----------------------------------------------------Button-------------------------------------------------------- */
-
-
-
-.button_container {
+ }
+ 
+ 
+ 
+ /* ----------------------------------------------------Button-------------------------------------------------------- */
+ 
+ 
+ 
+ .button_container {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -135,23 +135,26 @@ html body {
     height: 40px;
     margin-top: 50px;
     margin-bottom: 100px;
-}
-
-.button_container_inner {
+ }
+ 
+ .button_container_inner {
     background: none;
     color: white;
     font-size: 24pt;
-    outline: none;
-    border: none;
-}
+ }
 
-
-
-/* ----------------------------------------------------Button-------------------------------------------------------- */
-
-
-
-.slider_bubble {
+ .button_container_inner:focus {
+     text-shadow: none;
+     outline: none;
+ }
+ 
+ 
+ 
+ /* ----------------------------------------------------Button-------------------------------------------------------- */
+ 
+ 
+ 
+ .slider_bubble {
     display: inline-flex;
     justify-content: center;
     align-items: center;
@@ -165,9 +168,9 @@ html body {
     right: -14px;
     margin-bottom: 20px;
     color: #1E757E;
-}
-
-.title_box {
+ }
+ 
+ .title_box {
     position: relative;
     display: inline-flex;
     flex-direction: row;
@@ -176,16 +179,15 @@ html body {
     width: 100%;
     margin: 0px;
     padding: 0px;
-}
-.slider {
+ }
+ .slider {
     width: 1000%;
   }
-
-  span, .result {
+  span {
       margin: 10px;
       font-size: 25px;
       color: #1E757E;
-      /* font-weight: 800; */
+      font-weight: 800;
   }
   .title1{
     margin: 10px;
@@ -295,49 +297,30 @@ html body {
   input[type=range]:focus::-ms-fill-upper {
     background: #3BA3A8;
   }
-
-  .button_container_inner:focus {
-    text-shadow: none;
-    outline: none;
-}
-
-@media only screen and (max-width: 500px) {
-  * {
-      font-size: 14px;
+ 
+ 
+  .input-text {
+      margin-left: auto;
+      margin-right: 2em;
+      width: 100%;
+      border-radius: 8px;
+      border: 2px solid lightgray;
+      margin-bottom: 0.5em;
+      text-align: center;
   }
 
-  .Title {
-    padding-top: 15px;
-    font-size: 32px;
+  .bio-input {
+      
   }
-
-  .TitleDiv {
-    max-height: 50px;
+ 
+ 
+ 
+  #music {
+    position: relative;
+    display: inline-flex;
+    width: 100%;
+    height: 30px;
+    border-radius: 8px;
+    border-color: #1E757E;
+ 
   }
-
-  .QuestionBox {
-    width: 80%;
-  }
-
-  .title1 {
-    font-size: 16px;
-  }
-
-  #QuestionTitle {
-    font-size: 16px;
-  }
-
-  .button_container_inner {
-    font-size: 16px;
-  }
-
-  .units, .result, span {
-    font-size: 14px;
-  }
-
-}
-@media only screen and (min-width: 501px) {
-  * {
-    font-size: 16px;
-  }
-}

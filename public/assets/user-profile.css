@@ -1,3 +1,7 @@
+h4 {
+    font-size: 1.20em;
+}
+
 .main-container {
     padding-top: 8em;
     padding-bottom: 6em;
@@ -28,6 +32,15 @@
 .profile-photo {
     width: 80%;
     border: none;
+}
+
+.name {
+    margin-top: 1em;
+    font-size: 1.5em;
+}
+
+.bio {
+    margin-bottom: 1em;
 }
 
 

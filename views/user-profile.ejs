@@ -26,8 +26,6 @@
     </div>
 
     <!-- `Latitude: ${user.current_latitude} Longitude: ${user.current_longitude}` -->
-
-
     
      <!-- main -->
      <div class="main-container">
@@ -37,13 +35,16 @@
                 <button class="profile-picture-button" onclick="showProfilePictureGrid()"><img class="profile-photo" src="<%=user.current_profile_picture%>" alt="profile-picture"></button>
                 </div>
                 <div class="profile-info-container">
-                    <p class="name"><%=`${user.first_name} ${user.last_name}`%></p>
-                    <p class="headline">Lorem Ipsum</p>
+                    <p class="name"><%=`${user.first_name} ${user.last_name}, ${user.age}`%></p>
+                    <h4>Headline</h4>
+                    <p class="headline"><%=user.headline%></p>
+                    <h4>Bio</h4>
+                    <p class="bio"><%=user.bio%></p>
                     <div class="profile-ribbon-container">
                         <div class="profile-ribbon"><img class="profile-icon" src="assets/icons/pin.png" alt="location"><input class="ribbon-content" id="location-coordinates" type="hidden" value="<%=`${user.current_latitude},${user.current_longitude}`%>"><p class="raw-location"><%=`Latitude: ${user.current_latitude} Longitude: ${user.current_longitude}`%></p></div>
-                        <div class="profile-ribbon"><img class="profile-icon" src="assets/icons/home-run.png" alt="place-of-origin"><p class="ribbon-content">From Lorem, Ipsum</p></div>
-                        <div class="profile-ribbon"><img class="profile-icon" src="assets/icons/work.png" alt="career"><p class="ribbon-content"></p>Lorem Ipsum</div>
-                        <div class="profile-ribbon"><img class="profile-icon" src="assets/icons/student.png" alt="education"><p class="ribbon-content">Lorem Ipsum</p></div>
+                        <!-- <div class="profile-ribbon"><img class="profile-icon" src="assets/icons/home-run.png" alt="place-of-origin"><p class="ribbon-content">From: <%=user%></p></div> -->
+                        <div class="profile-ribbon"><img class="profile-icon" src="assets/icons/work.png" alt="career"><p class="ribbon-content occupation"><%=user.job_title%></p></div>
+                        <div class="profile-ribbon"><img class="profile-icon" src="assets/icons/student.png" alt="education"><p class="ribbon-content education"><%=user.highest_education_type%></p></div>
                         <!-- <div class="profile-ribbon"><img class="profile-icon" src="" alt="education"><p class="ribbon-content"></p></div> -->
                     </div>
                 </div>
@@ -71,7 +72,6 @@
     </div>
   </div>
 
-
             <div id="user_profile_form">
                 <form method='post' action='/user-settings-page'>
                     <input class="" id="" name="" type="hidden" value="">
@@ -85,7 +85,7 @@
         <footer class="main-footer">
             <nav class="footer-navigation-icons">
                 <a class="footer-link" href="/user-profile"><img src="assets/icons/profileIcon.png" alt="profile-icon"></a>
-                <a class="footer-link" href=""><img src="assets/icons/messageIcon.png" alt="message-icon"></a>
+                <a class="footer-link" href="/user-messages"><img src="assets/icons/messageIcon.png" alt="message-icon"></a>
                 <a class="footer-link" href="/user-settings-page"><img src="assets/icons/settingIcon.png" alt="settings-icon"></a>
             </nav>
         </footer>
@@ -95,4 +95,5 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script> -->
 <script src="assets/client-side-google-maps.js"></script>
 <script src="assets/user-profile.js"></script>
+<script src="assets/formatting.js"></script>
 </html>
