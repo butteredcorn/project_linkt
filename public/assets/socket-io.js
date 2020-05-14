@@ -6,7 +6,7 @@ $(() => {
   receiver_user_id = $('#receiver_user_id').val()
   receiver_username = $('#receiver_username').val()
 
-  const socket = io('http://localhost:5000', {
+  const socket = io($('.socketURL').val(), {
     query: {
       token: document.cookie, //user JWT object here
       match_user_id: receiver_user_id,

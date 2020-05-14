@@ -12,7 +12,7 @@ const userSettings = '/user-settings'
 const instagramEndpoint = '/instagram/login'
 const profileSettings = '/profile-settings'
 
-const { errors, metric_calculation_constants } = require('../globals')
+const { errors, metric_calculation_constants, SOCKET_IO_URL } = require('../globals')
 const { TIMEOUT } = metric_calculation_constants
 const { UI_ROUTE_ERROR } = errors
 
@@ -123,9 +123,7 @@ router.post('/match-profile', protectedRoute, async(req, res) => {
 
 router.get('/match-message', protectedRoute, async(req, res) => {
     try {
-        res.render('match-message', {
-            
-        })
+        res.redirect('/dashboard')
         //res.send('Need to handle match-message get')
     } catch (error) {
         console.log(error)
@@ -140,7 +138,8 @@ router.post('/match-message', protectedRoute, async(req, res) => {
         res.render('match-message', {
             match_user_id: req.body.receiver_user_id,
             match_username: req.body.receiver_username,
-            match_profile_photo: req.body.profile_picture
+            match_profile_photo: req.body.profile_picture,
+            socket_url: SOCKET_IO_URL
         })
     } catch (error) {
         console.log(error)

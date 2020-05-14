@@ -37,6 +37,8 @@ module.exports = {
     errors: {
         UI_ROUTE_ERROR: new Error("There appears to be some error. We apologize.")
     },
+
+    SOCKET_IO_URL: process.env.SOCKET_URL
 }
 
 //instagram date stamp is in ISO 8601 format
