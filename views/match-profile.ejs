@@ -24,7 +24,7 @@
     </div>
 
      <!-- main -->
-    <% const { user_id, username, first_name, last_name, age, profile_picture } = matchProfile %>
+    <% const { user_id, username, first_name, last_name, age, profile_picture, headline, bio, current_latitude, current_longitude, job_title, highest_education_type } = matchProfile %>
      <div class="main-container">
         <main>
             <div class="profile-container">
@@ -32,13 +32,14 @@
                     <img class="profile-photo" src="<%=profile_picture%>" alt="profile-picture">
                 </div>
                 <div class="profile-info-container">
-                    <p class="name"><%`${first_name} ${last_name}`%></p>
-                    <p class="headline">A highly advanced AI</p>
+                    <p class="name"><%=`${first_name} ${last_name}`%></p>
+                    <p class="headline"><%=headline%></p>
+                    <p class="bio"><%=bio%></p>
                     <div class="profile-ribbon-container">
-                        <div class="profile-ribbon"><img class="profile-icon" src="assets/icons/pin.png" alt="location"><p class="ribbon-content">Vancouver, BC</p></div>
-                        <div class="profile-ribbon"><img class="profile-icon" src="assets/icons/home-run.png" alt="place-of-origin"><p class="ribbon-content">From Digital Space, Youtube</p></div>
-                        <div class="profile-ribbon"><img class="profile-icon" src="assets/icons/work.png" alt="career"><p class="ribbon-content"></p>Youtube Star</div>
-                        <div class="profile-ribbon"><img class="profile-icon" src="assets/icons/student.png" alt="education"><p class="ribbon-content">Tomitake</p></div>
+                        <div class="profile-ribbon"><img class="profile-icon" src="assets/icons/pin.png" alt="location"><p class="ribbon-content">Latitude: <%=`${current_latitude}`%> Longitude: <%=`${current_longitude}`%></p></div>
+                        <!-- <div class="profile-ribbon"><img class="profile-icon" src="assets/icons/home-run.png" alt="place-of-origin"><p class="ribbon-content">From: </p></div> -->
+                        <div class="profile-ribbon"><img class="profile-icon" src="assets/icons/work.png" alt="career"><p class="ribbon-content"></p><%=job_title%></div>
+                        <div class="profile-ribbon"><img class="profile-icon" src="assets/icons/student.png" alt="education"><p class="ribbon-content"><%=highest_education_type%></p></div>
                         <!-- <div class="profile-ribbon"><img class="profile-icon" src="" alt="education"><p class="ribbon-content"></p></div> -->
                     </div>
                 </div>

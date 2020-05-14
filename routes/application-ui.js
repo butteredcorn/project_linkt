@@ -9,6 +9,7 @@ const { loadUserProfile } = require('../controllers/data-compilation/user-profil
 
 const userSettings = '/user-settings?'
 const instagramEndpoint = '/instagram/login'
+const profileSettings = '/profile-settings'
 
 const { errors, metric_calculation_constants } = require('../globals')
 const { TIMEOUT } = metric_calculation_constants
@@ -19,6 +20,7 @@ router.get('/dashboard', protectedRoute, async(req, res) => {
     try {
         let userPreferences
         let userInstagram
+        let userBioAndHeadline
         
         //db.createConnection() created at instagram-endpoint through calculate-metrics
         //db.closeConnection also handled via timer
@@ -28,10 +30,14 @@ router.get('/dashboard', protectedRoute, async(req, res) => {
             console.log(`delayed db handling invoked.`)
             userPreferences = await db.getUserPreferencesNonHandled(undefined, `WHERE user_id = ${req.user.id}`)
             userInstagram = await db.getUserInstagramsNonHandled(undefined, `WHERE user_id = ${req.user.id}`)
+            userBioAndHeadline = await db.getUsersUnhandled('headline, bio', `WHERE id = ${req.user.id}`)
         } else {
         //use handled version
-            userPreferences = await db.getUserPreferences(undefined, `WHERE user_id = ${req.user.id}`)
-            userInstagram = await db.getUserInstagrams(undefined, `WHERE user_id = ${req.user.id}`)
+            await db.createConnection()
+            userPreferences = await db.getUserPreferencesNonHandled(undefined, `WHERE user_id = ${req.user.id}`)
+            userInstagram = await db.getUserInstagramsNonHandled(undefined, `WHERE user_id = ${req.user.id}`)
+            userBioAndHeadline = await db.getUsersUnhandled('headline, bio', `WHERE id = ${req.user.id}`)
+            await db.closeConnection()
         }
         
 
@@ -41,6 +47,9 @@ router.get('/dashboard', protectedRoute, async(req, res) => {
                 newUser: true
             })
             res.redirect(userSettings + query) //send querystring
+
+        } else if (userBioAndHeadline && userBioAndHeadline.length == 0) {
+            res.redirect(profileSettings)
 
         } else if (userInstagram && userInstagram.length == 0) {
 

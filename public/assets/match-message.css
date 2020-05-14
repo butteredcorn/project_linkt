@@ -53,6 +53,10 @@ main {
     margin-bottom: 2em;
 }
 
+#outGoingMessage {
+    border: 2px solid lightgray;
+}
+
 .message-submit-button {
     background-color: #ED2265;
     font-weight: normal;

@@ -56,7 +56,7 @@
                 </div>
 
                 <%for (let match of matches) { %>
-                    <% const { first_name, last_name, age, current_profile_picture, openess, conscientiousness, extroversion} = match %>
+                    <% const { first_name, last_name, age, current_profile_picture, headline, bio, current_latitude, current_longitude, openess, conscientiousness, extroversion} = match %>
                     <% match.username = `${first_name} ${last_name}` %>
                     <div class="card-container">
                         <div class="card">
@@ -73,7 +73,12 @@
                                         <input class="profile-selected" name="first_name" type="hidden" value="<%=first_name%>">
                                         <input class="profile-selected" name="last_name" type="hidden" value="<%=last_name%>">
                                         <input class="profile-selected" name="age" type="hidden" value="<%=age%>">
-                                        <input class="message-selected" name="profile_picture" type="hidden" value="<%=current_profile_picture%>">
+                                        <input class="profile-selected" name="profile_picture" type="hidden" value="<%=current_profile_picture%>">
+                                        <input class="profile-selected" name="current_latitude" type="hidden" value="<%=current_latitude%>">
+                                        <input class="profile-selected" name="current_longitude" type="hidden" value="<%=current_longitude%>">
+                                        <input class="profile-selected" name="headline" type="hidden" value="<%=headline%>">
+                                        <input class="profile-selected" name="bio" type="hidden" value="<%=bio%>">
+
                                         <button type="submit" class="view-profile">View Profile</button>
                                     </form>
                                     <form action="/match-message" method="POST">
