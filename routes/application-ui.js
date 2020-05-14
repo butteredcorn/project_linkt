@@ -192,7 +192,7 @@ router.post('/user-settings-page', protectedRoute, async(req, res) => {
 router.get('/user-profile', protectedRoute, async(req, res) => {
     try {
         const {userObject, userPhotos} = await loadUserProfile(req.user)
-        console.log(userPhotos)
+        console.log(userObject)
         res.render('user-profile', {
             user: userObject,
             userPhotos: userPhotos
