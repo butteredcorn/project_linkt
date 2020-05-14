@@ -27,15 +27,20 @@
             <main>
                 <div class="messages-container">
                     <% for (let message of user_messages) {  %>
-                        <div class="message-card">
+                        <form action="/match-message" method="POST">
+                            <button class="message-card" type="submit">
                             <img class="match-user-profile-photo" src="<%=message.match_profile_picture%>" alt="other-user-profile-photo">
                             <div class="text-column">
                                 <p class="match-username"><%=message.match_username%></p>
                                 <p class="most-recent-message"><%=message.message_text%></p>
                             </div>
-                        </div>
+                            <input class="message-selected" name="receiver_user_id" type="hidden" value="<%=message.match_id%>">
+                            <input class="message-selected" name="receiver_username" type="hidden" value="<%=message.match_username%>">
+                            <input class="message-selected" name="profile_picture" type="hidden" value="<%=message.match_profile_picture%>">
+                            </button>
+                        </form>
                     <%}%>
-                </div>
+                    </div>
             </main>
         </div>
     
@@ -43,7 +48,7 @@
             <footer class="main-footer">
                 <nav class="footer-navigation-icons">
                     <a class="footer-link" href="/user-profile"><img src="assets/icons/profileIcon.png" alt="profile-icon"></a>
-                    <a class="footer-link" href=""><img src="assets/icons/messageIcon.png" alt="message-icon"></a>
+                    <a class="footer-link" href="/user-messages"><img src="assets/icons/messageIcon.png" alt="message-icon"></a>
                     <a class="footer-link" href="/user-settings-page"><img src="assets/icons/settingIcon.png" alt="settings-icon"></a>
                 </nav>
             </footer>
@@ -53,5 +58,5 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.dev.js"></script>
     <script src="assets/user-messages.js"></script>
-    <script src="formatting.js"></script>
+    <script src="assets/formatting.js"></script>
 </html>

@@ -144,6 +144,7 @@ router.get('/user-messages', protectedRoute, async(req, res) => {
 
         for (let user of otherUsers) {
             for (let message of userMessages) {
+                message.match_id = user.user_id
                 message.match_username = user.first_name + " " + user.last_name
                 message.match_profile_picture = user.current_profile_picture
 

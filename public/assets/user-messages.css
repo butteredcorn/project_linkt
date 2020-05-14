@@ -23,6 +23,8 @@ main {
     align-items: center;
     background-color: rgb(241, 241, 241);
     padding: 1em;
+    color: #303030;
+    text-align: left;
 }
 
 .match-username{
