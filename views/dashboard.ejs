@@ -27,7 +27,7 @@
         <main>
             <div class="cards-container">
 
-                <div class="card-container">
+                <!-- <div class="card-container">
                     <div class="card">
                         <div class="profile-image-column">
                             <img class="profile-image" src="/assets/meme/kizuna-ai.jpg" alt="profile picture">
@@ -38,13 +38,13 @@
                             <p class="bio">Bio: a Japanese virtual YouTuber and self-proclaimed artificial intelligence. As of 2019, she operates three YouTube channels.</p>
                             <div class="card-buttons-container">
 
-                                <!-- pass on profile info to next page -->
+                                pass on profile info to next page
                                 <form action="/match-profile" method="POST">
                                     <input class="profile-selected" name="profile-selected" type="hidden" value="">
                                     <button type="submit" class="view-profile">View Profile</button>
                                 </form>
 
-                                <!-- pass on profile info to next page -->
+                                pass on profile info to next page
                                 <form action="/match-message" method="POST">
                                     <input class="message-selected" name="message-selected" type="hidden" value="">
                                     <button class="message">Message!</button>
@@ -53,7 +53,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> -->
 
                 <%for (let match of matches) { %>
                     <% const { first_name, last_name, age, current_profile_picture, headline, bio, current_latitude, current_longitude, openess, conscientiousness, extroversion} = match %>
@@ -64,9 +64,10 @@
                                 <img class="profile-image" src="<%=current_profile_picture%>" alt="profile picture">
                             </div>
                             <div class="info-column">
-                                <p class="name"><%=`${first_name} ${last_name}`%></p>
-                                <p class="age">Age: <%=age%></p>
-                                <p class="bio">Bio: a Japanese virtual YouTuber and self-proclaimed artificial intelligence. As of 2019, she operates three YouTube channels.</p>
+                                <p class="name"><%=`${first_name} ${last_name}, ${age}`%></p>
+                                <!-- <p class="age">Age: <%=age%></p> -->
+                                <p class="headline">Headline: <%=headline%></p>
+                                <p class="bio">Bio: <%=bio%></p>
                                 <div class="card-buttons-container">
                                     <form action="/match-profile" method="POST">
                                         <input class="profile-selected" name="username" type="hidden" value="<%=match.username%>">

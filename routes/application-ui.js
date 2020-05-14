@@ -8,7 +8,7 @@ const { loadUserSettings } = require('../controllers/data-compilation/user-setti
 const { loadUserProfile } = require('../controllers/data-compilation/user-profile')
 const { loadMessages } = require('../controllers/data-compilation/user-messages')
 
-const userSettings = '/user-settings?'
+const userSettings = '/user-settings'
 const instagramEndpoint = '/instagram/login'
 const profileSettings = '/profile-settings'
 
@@ -47,14 +47,16 @@ router.get('/dashboard', protectedRoute, async(req, res) => {
             const query = querystring.stringify({
                 newUser: true
             })
-            res.redirect(userSettings + query) //send querystring
+            res.redirect(userSettings + '?' + query) //send querystring
 
         } else if (userBioAndHeadline && userBioAndHeadline.length == 0) {
             res.redirect(profileSettings)
 
         } else if (userInstagram && userInstagram.length == 0) {
-
-            res.redirect(instagramEndpoint)
+            const query = querystring.stringify({
+                newUser: true
+            })
+            res.redirect(instagramEndpoint + '?' + query)
 
         //else redirect to dashboard
         } else {
@@ -68,13 +70,22 @@ router.get('/dashboard', protectedRoute, async(req, res) => {
                 data = await loadDashboard(req.user)
             }
 
-            console.log(data.matches)
+            //console.log(data.matches)
             //console.log(data.userPersonalityAspects)
 
-            res.render('dashboard', {
-                userPersonalityAspects: data.userPersonalityAspects,
-                matches: data.matches
-            })
+            //new user routing
+            if(req.query.newUser) {
+                res.render('dashboard', {
+                    userPersonalityAspects: data.userPersonalityAspects,
+                    matches: data.matches,
+                    newUser: true
+                })
+            } else {
+                res.render('dashboard', {
+                    userPersonalityAspects: data.userPersonalityAspects,
+                    matches: data.matches
+                })
+            }
         }
             
     } catch (error) {
