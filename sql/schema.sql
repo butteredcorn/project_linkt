@@ -139,6 +139,7 @@ CREATE TABLE user_messages (
     receiver_id             INT NOT NULL,
     socket_key              VARCHAR(255) NOT NULL,
     message_text            VARCHAR(255) NOT NULL,
+    date_created            TIMESTAMP NOT NULL DEFAULT NOW(),
     FOREIGN KEY (sender_id)   REFERENCES users(id),
     FOREIGN KEY (receiver_id)   REFERENCES users(id)
 );

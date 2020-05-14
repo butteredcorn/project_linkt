@@ -29,6 +29,21 @@ router.get('/reset/resetDatabase', protectedRoute, async (req, res, next) => {
     }
 })
 
+router.get('/reset/resetMessageDatabase', protectedRoute, async (req, res, next) => {
+    try {
+        await checkAdministratorPrivilege(req.user)
+        //await db.createConnection()
+        //takes path to directory of resources, do not enter filenames
+        const result = await db.resetUserMessages()
+        console.log(result)
+        res.send(result)
+    } catch (error) {
+        throw error
+    } finally {
+        //await db.closeConnection()
+    }
+})
+
 router.get('/getUsers', protectedRoute, async (req, res, next) => {
     try {
         await checkAdministratorPrivilege(req.user)
@@ -151,6 +166,20 @@ router.get('/getUserCareerAndEducation', protectedRoute, async (req, res) => {
         const selectBy = req.query.selectBy
         const searchBy = req.query.searchBy
         const result = await db.getUserCareerAndEducation(selectBy, searchBy)
+        console.log(result)
+        res.send(result)
+    } catch (error) {
+        console.log(error)
+        throw error
+    }
+})
+
+router.get('/getUserMessages', protectedRoute, async (req, res) => {
+    try {
+        await checkAdministratorPrivilege(req.user)
+        const selectBy = req.query.selectBy
+        const searchBy = req.query.searchBy
+        const result = await db.getUserMessages(selectBy, searchBy)
         console.log(result)
         res.send(result)
     } catch (error) {

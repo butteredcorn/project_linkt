@@ -94,7 +94,8 @@ module.exports = function () {
                 }
     
                 //push message to database, and have receiving user load messages upon socket initialization
-                await db.createUserMessage(socket.user.id, data.receiver_user_id, socketKey, data.message)
+                //alternative to data.receiver_user_id - socket.receiver_user_id
+                await db.createUserMessage(socket.user.id, socket.receiver_user_id, socketKey, data.message) 
     
                 //message the 'room' socket
                 //don't need user_id for data?

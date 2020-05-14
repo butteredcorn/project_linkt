@@ -262,6 +262,7 @@ const dropAndRecreateTables = () => {
                 receiver_id             INT NOT NULL,
                 socket_key              VARCHAR(255) NOT NULL,
                 message_text            VARCHAR(255) NOT NULL,
+                date_created            TIMESTAMP NOT NULL DEFAULT NOW(),
                 FOREIGN KEY (sender_id)   REFERENCES users(id),
                 FOREIGN KEY (receiver_id)   REFERENCES users(id)
             )`)
@@ -294,6 +295,39 @@ const resetDatabase = () => {
             })
         } catch (error) {
             console.log(error)
+            reject(error)
+        }
+    })
+}
+
+const resetUserMessages = () => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            await createConnection()
+            sqlCallback('DROP TABLE IF EXISTS user_messages')
+            .then((result) => {
+                console.log(result.message)
+                return sqlCallback(`CREATE TABLE user_messages (
+                    id                      INT PRIMARY KEY AUTO_INCREMENT,
+                    sender_id               INT NOT NULL,
+                    receiver_id             INT NOT NULL,
+                    socket_key              VARCHAR(255) NOT NULL,
+                    message_text            VARCHAR(255) NOT NULL,
+                    date_created            TIMESTAMP NOT NULL DEFAULT NOW(),
+                    FOREIGN KEY (sender_id)   REFERENCES users(id),
+                    FOREIGN KEY (receiver_id)   REFERENCES users(id)
+                )`)
+                .then((result) => {
+                    resolve(result)
+                })
+                .catch((error) => {
+                    reject(error)
+                })
+                .finally(() => {
+                    closeConnection()
+                })
+            })
+        } catch (error) {
             reject(error)
         }
     })
@@ -1124,6 +1158,7 @@ module.exports = {
     createConnection,
     closeConnection,
     resetDatabase,
+    resetUserMessages,
     getUsers,
     getUsersUnhandled,
     getUserByID,

@@ -6,6 +6,7 @@ const querystring = require('querystring')
 const { loadDashboard, loadDashboardUnhandled } = require('../controllers/data-compilation/dashboard')
 const { loadUserSettings } = require('../controllers/data-compilation/user-settings')
 const { loadUserProfile } = require('../controllers/data-compilation/user-profile')
+const { loadMessages } = require('../controllers/data-compilation/user-messages')
 
 const userSettings = '/user-settings?'
 const instagramEndpoint = '/instagram/login'
@@ -123,11 +124,42 @@ router.get('/match-message', protectedRoute, async(req, res) => {
 
 router.post('/match-message', protectedRoute, async(req, res) => {
     try {
-        //console.log(req.body)
+        console.log(req.body)
+        
         res.render('match-message', {
             match_user_id: req.body.receiver_user_id,
             match_username: req.body.receiver_username,
             match_profile_photo: req.body.profile_picture
+        })
+    } catch (error) {
+        console.log(error)
+        res.send(UI_ROUTE_ERROR)
+    }
+})
+
+router.get('/user-messages', protectedRoute, async(req, res) => {
+    try {
+        const {otherUsers, userMessages} = await loadMessages(req.user)
+        const otherUsersThatHaveMessaged = []
+
+        for (let user of otherUsers) {
+            for (let message of userMessages) {
+                if (user.user_id == message.sender_id || user.user_id == message.receiver_id) {
+                    otherUsersThatHaveMessaged.push(user)
+                    break;
+                }
+            }
+        }
+
+        //console.log(otherUsers)
+        console.log(otherUsersThatHaveMessaged)
+        console.log(userMessages)
+
+
+        //const otherUsersThatHaveMessaged = otherUsers
+
+        res.render('user-messages', {
+            other_users: otherUsersThatHaveMessaged
         })
     } catch (error) {
         console.log(error)
