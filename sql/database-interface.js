@@ -459,16 +459,16 @@ const updateUserProfilePhoto = (id, current_profile_picture) => {
     })
 }
 
-const updateUserProfileBio = (id, bio) => {
+const updateUserProfileBioAndHeadline = (id, bio, headline) => {
     return new Promise(async (resolve, reject) => {
         try {
             await createConnection()
             const table = 'users'
-            const sql = `UPDATE ${table} SET bio = ? WHERE id = ?`
-            const params = [bio, id]
+            const sql = `UPDATE ${table} SET bio = ?, headline =? WHERE id = ?`
+            const params = [bio, headline, id]
             db.query(sql, params, (error, result) => {
                 if (error) {
-                    console.log(new Error(`${error} Problem updating user profile bio for ${id} in ${table}.`))
+                    console.log(new Error(`${error} Problem updating user profile bio and headline for ${id} in ${table}.`))
                     reject(error)
                 }
                 resolve(rawDataPacketConverter(result))
@@ -1043,6 +1043,83 @@ const createUserMessage = (sender_id, receiver_id, socket_key, message_text) => 
     })
 }
 
+/**
+ * user_career_and_education
+ * @param {*} selectBy 
+ * @param {*} searchBy 
+ */
+const getUserCareerAndEducation = (selectBy = '*', searchBy = '') => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            await createConnection()
+            const table = 'user_career_and_education'
+            const sql = `SELECT ${selectBy} FROM ${table} ${searchBy}`
+            db.query(sql, (error, result) => {
+                if (error) {
+                    console.log(`Problem searching for ${table} by ${searchBy}.`)
+                    reject(error)
+                }
+                resolve(rawDataPacketConverter(result))
+            })
+        } catch (error) {
+            console.log(error)
+            reject(error)
+        } finally {
+            closeConnection()
+        }
+    })
+}
+
+const createUserCareerAndEducation = (user_id, highest_education_type, job_title) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            await createConnection()
+            const table = 'user_career_and_education'
+            const sql = `INSERT INTO ${table} (user_id, highest_education_type, job_title) VALUES (?, ?, ?)`
+            const params = [user_id, highest_education_type, job_title]
+            db.query(sql, params, (error, result) => {
+                if (error) {
+                    console.log(`${error} Problem creating user message and inserting into ${table}.`)
+                    reject(error)
+                }
+                resolve(rawDataPacketConverter(result))
+            })
+        } catch (error) {
+            console.log(error)
+            reject(error)
+        } finally {
+            closeConnection()
+        }     
+    })
+}
+
+const updateUserCareerAndEducation = (user_id, highest_education_type, job_title) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            await createConnection()
+            const table = 'user_career_and_education'
+            const sql = `UPDATE ${table} SET highest_education_type = ?, job_title = ? WHERE user_id = ?`
+            const params = [highest_education_type, job_title, user_id]
+            db.query(sql, params, (error, result) => {
+                if (error) {
+                    console.log(`${error} Problem updating user career and education for ${table}.`)
+                    reject(error)
+                }
+                resolve(rawDataPacketConverter(result))
+            })
+        } catch (error) {
+            console.log(error)
+            reject(error)
+        } finally {
+            closeConnection()
+        }     
+    })
+}
+
+
+
+
+
 module.exports = {
     createConnection,
     closeConnection,
@@ -1054,7 +1131,7 @@ module.exports = {
     updateUserGenderAndMaxDistance,
     updateUserCoordinates,
     updateUserProfilePhoto,
-    updateUserProfileBio,
+    updateUserProfileBioAndHeadline,
     getUserInstagrams,
     getUserInstagramsNonHandled,
     createUserIG,
@@ -1077,6 +1154,9 @@ module.exports = {
     createUserPersonalityAspects,
     createUserPersonalityAspectsUnhandled,
     getUserMessages,
-    createUserMessage
+    createUserMessage,
+    getUserCareerAndEducation,
+    createUserCareerAndEducation,
+    updateUserCareerAndEducation
 }
 

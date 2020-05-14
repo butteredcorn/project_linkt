@@ -110,7 +110,6 @@ main > * {
     .profile-image {
         width: 80%;
         border-radius: 100%;
-    
     }
 
     .info-column {
@@ -134,9 +133,17 @@ main > * {
 @media only screen and (min-width: 501px) {
 
     .profile-image-column {
-        max-width: 40%;
         margin-left: 4em;
     }
+
+    .profile-image {
+        border-radius: 100%;
+    }
+
+    .info-column {
+        max-width: 320px;
+    }
+
 
     header {
         max-width: 1000px;

@@ -204,6 +204,43 @@ router.get('/user-profile', protectedRoute, async(req, res) => {
     }
 })
 
+router.get('/profile-settings', protectedRoute, async(req, res) => {
+    try {
+        res.render('profile-settings', {
+            
+        })
+
+    } catch (error) {
+        console.log(error)
+        res.send(UI_ROUTE_ERROR)
+    }
+})
+
+router.post('/profile-settings', protectedRoute, async(req, res) => {
+    try {
+        if(req.body) {
+            if (req.query.delayDBHandling) {
+
+            } else {
+                await db.updateUserProfileBioAndHeadline(req.user.id, req.body.bio, req.body.headline)
+                const userCareerEducation = await db.getUserCareerAndEducation(undefined, `WHERE user_id = ${req.user.id}`)
+                if (userCareerEducation && userCareerEducation.length ==0) {
+                    await db.createUserCareerAndEducation(req.user.id, req.body.education_level, req.body.occupation)    
+                } else {
+                    await db.updateUserCareerAndEducation(req.user.id, req.body.education_level, req.body.occupation)
+                }
+            }
+            res.redirect('/dashboard')
+        } else {
+            console.log(new Error('req.body undefined.'))
+        }
+    } catch (error) {
+        console.log(error)
+        res.send(UI_ROUTE_ERROR)
+    }
+})
+
+
 router.post('/user-profile-picture', protectedRoute, async(req, res) => {
     try {
         await db.updateUserProfilePhoto(req.user.id, req.body.selectedProfilePicture)

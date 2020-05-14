@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Linkt</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="assets/user-settings.css" type="text/css">
+    <link href="assets/profile-settings.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+    <main id="AppMain">
+        <form id="App" method='post' action='/profile-settings'>
+            <div class="TitleDiv">
+                <h1 class="Title">Profile Information</h1>
+
+                <h3 class="SubText"></h3>
+            </div>
+
+            <div class="QuestionBox">
+                <div class="QuestionTextBox">
+                    <p id="QuestionTitle">Headline</p>
+                    <div class="result"><span class="result headlineValue">Keep it short and make it count!</div>
+                </div>
+                <div class="QuestionTextBox">
+                    <p class="QuestionText"></p>
+                    <input type="text" class="input-text " name="headline" value="" maxlength="40" oninput={updateHeadline(this.value)} required></input>
+                </div>
+            </div>
+
+            <div class="QuestionBox">
+                <div class="QuestionTextBox">
+                    <p id="QuestionTitle">Bio</p>
+                    <div class="result"><span class="result bioValue">Introduce yourself!</div>
+                </div>
+                <div class="QuestionTextBox">
+                    <p class="QuestionText"></p>
+                    <textarea class="input-text" name="bio" value="" maxlength="200" oninput={} required></textarea>
+                </div>
+            </div>
+
+            <!-- <div class="QuestionBox">
+                <div class="QuestionTextBox">
+                    <p id="QuestionTitle">Where are you from?</p>
+                    <div class="result"><span class="result placeOfOrigin"></div>
+                </div>
+                <div class="QuestionTextBox">
+                    <p class="QuestionText"></p>
+                    <input type="text" class="input-text city" name="place_of_origin" value="" maxlength="100" oninput={updatePlaceOfOrigin(this.value)} required></input>
+                </div>
+            </div> -->
+
+            <div class="QuestionBox">
+                <div class="QuestionTextBox">
+                    <p id="QuestionTitle">Current Occupation</p>
+                    <div class="result"><span class="result occupationValue"></div>
+                </div>
+                <div class="QuestionTextBox">
+                    <p class="QuestionText"></p>
+                    <input type="text" class="input-text " name="occupation" value="" maxlength="60" oninput={updateOccupation(this.value)} required></input>
+                </div>
+            </div>
+
+            <div class="QuestionBox">
+                <div class="QuestionTextBox">
+                    <p id="QuestionTitle">Highest Level of Education Completed</p>
+                    <div class="result"><span class="educationValue"></div>
+                </div>
+                <div class="QuestionTextBox">
+                    <p class="QuestionText">Graduate Degree</p>
+                    <input type="radio" class="Dot" name="education_level" value="graduate degree" oninput={} required></input>
+                </div>
+                <div class="QuestionTextBox">
+                    <p class="QuestionText">Undergraduate Degree</p>
+                    <input type="radio" class="Dot" name="education_level" value="undergraduate degree" oninput={} required></input>
+                </div>
+                <div class="QuestionTextBox">
+                    <p class="QuestionText">Post Secondary Diploma</p>
+                    <input type="radio" class="Dot" name="education_level" value="post secondary diploma" oninput={} required></input>
+                </div>
+                <div class="QuestionTextBox">
+                    <p class="QuestionText">High School Diploma</p>
+                    <input type="radio" class="Dot" name="education_level" value="high school diploma" oninput={} required></input>
+                </div>
+            </div>
+
+            <div class="button_container">
+                <button type="submit" class="button_container_inner">Next</button>
+            </div>
+
+        </form>
+    </main>
+</body>
+<script src="assets/profile-settings.js"></script>
+</html>
