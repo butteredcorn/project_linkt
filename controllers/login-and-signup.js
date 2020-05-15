@@ -24,6 +24,9 @@ const signUpUser = (email, password, first_name, last_name, age, current_latitud
                 //await db.closeConnection()
             }
         })
+        .catch((error) => {
+            reject(error)
+        })
     })
 }
 
