@@ -44,6 +44,21 @@ router.get('/reset/resetMessageDatabase', protectedRoute, async (req, res, next)
     }
 })
 
+router.get('/reset/resetUsersLikes', protectedRoute, async (req, res, next) => {
+    try {
+        await checkAdministratorPrivilege(req.user)
+        //await db.createConnection()
+        //takes path to directory of resources, do not enter filenames
+        const result = await db.resetUsersLikes()
+        console.log(result)
+        res.send(result)
+    } catch (error) {
+        throw error
+    } finally {
+        //await db.closeConnection()
+    }
+})
+
 router.get('/getUsers', protectedRoute, async (req, res, next) => {
     try {
         await checkAdministratorPrivilege(req.user)
@@ -180,6 +195,20 @@ router.get('/getUserMessages', protectedRoute, async (req, res) => {
         const selectBy = req.query.selectBy
         const searchBy = req.query.searchBy
         const result = await db.getUserMessages(selectBy, searchBy)
+        console.log(result)
+        res.send(result)
+    } catch (error) {
+        console.log(error)
+        throw error
+    }
+})
+
+router.get('/getUsersLikes', protectedRoute, async (req, res) => {
+    try {
+        await checkAdministratorPrivilege(req.user)
+        const selectBy = req.query.selectBy
+        const searchBy = req.query.searchBy
+        const result = await db.getUsersLikes(selectBy, searchBy)
         console.log(result)
         res.send(result)
     } catch (error) {

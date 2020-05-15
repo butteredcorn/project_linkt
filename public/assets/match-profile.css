@@ -20,7 +20,6 @@ body {
 
 .profile-info-container {
     width: 80%;
-    padding-left: 0.5em;
 }
 
 .profile-ribbon-container {
@@ -40,10 +39,20 @@ body {
     align-items: center;
 }
 
+.ribbon-content {
+    display: flex;
+    align-items: center;
+}
+
 .profile-icon {
     max-width: 15px;
     max-height: 15px;
     margin-right: 1em;
+}
+
+.profile-image-container {
+    display: flex;
+    justify-content: center;
 }
 
 .message-button-container {
@@ -51,8 +60,28 @@ body {
     justify-content: center;
 }
 
+button {
+    margin-top: 1em;
+    margin-bottom: 1em;
+    padding-left: 0.25em;
+    padding-right: 0.25em;
+}
+
 .message {
     background-color: #ED2265;
+    margin-left: 0.5em;
+    margin-right: 0.5em;
+}
+
+.like {
+    background-color: #3BA3A8;
+    margin-left: 0.5em;
+    margin-right: 0.5em;
+}
+
+.buttons {
+    display: flex;
+    justify-content: center;
 }
 
 

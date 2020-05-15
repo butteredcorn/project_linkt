@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS users_likes;
 DROP TABLE IF EXISTS user_messages;
 DROP TABLE IF EXISTS user_tags;
 DROP TABLE IF EXISTS user_career_and_education;
@@ -142,4 +143,12 @@ CREATE TABLE user_messages (
     date_created            TIMESTAMP NOT NULL DEFAULT NOW(),
     FOREIGN KEY (sender_id)   REFERENCES users(id),
     FOREIGN KEY (receiver_id)   REFERENCES users(id)
+);
+
+CREATE TABLE users_likes (
+    id                              INT PRIMARY KEY AUTO_INCREMENT,
+    user_id                         INT NOT NULL,
+    likes_user_id                   INT NOT NULL,
+    FOREIGN KEY (user_id)           REFERENCES users(id),
+    FOREIGN KEY (likes_user_id)     REFERENCES users(id)
 );

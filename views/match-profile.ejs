@@ -36,20 +36,37 @@
                     <p class="headline"><%=headline%></p>
                     <p class="bio"><%=bio%></p>
                     <div class="profile-ribbon-container">
-                        <div class="profile-ribbon"><img class="profile-icon" src="assets/icons/pin.png" alt="location"><p class="ribbon-content">Latitude: <%=`${current_latitude}`%> Longitude: <%=`${current_longitude}`%></p></div>
+                        <div class="profile-ribbon"><img class="profile-icon" src="assets/icons/pin.png" alt="location"><p class="ribbon-content"></p>Latitude: <%=`${current_latitude}`%> Longitude: <%=`${current_longitude}`%></div>
                         <!-- <div class="profile-ribbon"><img class="profile-icon" src="assets/icons/home-run.png" alt="place-of-origin"><p class="ribbon-content">From: </p></div> -->
                         <div class="profile-ribbon"><img class="profile-icon" src="assets/icons/work.png" alt="career"><p class="ribbon-content"></p><%=job_title%></div>
-                        <div class="profile-ribbon"><img class="profile-icon" src="assets/icons/student.png" alt="education"><p class="ribbon-content"><%=highest_education_type%></p></div>
+                        <div class="profile-ribbon"><img class="profile-icon" src="assets/icons/student.png" alt="education"><p class="ribbon-content"></p><%=highest_education_type%></div>
                         <!-- <div class="profile-ribbon"><img class="profile-icon" src="" alt="education"><p class="ribbon-content"></p></div> -->
                     </div>
                 </div>
 
-                <form class="message-button-container" action="/match-message" method="POST">
-                    <input class="message-selected" name="receiver_user_id" type="hidden" value="<%=user_id%>">
-                    <input class="message-selected" name="receiver_username" type="hidden" value="<%=username%>">
-                    <input class="message-selected" name="profile_picture" type="hidden" value="<%=profile_picture%>">
-                    <button class="message">Message!</button>
-                </form>
+                <div class="buttons">
+                    <form class="like-button-container" action="/match-liked" method="POST">
+                        <input class="profile-selected" name="user_id" type="hidden" value="<%=user_id%>">
+                        <input class="profile-selected" name="username" type="hidden" value="<%=username%>">
+                        <input class="profile-selected" name="first_name" type="hidden" value="<%=first_name%>">
+                        <input class="profile-selected" name="last_name" type="hidden" value="<%=last_name%>">
+                        <input class="profile-selected" name="age" type="hidden" value="<%=age%>">
+                        <input class="profile-selected" name="profile_picture" type="hidden" value="<%=profile_picture%>">
+                        <input class="profile-selected" name="current_latitude" type="hidden" value="<%=current_latitude%>">
+                        <input class="profile-selected" name="current_longitude" type="hidden" value="<%=current_longitude%>">
+                        <input class="profile-selected" name="headline" type="hidden" value="<%=headline%>">
+                        <input class="profile-selected" name="bio" type="hidden" value="<%=bio%>">
+                        <input class="profile-selected" name="job_title" type="hidden" value="<%=job_title%>">
+                        <input class="profile-selected" name="highest_education_type" type="hidden" value="<%=highest_education_type%>">
+                        <button class="like">Like!</button>
+                    </form>
+                    <form class="message-button-container" action="/match-message" method="POST">
+                        <input class="message-selected" name="receiver_user_id" type="hidden" value="<%=user_id%>">
+                        <input class="message-selected" name="receiver_username" type="hidden" value="<%=username%>">
+                        <input class="message-selected" name="profile_picture" type="hidden" value="<%=profile_picture%>">
+                        <button class="message">Message!</button>
+                    </form>
+                </div>
             </div>
         </main>
     </div>
