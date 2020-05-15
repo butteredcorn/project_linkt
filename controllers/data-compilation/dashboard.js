@@ -67,7 +67,7 @@ const getUserMatches = (user) => {
                 if (current_latitude && current_longitude && match.current_latitude && match.current_longitude) {
                     match.distance_kms = getDistanceFromLatitudeLongitudeInKmPerformant(current_latitude, current_longitude, match.current_latitude, match.current_longitude)
                 } else {
-                    console.log(new Error('WARN: distance not being calculated as coordinates are falsey (0 inclusive).'))
+                    console.log(('WARN: distance not being calculated as coordinates are falsey (0 inclusive).'))
                     match.distance_kms = null
                 }
                 // console.log(match.distance_kms)
@@ -78,7 +78,7 @@ const getUserMatches = (user) => {
                 } else if (match.distance_kms === null) { //handle if user did not provide authorisation for location and location detection backfall fails
                     matchesWithNullDistance.push(match)
                 } else { //undefined
-                    console.log(new Error('ERROR: unexpected result. match.distance_kms appears to be undefined.'))
+                    console.log(('ERROR: unexpected result. match.distance_kms appears to be undefined.'))
                 }
             }
 
