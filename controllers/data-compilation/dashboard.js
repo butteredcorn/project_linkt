@@ -68,7 +68,7 @@ const getUserMatches = (user) => {
                     delete match.password_hash
 
                     //handled
-                    const likesUser = await db.getUsersLikes(undefined, `WHERE likes_user_id = ${user.id}`)
+                    const likesUser = await db.getUsersLikes(undefined, `WHERE user_id = ${match.user_id} likes_user_id = ${user.id}`)
 
                     if (likesUser && likesUser.length > 0) {
                         match.likes_user = true
@@ -145,8 +145,8 @@ const getUserMatchesUnhandled = (user) => {
                 for(let match of otherUsers) {
                     delete match.password_hash
 
-                    //handled
-                    const likesUser = await db.getUsersLikesUnhandled(undefined, `WHERE likes_user_id = ${user.id}`)
+                    //unhandled
+                    const likesUser = await db.getUsersLikesUnhandled(undefined, `WHERE user_id = ${match.user_id} likes_user_id = ${user.id}`)
 
                     if (likesUser && likesUser.length > 0) {
                         match.likes_user = true
@@ -166,7 +166,14 @@ const getUserMatchesUnhandled = (user) => {
                 for (let match of otherUsers) {
                     delete match.password_hash
 
+                    //unhandled
+                    const likesUser = await db.getUsersLikesUnhandled(undefined, `WHERE user_id = ${match.user_id} likes_user_id = ${user.id}`)
 
+                    if (likesUser && likesUser.length > 0) {
+                        match.likes_user = true
+                    } else {
+                        match.likes_user = false
+                    }
 
 
                     if (current_latitude && current_longitude && match.current_latitude && match.current_longitude) {
