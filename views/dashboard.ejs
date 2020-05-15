@@ -56,7 +56,7 @@
                 </div> -->
 
                 <%for (let match of matches) { %>
-                    <% const { user_id, first_name, last_name, age, current_profile_picture, headline, bio, job_title, highest_education_type, current_latitude, current_longitude, distance_kms, openess, conscientiousness, extroversion} = match %>
+                    <% const { user_id, first_name, last_name, age, current_profile_picture, headline, bio, job_title, highest_education_type, current_latitude, current_longitude, distance_kms, likes_user, openess, conscientiousness, extroversion} = match %>
                     <% match.username = `${first_name} ${last_name}` %>
                     <div class="card-container">
                         <div class="card">
@@ -84,6 +84,7 @@
                                         <input class="profile-selected" name="job_title" type="hidden" value="<%=job_title%>">
                                         <input class="profile-selected" name="highest_education_type" type="hidden" value="<%=highest_education_type%>">
                                         <input class="profile-selected" name="distance_kms" type="hidden" value="<%=distance_kms%>">
+                                        <input class="profile-selected" name="likes_user" type="hidden" value="<%=likes_user%>">
 
                                         <button type="submit" class="view-profile">View Profile</button>
                                     </form>
@@ -91,6 +92,7 @@
                                         <input class="message-selected" name="receiver_user_id" type="hidden" value="<%=match.user_id%>">
                                         <input class="message-selected" name="receiver_username" type="hidden" value="<%=match.username%>">
                                         <input class="message-selected" name="profile_picture" type="hidden" value="<%=current_profile_picture%>">
+                                        <input class="message-selected" name="likes_user" type="hidden" value="<%=likes_user%>">
                                         <button class="message">Message!</button>
                                     </form>
                                 </div>

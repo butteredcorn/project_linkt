@@ -36,8 +36,17 @@ const getUserMatches = (user) => {
             // console.log(latestUserPreference)
             // console.log(otherUsers)
 
-            for (let user of otherUsers) {
-                delete user.password_hash
+            for(let match of otherUsers) {
+                delete match.password_hash
+
+                //handled
+                const likesUser = await db.getUsersLikes(undefined, `WHERE user_id = ${match.user_id} AND likes_user_id = ${user.id}`)
+
+                if (likesUser && likesUser.length > 0) {
+                    match.likes_user = true
+                } else {
+                    match.likes_user = false
+                }
             }
 
             //filters for user's gender setting, and age setting, joined with other users' personality aspects
