@@ -121,6 +121,27 @@ router.post('/match-profile', protectedRoute, async(req, res) => {
     }
 })
 
+router.post('/match-liked', protectedRoute, async(req, res) => {
+    try {
+        console.log(req.body)
+        const liked = await db.getUsersLikes(undefined, `WHERE user_id = ${req.user.id} AND likes_user_id = ${req.body.user_id}`)
+        
+        if(liked && liked.length == 0) {
+            await db.createUserLike(req.user.id, req.body.user_id)
+        } else {
+            console.log('already liked.')
+        }
+
+        res.render('match-profile', {
+            matchProfile: req.body
+        })
+    } catch (error) {
+        console.log(error)
+        res.send(UI_ROUTE_ERROR)
+    }
+})
+
+
 router.get('/match-message', protectedRoute, async(req, res) => {
     try {
         res.redirect('/dashboard')

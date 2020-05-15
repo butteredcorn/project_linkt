@@ -46,6 +46,18 @@
 
                 <div class="buttons">
                     <form class="like-button-container" action="/match-liked" method="POST">
+                        <input class="profile-selected" name="user_id" type="hidden" value="<%=user_id%>">
+                        <input class="profile-selected" name="username" type="hidden" value="<%=username%>">
+                        <input class="profile-selected" name="first_name" type="hidden" value="<%=first_name%>">
+                        <input class="profile-selected" name="last_name" type="hidden" value="<%=last_name%>">
+                        <input class="profile-selected" name="age" type="hidden" value="<%=age%>">
+                        <input class="profile-selected" name="profile_picture" type="hidden" value="<%=profile_picture%>">
+                        <input class="profile-selected" name="current_latitude" type="hidden" value="<%=current_latitude%>">
+                        <input class="profile-selected" name="current_longitude" type="hidden" value="<%=current_longitude%>">
+                        <input class="profile-selected" name="headline" type="hidden" value="<%=headline%>">
+                        <input class="profile-selected" name="bio" type="hidden" value="<%=bio%>">
+                        <input class="profile-selected" name="job_title" type="hidden" value="<%=job_title%>">
+                        <input class="profile-selected" name="highest_education_type" type="hidden" value="<%=highest_education_type%>">
                         <button class="like">Like!</button>
                     </form>
                     <form class="message-button-container" action="/match-message" method="POST">
