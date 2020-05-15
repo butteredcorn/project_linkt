@@ -1,7 +1,7 @@
 const db = require('../../sql/database-interface')
 const { } = require('../../globals')
 const { determineUserPersonalityAspects, determineUserPersonalityAspectsUnhandled } = require('../logic/determine-personality-aspects')
-
+const { getDistanceFromLatitudeLongitudeInKmPerformant } = require('../location-distance')
 
 
 
@@ -51,15 +51,23 @@ const getUserMatches = (user) => {
         try {
             const userUserPreferences = (await db.getUsers(undefined, `JOIN user_preferences ON users.id=user_preferences.user_id WHERE users.id = ${user.id}`))
             const latestUserPreference = userUserPreferences[userUserPreferences.length - 1]
+            const { user_id, partner_gender, partner_age_min, partner_age_max, current_latitude, current_longitude, max_distance } = latestUserPreference
 
             //note: users.id is getting overwritten by user_personality_aspects.id --> for user_id, call user_id, otherwise this object's id property refers to the id of user_personality_aspects
-            const otherUsers = await db.getUsers(undefined, `LEFT OUTER JOIN user_career_and_education ON users.id=user_career_and_education.user_id JOIN user_personality_aspects ON users.id=user_personality_aspects.user_id WHERE users.gender = '${latestUserPreference.partner_gender}' AND users.age >= ${latestUserPreference.partner_age_min} AND users.age <= ${latestUserPreference.partner_age_max} AND users.id != ${user.id}`)
+            const otherUsers = await db.getUsers(undefined, `LEFT OUTER JOIN user_career_and_education ON users.id=user_career_and_education.user_id JOIN user_personality_aspects ON users.id=user_personality_aspects.user_id WHERE users.gender = '${partner_gender}' AND users.age >= ${partner_age_min} AND users.age <= ${partner_age_max} AND users.id != ${user.id}`)
         
             // console.log(latestUserPreference)
             // console.log(otherUsers)
 
-            for (let user of otherUsers) {
-                delete user.password_hash
+            for (let match of otherUsers) {
+                delete match.password_hash
+                if (current_latitude && current_longitude && match.current_latitude && match.current_longitude) {
+                    match.distance_kms = getDistanceFromLatitudeLongitudeInKmPerformant(current_latitude, current_longitude, match.current_latitude, match.current_longitude)
+                } else {
+                    console.log(new Error('WARN: distance not being calculated as coordinates are falsey (0 inclusive).'))
+                    match.distance_kms = null
+                }
+                // console.log(match.distance_kms)
             }
 
             //filters for user's gender setting, and age setting, joined with other users' personality aspects
