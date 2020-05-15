@@ -1,8 +1,7 @@
 const db = require('../sql/database-interface')
 const hash = require('./bcrypt').hashFunction
 const compare = require('./bcrypt').compareHashAndPassword
-const { admins } = require('../globals')
-const MINIMUM_AGE_REQUIREMENT = 18;
+const { admins, MINIMUM_AGE_REQUIREMENT} = require('../globals')
 
 const signUpUser = (email, password, first_name, last_name, age, current_latitude, current_longitude) => {
     return new Promise((resolve, reject) => {

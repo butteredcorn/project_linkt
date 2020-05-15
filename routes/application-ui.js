@@ -239,7 +239,8 @@ router.get('/user-settings', protectedRoute, async(req, res) => {
         } else {
             res.render('user-settings', {
                 heading: 'Preferences',
-                subHeading: ''
+                subHeading: '',
+                newUsers: false
             })
         }
     } catch (error) {
