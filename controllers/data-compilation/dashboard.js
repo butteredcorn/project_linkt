@@ -68,7 +68,7 @@ const getUserMatches = (user) => {
                     delete match.password_hash
 
                     //handled
-                    const likesUser = await db.getUsersLikes(undefined, `WHERE user_id = ${match.user_id} likes_user_id = ${user.id}`)
+                    const likesUser = await db.getUsersLikes(undefined, `WHERE user_id = ${match.user_id} AND likes_user_id = ${user.id}`)
 
                     if (likesUser && likesUser.length > 0) {
                         match.likes_user = true
@@ -148,7 +148,7 @@ const getUserMatchesUnhandled = (user) => {
                     delete match.password_hash
 
                     //unhandled
-                    const likesUser = await db.getUsersLikesUnhandled(undefined, `WHERE user_id = ${match.user_id} likes_user_id = ${user.id}`)
+                    const likesUser = await db.getUsersLikesUnhandled(undefined, `WHERE user_id = ${match.user_id} AND likes_user_id = ${user.id}`)
 
                     if (likesUser && likesUser.length > 0) {
                         match.likes_user = true
@@ -169,7 +169,7 @@ const getUserMatchesUnhandled = (user) => {
                     delete match.password_hash
 
                     //unhandled
-                    const likesUser = await db.getUsersLikesUnhandled(undefined, `WHERE user_id = ${match.user_id} likes_user_id = ${user.id}`)
+                    const likesUser = await db.getUsersLikesUnhandled(undefined, `WHERE user_id = ${match.user_id} AND likes_user_id = ${user.id}`)
 
                     if (likesUser && likesUser.length > 0) {
                         match.likes_user = true
