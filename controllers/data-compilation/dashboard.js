@@ -157,7 +157,7 @@ const smartSortMatches = (userPersonalityAspects, matches) => {
                 }
             //one of either user.openess && user.conscientiousness && user.extroversion undefined here
             } else {
-                console.log(new Error('WARN: smartSorting bypassed due to undefined user personality aspects.'))
+                console.log(('WARN: smartSorting bypassed due to undefined user personality aspects.'))
                 for (let match of matches) {
                     match.difference = null //bypass selection
                 }

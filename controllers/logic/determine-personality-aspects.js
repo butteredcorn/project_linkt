@@ -14,7 +14,7 @@ const determineUserPersonalityAspects = (user) => {
             }
 
             const userMetrics = await db.getUserMetrics(undefined, `WHERE user_id = ${user.id}`)
-            console.log(userMetrics)
+            //console.log(userMetrics)
             const latestMetrics = userMetrics[userMetrics.length - 1]
 
             //console.log(latestMetrics)
