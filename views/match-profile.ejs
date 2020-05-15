@@ -24,7 +24,7 @@
     </div>
 
      <!-- main -->
-    <% const { user_id, username, first_name, last_name, age, profile_picture, headline, bio, current_latitude, current_longitude, job_title, highest_education_type } = matchProfile %>
+    <% const { user_id, username, first_name, last_name, age, profile_picture, headline, bio, current_latitude, current_longitude, distance_kms, job_title, highest_education_type } = matchProfile %>
      <div class="main-container">
         <main>
             <div class="profile-container">
@@ -32,7 +32,8 @@
                     <img class="profile-photo" src="<%=profile_picture%>" alt="profile-picture">
                 </div>
                 <div class="profile-info-container">
-                    <p class="name"><%=`${first_name} ${last_name}`%></p>
+                    <p class="name"><%=`${first_name} ${last_name}, ${age}`%></p>
+                    <p class="distance">Distance: <%=distance_kms%> KMs</p>
                     <p class="headline"><%=headline%></p>
                     <p class="bio"><%=bio%></p>
                     <div class="profile-ribbon-container">
@@ -58,6 +59,7 @@
                         <input class="profile-selected" name="bio" type="hidden" value="<%=bio%>">
                         <input class="profile-selected" name="job_title" type="hidden" value="<%=job_title%>">
                         <input class="profile-selected" name="highest_education_type" type="hidden" value="<%=highest_education_type%>">
+                        <input class="profile-selected" name="distance_kms" type="hidden" value="<%=distance_kms%>">
                         <button class="like">Like!</button>
                     </form>
                     <form class="message-button-container" action="/match-message" method="POST">
