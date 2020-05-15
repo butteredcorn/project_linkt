@@ -33,6 +33,8 @@ $(() => {
   socket.on('old messages', (data) => {
     const formattedData = []
 
+    console.log(data)
+
     for (let message of data) {
       const formattedMessage = {
         username: message.username,
