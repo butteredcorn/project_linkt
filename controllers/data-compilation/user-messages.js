@@ -10,8 +10,10 @@ const getUserMessages = (user) => {
     return new Promise(async (resolve, reject) => {
         try {
             const selectBy = 'DISTINCT socket_key, sender_id, receiver_id, message_text, date_created'
-            const searchBy = 'u1 WHERE date_created = (SELECT MAX(date_created) FROM user_messages u2 WHERE u1.socket_key = u2.socket_key) ORDER BY date_created DESC'
+            const searchBy = `u1 WHERE date_created = (SELECT MAX(date_created) FROM user_messages u2 WHERE u1.socket_key = u2.socket_key) AND (sender_id = ${user.id} OR receiver_id = ${user.id}) ORDER BY date_created DESC`
             const userMessage = await db.getUserMessages(selectBy, searchBy)
+
+            //console.log(userMessage)
 
             resolve(userMessage)
         } catch(error) {

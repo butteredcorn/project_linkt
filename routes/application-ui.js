@@ -152,17 +152,22 @@ router.get('/user-messages', protectedRoute, async(req, res) => {
         const {otherUsers, userMessages} = await loadMessages(req.user)
         const otherUsersThatHaveMessaged = []
 
+        console.log(otherUsers)
+        console.log(userMessages)
+
         for (let user of otherUsers) {
             for (let message of userMessages) {
-                message.match_id = user.user_id
-                message.match_username = user.first_name + " " + user.last_name
-                message.match_profile_picture = user.current_profile_picture
-
                 if (user.user_id == message.sender_id) {
+                    message.match_id = user.user_id
+                    message.match_username = user.first_name + " " + user.last_name
+                    message.match_profile_picture = user.current_profile_picture
                     otherUsersThatHaveMessaged.push(user)
                     message.username = user.first_name + " " + user.last_name
                     break;
                 } else if (user.user_id == message.receiver_id) {
+                    message.match_id = user.user_id
+                    message.match_username = user.first_name + " " + user.last_name
+                    message.match_profile_picture = user.current_profile_picture
                     otherUsersThatHaveMessaged.push(user)
                     message.receiver_username = user.first_name + " " + user.last_name
                     break;
