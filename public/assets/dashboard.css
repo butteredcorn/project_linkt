@@ -69,6 +69,7 @@ main > * {
 
 .info-column {
     margin-right: 4em;
+    word-wrap: break-word;
 }
 
 .profile-image {
@@ -141,7 +142,7 @@ main > * {
     }
 
     .info-column {
-        max-width: 320px;
+        width: 320px;
     }
 
 

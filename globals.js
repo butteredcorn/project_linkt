@@ -2,6 +2,8 @@ module.exports = {
     admins: [ process.env.DATABASE_ADMIN ],
     bcryptSaltRounds: parseInt(process.env.SALT_ROUNDS),
 
+    MINIMUM_AGE_REQUIREMENT: 18,
+    
     MINIMUM_IG_PHOTOS: 1,
 
     NUM_IG_PHOTOS_PUSHED_TO_DB: 25, //default from IG is 25 post objects
