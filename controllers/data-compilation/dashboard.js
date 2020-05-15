@@ -59,6 +59,9 @@ const getUserMatches = (user) => {
             // console.log(latestUserPreference)
             // console.log(otherUsers)
 
+            const matchesThatMeetDistanceRequirements = []
+            const matchesWithNullDistance = []
+
             for (let match of otherUsers) {
                 delete match.password_hash
                 if (current_latitude && current_longitude && match.current_latitude && match.current_longitude) {
@@ -68,10 +71,23 @@ const getUserMatches = (user) => {
                     match.distance_kms = null
                 }
                 // console.log(match.distance_kms)
+                if ((match.distance_kms || match.distance_kms == 0) && match.distance_kms <= max_distance) {
+                    matchesThatMeetDistanceRequirements.push(match)
+                } else if (match.distance_kms > max_distance) {
+                    console.log(`Match removed as user_id: ${match.user_id}'s distance_kms (${distance_kms}kms) was greater than user preference (${max_distance}kms).`)
+                } else if (match.distance_kms === null) { //handle if user did not provide authorisation for location and location detection backfall fails
+                    matchesWithNullDistance.push(match)
+                } else { //undefined
+                    console.log(new Error('ERROR: unexpected result. match.distance_kms appears to be undefined.'))
+                }
+            }
+
+            if (matchesWithNullDistance.length > 0) {
+                console.log(`Matches without distance_kms detected: ${matchesWithNullDistance}.`)
             }
 
             //filters for user's gender setting, and age setting, joined with other users' personality aspects
-            resolve(otherUsers)
+            resolve(matchesThatMeetDistanceRequirements)
         
         } catch(error) {
             reject(error)
