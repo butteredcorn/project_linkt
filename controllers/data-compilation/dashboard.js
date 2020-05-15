@@ -135,9 +135,11 @@ const getUserMatchesUnhandled = (user) => {
             const db = require('../../routes/instagram-endpoint').db
             const userUserPreferences = (await db.getUsersUnhandled(undefined, `JOIN user_preferences ON users.id=user_preferences.user_id WHERE users.id = ${user.id}`))
             const latestUserPreference = userUserPreferences[userUserPreferences.length - 1]
+            const { user_id, partner_gender, partner_age_min, partner_age_max, current_latitude, current_longitude, max_distance } = latestUserPreference
+
 
             //note: users.id is getting overwritten by user_personality_aspects.id --> for user_id, call user_id, otherwise this object's id property refers to the id of user_personality_aspects
-            const otherUsers = await db.getUsersUnhandled(undefined, `LEFT OUTER JOIN user_career_and_education ON users.id=user_career_and_education.user_id JOIN user_personality_aspects ON users.id=user_personality_aspects.user_id WHERE users.gender = '${latestUserPreference.partner_gender}' AND users.age >= ${latestUserPreference.partner_age_min} AND users.age <= ${latestUserPreference.partner_age_max} AND users.id != ${user.id}`)
+            const otherUsers = await db.getUsersUnhandled(undefined, `LEFT OUTER JOIN user_career_and_education ON users.id=user_career_and_education.user_id JOIN user_personality_aspects ON users.id=user_personality_aspects.user_id WHERE users.gender = '${partner_gender}' AND users.age >= ${partner_age_min} AND users.age <= ${partner_age_max} AND users.id != ${user.id}`)
             //handle here if user disallows location and backfall fails
             if (!current_latitude || !current_longitude) {
                 console.log(new Error(`WARN: user: ${user_id}, has disallowed location tracking, and backfall mechanism has failed.`))
