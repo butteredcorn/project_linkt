@@ -240,7 +240,7 @@ router.get('/user-settings', protectedRoute, async(req, res) => {
             res.render('user-settings', {
                 heading: 'Preferences',
                 subHeading: '',
-                newUsers: false
+                newUser: false
             })
         }
     } catch (error) {
