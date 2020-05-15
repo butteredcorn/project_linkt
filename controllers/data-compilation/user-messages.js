@@ -26,11 +26,12 @@ const getUserMessages = (user) => {
 const getUserMatches = (user) => {
     return new Promise(async (resolve, reject) => {
         try {
-            const userUserPreferences = (await db.getUsers(undefined, `JOIN user_preferences ON users.id=user_preferences.user_id WHERE users.id = ${user.id}`))
-            const latestUserPreference = userUserPreferences[userUserPreferences.length - 1]
+            // const userUserPreferences = (await db.getUsers(undefined, `JOIN user_preferences ON users.id=user_preferences.user_id WHERE users.id = ${user.id}`))
+            // const latestUserPreference = userUserPreferences[userUserPreferences.length - 1]
 
             //note: users.id is getting overwritten by user_personality_aspects.id --> for user_id, call user_id, otherwise this object's id property refers to the id of user_personality_aspects
-            const otherUsers = await db.getUsers(undefined, `JOIN user_personality_aspects ON users.id=user_personality_aspects.user_id WHERE users.gender = '${latestUserPreference.partner_gender}' AND users.age >= ${latestUserPreference.partner_age_min} AND users.age <= ${latestUserPreference.partner_age_max} AND users.id != ${user.id}`)
+            //no need to restrict to user preferences here, since people outside of preferences may message the user
+            const otherUsers = await db.getUsers(undefined, `JOIN user_personality_aspects ON users.id=user_personality_aspects.user_id WHERE users.id != ${user.id}`)
         
             // console.log(latestUserPreference)
             // console.log(otherUsers)
