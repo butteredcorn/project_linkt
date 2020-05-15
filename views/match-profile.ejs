@@ -43,12 +43,14 @@
                         <!-- <div class="profile-ribbon"><img class="profile-icon" src="" alt="education"><p class="ribbon-content"></p></div> -->
                     </div>
                 </div>
-                <div class="message-button-container">
+
+                <form class="message-button-container" action="/match-message" method="POST">
+                    <input class="message-selected" name="receiver_user_id" type="hidden" value="<%=user_id%>">
+                    <input class="message-selected" name="receiver_username" type="hidden" value="<%=username%>">
+                    <input class="message-selected" name="profile_picture" type="hidden" value="<%=profile_picture%>">
                     <button class="message">Message!</button>
-                </div>
+                </form>
             </div>
-
-
         </main>
     </div>
 

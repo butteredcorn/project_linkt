@@ -56,7 +56,7 @@
                 </div> -->
 
                 <%for (let match of matches) { %>
-                    <% const { first_name, last_name, age, current_profile_picture, headline, bio, current_latitude, current_longitude, openess, conscientiousness, extroversion} = match %>
+                    <% const { user_id, first_name, last_name, age, current_profile_picture, headline, bio, current_latitude, current_longitude, openess, conscientiousness, extroversion} = match %>
                     <% match.username = `${first_name} ${last_name}` %>
                     <div class="card-container">
                         <div class="card">
@@ -70,6 +70,7 @@
                                 <p class="bio">Bio: <%=bio%></p>
                                 <div class="card-buttons-container">
                                     <form action="/match-profile" method="POST">
+                                        <input class="profile-selected" name="user_id" type="hidden" value="<%=user_id%>">
                                         <input class="profile-selected" name="username" type="hidden" value="<%=match.username%>">
                                         <input class="profile-selected" name="first_name" type="hidden" value="<%=first_name%>">
                                         <input class="profile-selected" name="last_name" type="hidden" value="<%=last_name%>">
@@ -94,7 +95,6 @@
                     </div>
                 <%}%>
                 
-
                 <!-- card container end -->
             </div>
         </main>

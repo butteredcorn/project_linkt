@@ -133,7 +133,7 @@ router.get('/match-message', protectedRoute, async(req, res) => {
 
 router.post('/match-message', protectedRoute, async(req, res) => {
     try {
-        //console.log(req.body)
+        console.log(req.body)
 
         res.render('match-message', {
             match_user_id: req.body.receiver_user_id,

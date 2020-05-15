@@ -93,7 +93,48 @@ const getUserMatchesUnhandled = (user) => {
     })
 } 
 
+const smartSortMatches = (userPersonalityAspects, matches) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const user = userPersonalityAspects[0]
 
+            for (let match of matches) {
+
+                const openessDifference = Math.abs(user.openess - match.openess)
+                const conscientiousnessDifference = Math.abs(user.conscientiousness - match.conscientiousness)
+                const extraversionDifference = Math.abs(user.extroversion - match.extroversion)
+                const totalDifference = openessDifference + conscientiousnessDifference + extraversionDifference
+                
+                match.difference = totalDifference
+            }
+
+            if (matches.length >= 2) {
+                function compare(matchA, matchB) {
+                    // Use toUpperCase() to ignore character casing
+                    const differenceA = matchA.difference
+                    const differenceB = matchB.difference
+                  
+                    let comparison = 0;
+                    if (differenceA > differenceB) {
+                      comparison = 1;
+                    } else if (differenceA < differenceB) {
+                      comparison = -1;
+                    }
+                    return comparison;
+                }
+
+                const sortedMatches = matches.sort(compare)
+
+                resolve(sortedMatches)
+
+            } else {
+                resolve(matches)
+            }
+        } catch (error) {
+            reject(error)
+        }
+    })
+}
 
 
 
@@ -102,8 +143,9 @@ const loadDashboard = (user) => {
         try {
 
             const userPersonalityAspects = await getUserPersonalityAspects(user)
-            const matches = await getUserMatches(user)
-
+            let matches = await getUserMatches(user)
+            matches = await smartSortMatches(userPersonalityAspects, matches)
+            console.log(matches)
             resolve({userPersonalityAspects, matches})
         } catch(error) {
             reject(error)
@@ -116,8 +158,8 @@ const loadDashboardUnhandled = (user) => {
         try {
 
             const userPersonalityAspects = await getUserPersonalityAspectsUnhandled(user)
-            const matches = await getUserMatchesUnhandled(user)
-
+            let matches = await getUserMatchesUnhandled(user)
+            matches = await smartSortMatches(userPersonalityAspects, matches)
             resolve({userPersonalityAspects, matches})
         } catch(error) {
             reject(error)

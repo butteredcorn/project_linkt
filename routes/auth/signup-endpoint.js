@@ -3,6 +3,7 @@ const router = express.Router()
 const authUserRedirect = require('../../controllers/authentication').authedUserRedirect
 const signUpUser = require('../../controllers/login-and-signup').signUpUser
 const path = require('path')
+const querystring = require('querystring')
 
 const dashboard = '/dashboard'
 
@@ -32,7 +33,10 @@ router.post('/', authUserRedirect, async (req, res) => {
             res.redirect(dashboard)
         } catch (error) {
             console.log(error)
-            res.send(error)
+            const query = querystring.stringify({
+                error: error.message
+            })
+            res.redirect('/login' + '?' + query)
         }
     }
 })

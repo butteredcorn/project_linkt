@@ -5,14 +5,16 @@ const createNewToken = require('../../controllers/json-web-token').createNewToke
 const loginUser = require('../../controllers/login-and-signup').loginUser
 const path = require('path')
 const db = require('../../sql/database-interface')
+const querystring = require('querystring')
 
 const milliSecondsPerDay = 86400000
 
 const dashboard = '/dashboard'
 
 router.get('/', authUserRedirect, (req, res) => {
-    //res.sendFile(path.join(__dirname, '../../public/login.html'))
-    res.render('login2')
+    res.render('login2', {
+        error: req.query.error
+    })
 })
 
 router.post('/', (req, res) => {
@@ -44,7 +46,10 @@ router.post('/', (req, res) => {
             })
             .catch((error) => {
                 console.log(error)
-                res.send(error)
+                const query = querystring.stringify({
+                    error: error
+                })
+                res.redirect('/login' + '?' + query)
             })
     } else {
         res.redirect('/login')

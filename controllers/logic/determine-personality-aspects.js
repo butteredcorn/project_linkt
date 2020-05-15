@@ -133,6 +133,13 @@ const determineExtraversion = (portrait_to_noperson_ratio, mean_hashtags_per_pos
                 reject(new Error('Check user metrics.'))
             }
 
+            // let hashtagWeight
+
+            // //not many hashtags
+            // if(mean_hashtags_per_post < 0.25) {
+            //     hashtagWeight = 0.1 //etc.
+            // }
+
             //handle null here
             if (portrait_to_noperson_ratio === null) {
                 userPersonalityAspects.extraversion = null
