@@ -56,13 +56,26 @@ const getUserMatches = (user) => {
             //note: users.id is getting overwritten by user_personality_aspects.id --> for user_id, call user_id, otherwise this object's id property refers to the id of user_personality_aspects
             const otherUsers = await db.getUsers(undefined, `LEFT OUTER JOIN user_career_and_education ON users.id=user_career_and_education.user_id JOIN user_personality_aspects ON users.id=user_personality_aspects.user_id WHERE users.gender = '${partner_gender}' AND users.age >= ${partner_age_min} AND users.age <= ${partner_age_max} AND users.id != ${user.id}`)
         
-            // console.log(latestUserPreference)
-            // console.log(otherUsers)
 
-            //handle here if user disallows location and backfall fails
+            // console.log(latestUserPreference)
+            //console.log(otherUsers)
+
+            //handle here if user disallows location and backfall fails --> currently, bypass
             if (!current_latitude || !current_longitude) {
                 console.log(new Error(`WARN: user: ${user_id}, has disallowed location tracking, and backfall mechanism has failed.`))
 
+                for(let match of otherUsers) {
+                    delete match.password_hash
+
+                    //handled
+                    const likesUser = await db.getUsersLikes(undefined, `WHERE likes_user_id = ${user.id}`)
+
+                    if (likesUser && likesUser.length > 0) {
+                        match.likes_user = true
+                    } else {
+                        match.likes_user = false
+                    }
+                }
 
                 resolve(otherUsers)
 
@@ -74,6 +87,17 @@ const getUserMatches = (user) => {
     
                 for (let match of otherUsers) {
                     delete match.password_hash
+
+                    const likesUser = await db.getUsersLikes(undefined, `WHERE user_id = ${match.user_id} AND likes_user_id = ${user.id}`)
+                    console.log(likesUser)
+
+                    if (likesUser && likesUser.length > 0) {
+                        match.likes_user = true
+                    } else {
+                        match.likes_user = false
+                    }
+
+
                     if (current_latitude && current_longitude && match.current_latitude && match.current_longitude) {
                         match.distance_kms = getDistanceFromLatitudeLongitudeInKmPerformant(current_latitude, current_longitude, match.current_latitude, match.current_longitude)
                     } else {
@@ -114,13 +138,62 @@ const getUserMatchesUnhandled = (user) => {
 
             //note: users.id is getting overwritten by user_personality_aspects.id --> for user_id, call user_id, otherwise this object's id property refers to the id of user_personality_aspects
             const otherUsers = await db.getUsersUnhandled(undefined, `LEFT OUTER JOIN user_career_and_education ON users.id=user_career_and_education.user_id JOIN user_personality_aspects ON users.id=user_personality_aspects.user_id WHERE users.gender = '${latestUserPreference.partner_gender}' AND users.age >= ${latestUserPreference.partner_age_min} AND users.age <= ${latestUserPreference.partner_age_max} AND users.id != ${user.id}`)
-        
-            // console.log(latestUserPreference)
-            // console.log(otherUsers)
+            //handle here if user disallows location and backfall fails
+            if (!current_latitude || !current_longitude) {
+                console.log(new Error(`WARN: user: ${user_id}, has disallowed location tracking, and backfall mechanism has failed.`))
 
-            //filters for user's gender setting, and age setting, joined with other users' personality aspects
-            resolve(otherUsers)
-        
+                for(let match of otherUsers) {
+                    delete match.password_hash
+
+                    //handled
+                    const likesUser = await db.getUsersLikesUnhandled(undefined, `WHERE likes_user_id = ${user.id}`)
+
+                    if (likesUser && likesUser.length > 0) {
+                        match.likes_user = true
+                    } else {
+                        match.likes_user = false
+                    }
+                }
+
+                resolve(otherUsers)
+
+
+
+            } else {
+                const matchesThatMeetDistanceRequirements = []
+                const matchesWithNullDistance = []
+
+                for (let match of otherUsers) {
+                    delete match.password_hash
+
+
+
+
+                    if (current_latitude && current_longitude && match.current_latitude && match.current_longitude) {
+                        match.distance_kms = getDistanceFromLatitudeLongitudeInKmPerformant(current_latitude, current_longitude, match.current_latitude, match.current_longitude)
+                    } else {
+                        console.log(new Error('WARN: distance not being calculated as coordinates are falsey (0 inclusive).'))
+                        match.distance_kms = null
+                    }
+                    // console.log(match.distance_kms)
+                    if ((match.distance_kms || match.distance_kms == 0) && match.distance_kms <= max_distance) {
+                        matchesThatMeetDistanceRequirements.push(match)
+                    } else if (match.distance_kms > max_distance) {
+                        console.log(`Match removed as user_id: ${match.user_id}'s distance_kms (${distance_kms}kms) was greater than user preference (${max_distance}kms).`)
+                    } else if (match.distance_kms === null) { //handle if match did not provide authorisation for location and location detection backfall fails
+                        matchesWithNullDistance.push(match)
+                    } else { //undefined
+                        console.log(new Error('ERROR: unexpected result. match.distance_kms appears to be undefined.'))
+                    }
+                }
+
+                if (matchesWithNullDistance.length > 0) {
+                    console.log(`Matches without distance_kms detected: ${matchesWithNullDistance}.`)
+                }
+
+                //filters for user's gender setting, and age setting, joined with other users' personality aspects
+                resolve(matchesThatMeetDistanceRequirements)
+            }
         } catch(error) {
             reject(error)
         }

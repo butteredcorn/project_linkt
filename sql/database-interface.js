@@ -1221,6 +1221,28 @@ const getUsersLikes = (selectBy = '*', searchBy = '') => {
     })
 }
 
+const getUsersLikesUnhandled = (selectBy = '*', searchBy = '') => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            //await createConnection()
+            const table = 'users_likes'
+            const sql = `SELECT ${selectBy} FROM ${table} ${searchBy}`
+            db.query(sql, (error, result) => {
+                if (error) {
+                    console.log(`Problem searching for ${table} by ${searchBy}.`)
+                    reject(error)
+                }
+                resolve(rawDataPacketConverter(result))
+            })
+        } catch (error) {
+            console.log(error)
+            reject(error)
+        } finally {
+            //closeConnection()
+        }
+    })
+}
+
 const createUserLike = (user_id, likes_user_id) => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -1287,6 +1309,7 @@ module.exports = {
     createUserCareerAndEducation,
     updateUserCareerAndEducation,
     getUsersLikes,
+    getUsersLikesUnhandled,
     createUserLike
 }
 
