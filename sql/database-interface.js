@@ -76,7 +76,11 @@ const sqlCallback = (sql) => {
 
 const dropAndRecreateTables = () => {
     return new Promise((resolve, reject) => {
-        sqlCallback('DROP TABLE IF EXISTS user_messages')
+        sqlCallback('DROP TABLE IF EXISTS users_likes')
+        .then((result) => {
+            console.log(result.message)
+            return sqlCallback('DROP TABLE IF EXISTS user_messages')
+        })
         .then((result) => {
             console.log(result.message)
             return sqlCallback('DROP TABLE IF EXISTS user_tags')
@@ -267,6 +271,16 @@ const dropAndRecreateTables = () => {
                 FOREIGN KEY (receiver_id)   REFERENCES users(id)
             )`)
         })
+        .then((result) => {
+            console.log(result.message)
+            return sqlCallback(`CREATE TABLE users_likes (
+                id                              INT PRIMARY KEY AUTO_INCREMENT,
+                user_id                         INT NOT NULL,
+                likes_user_id                   INT NOT NULL,
+                FOREIGN KEY (user_id)           REFERENCES users(id),
+                FOREIGN KEY (likes_user_id)     REFERENCES users(id)
+            )`)
+        })
         //finally resolve/reject
         .then((result) => {
             resolve(result)
@@ -316,6 +330,36 @@ const resetUserMessages = () => {
                     date_created            TIMESTAMP NOT NULL DEFAULT NOW(),
                     FOREIGN KEY (sender_id)   REFERENCES users(id),
                     FOREIGN KEY (receiver_id)   REFERENCES users(id)
+                )`)
+                .then((result) => {
+                    resolve(result)
+                })
+                .catch((error) => {
+                    reject(error)
+                })
+                .finally(() => {
+                    closeConnection()
+                })
+            })
+        } catch (error) {
+            reject(error)
+        }
+    })
+}
+
+const resetUsersLikes = () => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            await createConnection()
+            sqlCallback('DROP TABLE IF EXISTS users_likes')
+            .then((result) => {
+                console.log(result.message)
+                return sqlCallback(`CREATE TABLE users_likes (
+                    id                              INT PRIMARY KEY AUTO_INCREMENT,
+                    user_id                         INT NOT NULL,
+                    likes_user_id                   INT NOT NULL,
+                    FOREIGN KEY (user_id)           REFERENCES users(id),
+                    FOREIGN KEY (likes_user_id)     REFERENCES users(id)
                 )`)
                 .then((result) => {
                     resolve(result)
@@ -1150,7 +1194,55 @@ const updateUserCareerAndEducation = (user_id, highest_education_type, job_title
     })
 }
 
+/**
+ * users_likes
+ * @param {*} selectBy 
+ * @param {*} searchBy 
+ */
+const getUsersLikes = (selectBy = '*', searchBy = '') => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            await createConnection()
+            const table = 'users_likes'
+            const sql = `SELECT ${selectBy} FROM ${table} ${searchBy}`
+            db.query(sql, (error, result) => {
+                if (error) {
+                    console.log(`Problem searching for ${table} by ${searchBy}.`)
+                    reject(error)
+                }
+                resolve(rawDataPacketConverter(result))
+            })
+        } catch (error) {
+            console.log(error)
+            reject(error)
+        } finally {
+            closeConnection()
+        }
+    })
+}
 
+const createUserLike = (user_id, likes_user_id) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            await createConnection()
+            const table = 'users_likes'
+            const sql = `INSERT INTO ${table} (user_id, likes_user_id) VALUES (?, ?)`
+            const params = [user_id, likes_user_id]
+            db.query(sql, params, (error, result) => {
+                if (error) {
+                    console.log(`${error} Problem creating user like and inserting into ${table}.`)
+                    reject(error)
+                }
+                resolve(rawDataPacketConverter(result))
+            })
+        } catch (error) {
+            console.log(error)
+            reject(error)
+        } finally {
+            closeConnection()
+        }     
+    })
+}
 
 
 
@@ -1159,6 +1251,7 @@ module.exports = {
     closeConnection,
     resetDatabase,
     resetUserMessages,
+    resetUsersLikes,
     getUsers,
     getUsersUnhandled,
     getUserByID,
@@ -1192,6 +1285,8 @@ module.exports = {
     createUserMessage,
     getUserCareerAndEducation,
     createUserCareerAndEducation,
-    updateUserCareerAndEducation
+    updateUserCareerAndEducation,
+    getUsersLikes,
+    createUserLike
 }
 

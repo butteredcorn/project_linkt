@@ -70,7 +70,7 @@ router.get('/dashboard', protectedRoute, async(req, res) => {
                 data = await loadDashboard(req.user)
             }
 
-            //console.log(data.matches)
+            console.log(data.matches)
             //console.log(data.userPersonalityAspects)
 
             //new user routing
