@@ -8,11 +8,11 @@ const { loadUserSettings } = require('../controllers/data-compilation/user-setti
 const { loadUserProfile } = require('../controllers/data-compilation/user-profile')
 const { loadMessages } = require('../controllers/data-compilation/user-messages')
 
-const userSettings = '/user-settings?'
+const userSettings = '/user-settings'
 const instagramEndpoint = '/instagram/login'
 const profileSettings = '/profile-settings'
 
-const { errors, metric_calculation_constants } = require('../globals')
+const { errors, metric_calculation_constants, SOCKET_IO_URL } = require('../globals')
 const { TIMEOUT } = metric_calculation_constants
 const { UI_ROUTE_ERROR } = errors
 
@@ -47,14 +47,16 @@ router.get('/dashboard', protectedRoute, async(req, res) => {
             const query = querystring.stringify({
                 newUser: true
             })
-            res.redirect(userSettings + query) //send querystring
+            res.redirect(userSettings + '?' + query) //send querystring
 
         } else if (userBioAndHeadline && userBioAndHeadline.length == 0) {
             res.redirect(profileSettings)
 
         } else if (userInstagram && userInstagram.length == 0) {
-
-            res.redirect(instagramEndpoint)
+            const query = querystring.stringify({
+                newUser: true
+            })
+            res.redirect(instagramEndpoint + '?' + query)
 
         //else redirect to dashboard
         } else {
@@ -68,13 +70,22 @@ router.get('/dashboard', protectedRoute, async(req, res) => {
                 data = await loadDashboard(req.user)
             }
 
-            console.log(data.matches)
+            //console.log(data.matches)
             //console.log(data.userPersonalityAspects)
 
-            res.render('dashboard', {
-                userPersonalityAspects: data.userPersonalityAspects,
-                matches: data.matches
-            })
+            //new user routing
+            if(req.query.newUser) {
+                res.render('dashboard', {
+                    userPersonalityAspects: data.userPersonalityAspects,
+                    matches: data.matches,
+                    newUser: true
+                })
+            } else {
+                res.render('dashboard', {
+                    userPersonalityAspects: data.userPersonalityAspects,
+                    matches: data.matches
+                })
+            }
         }
             
     } catch (error) {
@@ -112,9 +123,7 @@ router.post('/match-profile', protectedRoute, async(req, res) => {
 
 router.get('/match-message', protectedRoute, async(req, res) => {
     try {
-        res.render('match-message', {
-            
-        })
+        res.redirect('/dashboard')
         //res.send('Need to handle match-message get')
     } catch (error) {
         console.log(error)
@@ -129,7 +138,8 @@ router.post('/match-message', protectedRoute, async(req, res) => {
         res.render('match-message', {
             match_user_id: req.body.receiver_user_id,
             match_username: req.body.receiver_username,
-            match_profile_photo: req.body.profile_picture
+            match_profile_photo: req.body.profile_picture,
+            socket_url: SOCKET_IO_URL
         })
     } catch (error) {
         console.log(error)

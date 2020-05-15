@@ -44,14 +44,15 @@ router.get('/returnURL', async (req, res) => {
                 const userIGExists = await db.getUserInstagrams('user_id, access_token', `WHERE user_id = ${req.user.id}`)
                 if(userIGExists.length > 0) {
                     await db.updateUserIG(req.user.id, req.user.instagram_id, req.user.instagram_access_token)
+                    res.redirect('/instagram/processData')
                 } else {
-                    //create userIG table
+                    //create new userIG table --> for new users
+                    const query = querystring.stringify({
+                        newUser: true
+                    })
                     await db.createUserIG(req.user.id, req.user.instagram_id, req.user.instagram_access_token)
+                    res.redirect('/instagram/processData' + '?' + query)
                 }
-                
-                //console.log(req.user)
-
-                res.redirect('/instagram/processData')
             })
         } else {
             res.send(new Error('Error with instagram redirectURI. No token found.'))
@@ -87,9 +88,19 @@ router.get('/processData', protectedRoute, async (req, res) => {
         console.log(instagramData)
         console.log(metrics)
 
-        const query = querystring.stringify({
-            delayDBHandling: true
-        })
+        let query
+
+        if(req.query.newUser) {
+            query = querystring.stringify({
+                delayDBHandling: true,
+                newUser: true
+            })
+        } else {
+            query = querystring.stringify({
+                delayDBHandling: true
+            })
+        }
+        
         
         res.redirect('/dashboard' + '?' + query)
 
