@@ -98,36 +98,44 @@ const smartSortMatches = (userPersonalityAspects, matches) => {
         try {
             const user = userPersonalityAspects[0]
 
-            for (let match of matches) {
+            if (user && user.openess && user.conscientiousness && user.extroversion) {
+                for (let match of matches) {
 
-                const openessDifference = Math.abs(user.openess - match.openess)
-                const conscientiousnessDifference = Math.abs(user.conscientiousness - match.conscientiousness)
-                const extraversionDifference = Math.abs(user.extroversion - match.extroversion)
-                const totalDifference = openessDifference + conscientiousnessDifference + extraversionDifference
-                
-                match.difference = totalDifference
-            }
-
-            if (matches.length >= 2) {
-                function compare(matchA, matchB) {
-                    // Use toUpperCase() to ignore character casing
-                    const differenceA = matchA.difference
-                    const differenceB = matchB.difference
-                  
-                    let comparison = 0;
-                    if (differenceA > differenceB) {
-                      comparison = 1;
-                    } else if (differenceA < differenceB) {
-                      comparison = -1;
-                    }
-                    return comparison;
+                    const openessDifference = Math.abs(user.openess - match.openess)
+                    const conscientiousnessDifference = Math.abs(user.conscientiousness - match.conscientiousness)
+                    const extraversionDifference = Math.abs(user.extroversion - match.extroversion)
+                    const totalDifference = openessDifference + conscientiousnessDifference + extraversionDifference
+                    
+                    match.difference = totalDifference
                 }
+    
+                if (matches.length >= 2) {
+                    function compare(matchA, matchB) {
+                        // Use toUpperCase() to ignore character casing
+                        const differenceA = matchA.difference
+                        const differenceB = matchB.difference
+                      
+                        let comparison = 0;
+                        if (differenceA > differenceB) {
+                          comparison = 1;
+                        } else if (differenceA < differenceB) {
+                          comparison = -1;
+                        }
+                        return comparison;
+                    }
+    
+                    const sortedMatches = matches.sort(compare)
+    
+                    resolve(sortedMatches)
 
-                const sortedMatches = matches.sort(compare)
-
-                resolve(sortedMatches)
-
+                } else {
+                    resolve(matches)
+                }
+            //one of either user.openess && user.conscientiousness && user.extroversion undefined here
             } else {
+                for (let match of matches) {
+                    match.difference = null //bypass selection
+                }
                 resolve(matches)
             }
         } catch (error) {
