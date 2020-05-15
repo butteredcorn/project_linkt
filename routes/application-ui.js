@@ -49,7 +49,7 @@ router.get('/dashboard', protectedRoute, async(req, res) => {
             })
             res.redirect(userSettings + '?' + query) //send querystring
 
-        } else if (userBioAndHeadline && userBioAndHeadline.length == 0) {
+        } else if (userBioAndHeadline && userBioAndHeadline.length == 0 || req.body.newUser) {
             res.redirect(profileSettings)
 
         } else if (userInstagram && userInstagram.length == 0) {
@@ -224,12 +224,15 @@ router.get('/user-messages', protectedRoute, async(req, res) => {
 
 router.get('/user-settings', protectedRoute, async(req, res) => {
     try {
+        const newUser = req.query.newUser
+
         const newUserMessage = {
             heading: "Looks like you're new!",
-            subHeading: "Let's get your profile setup so we can get you Linkt up."
+            subHeading: "Let's get your profile setup so we can get you Linkt up.",
+            newUser: true
         }
 
-        const newUser = req.query.newUser
+        
 
         if (newUser) {
             res.render('user-settings', newUserMessage)

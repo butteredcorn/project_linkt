@@ -23,3 +23,9 @@ function updateUserGender(value) {
 function updatePartnerGenderPreference(value) {
     document.querySelector(".partnerGenderValue").innerText = (value[0].toUpperCase() + value.slice(1))
 }
+
+$(() => {
+    if($('#newUser').val()) {
+        $('#routing').val('newUser')
+    }
+})
