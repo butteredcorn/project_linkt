@@ -16,6 +16,9 @@ module.exports = {
 
     MILLISECONDS_PER_DAY: 86400000,
 
+    MAX_UNLIKED_MESSAGES_PER_DAY_FREE: 3,
+    MAX_UNLIKED_MESSAGES_PER_USER_FREE: 1,
+
     psychometric_constants: {
         POST_FREQUENCY_WINDOW_DAYS: 30,
         CAREER_FOCUSED_KEYWORDS: ['challenge', 'challenging', 'reflect', 'passion', 'career', 'business', 'development', 'finance', 'money', 'success', 'motivation', 'hardatwork'],

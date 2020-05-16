@@ -18,6 +18,17 @@ $(() => {
     console.log("Client side messaging enabled.")
   })
 
+  socket.on('not liked error', (error) => {
+    const { match_user_id, match_username, match_profile_photo, url, error_message } = error[0]
+    $('#error_user_id').val(match_user_id)
+    $('#error_username').val(match_username)
+    $('#error_profile_picture').val(match_profile_photo)
+    $('#socket-error-form').attr('action', url);
+    $('#socket-error-form').submit()
+
+    console.log(error_message)
+  })
+
   socket.on('connection message', (data) => {
     username = data[0].username //passed from the req.user token
   })

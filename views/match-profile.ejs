@@ -60,12 +60,14 @@
                         <input class="profile-selected" name="job_title" type="hidden" value="<%=job_title%>">
                         <input class="profile-selected" name="highest_education_type" type="hidden" value="<%=highest_education_type%>">
                         <input class="profile-selected" name="distance_kms" type="hidden" value="<%=distance_kms%>">
+                        <input class="profile-selected" name="likes_user" type="hidden" value="<%=likes_user%>">
                         <button class="like">Like!</button>
                     </form>
                     <form class="message-button-container" action="/match-message" method="POST">
                         <input class="message-selected" name="receiver_user_id" type="hidden" value="<%=user_id%>">
                         <input class="message-selected" name="receiver_username" type="hidden" value="<%=username%>">
                         <input class="message-selected" name="profile_picture" type="hidden" value="<%=profile_picture%>">
+                        <input class="message-selected" name="likes_user" type="hidden" value="<%=likes_user%>">
                         <button class="message">Message!</button>
                     </form>
                 </div>
