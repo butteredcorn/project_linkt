@@ -112,8 +112,18 @@ router.post('/match-profile', protectedRoute, async(req, res) => {
 
         console.log(req.body)
 
+        let matchCarouselPhotos
+        const result = await db.getUserPublicPhotos(undefined, `WHERE user_id = ${req.body.user_id} ORDER BY position`)
+        if (result && result.length > 0) {
+            matchCarouselPhotos = result
+        } else {
+            matchCarouselPhotos = undefined
+        }
+
+
         res.render('match-profile', {
-            matchProfile: req.body
+            matchProfile: req.body,
+            matchCarouselPhotos: matchCarouselPhotos
         })
     } catch (error) {
         console.log(error)
@@ -295,11 +305,12 @@ router.post('/user-settings-page', protectedRoute, async(req, res) => {
 
 router.get('/user-profile', protectedRoute, async(req, res) => {
     try {
-        const {userObject, userPhotos} = await loadUserProfile(req.user)
+        const {userObject, userPhotos, userCarouselPhotos} = await loadUserProfile(req.user)
         console.log(userObject)
         res.render('user-profile', {
             user: userObject,
-            userPhotos: userPhotos
+            userPhotos: userPhotos,
+            userCarouselPhotos: userCarouselPhotos
         })
 
     } catch (error) {
@@ -348,16 +359,17 @@ router.post('/profile-settings', protectedRoute, async(req, res) => {
 router.post('/user-profile-picture', protectedRoute, async(req, res) => {
     try {
         console.log(req.body)
-        
-        if (req.body.selectedProfilePosition == 1) {
 
-        } else if (req.body.selectedProfilePosition == 2) {
-
-        } else if (req.body.selectedProfilePosition == 3) {
-
-        }
-
+        //leave for legacy support
         await db.updateUserProfilePhoto(req.user.id, req.body.selectedProfilePicture)
+
+        //migrate to this new table
+        const publicPosition = await db.getUserPublicPhotos(undefined, `WHERE position = ${req.body.selectedProfilePosition} AND user_id = ${req.user.id}`)
+        if(publicPosition && publicPosition.length == 0) {
+            await db.createUserPublicPhoto(req.user.id, req.body.selectedProfilePicture, req.body.selectedProfilePosition)
+        } else {
+            await db.updateUserPublicPhoto(req.user.id, req.body.selectedProfilePicture, req.body.selectedProfilePosition)
+        }
         
         res.redirect('/user-profile')
 
