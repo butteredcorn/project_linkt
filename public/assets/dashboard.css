@@ -63,6 +63,10 @@ main > * {
     flex-direction: row;
 }
 
+.carousel-profile-image-container {
+    max-width: 40%;
+}
+
 /* .profile-image {
     margin-left: 4em;
 } */
@@ -103,10 +107,11 @@ main > * {
         font-size: 12px;
     }
 
-    .profile-image-column {
+    .profile-image-column, .carousel-profile-image-container {
         max-width: 40%;
         margin-left: 2em;
     }
+
 
     .profile-image {
         width: 80%;
@@ -137,6 +142,10 @@ main > * {
         margin-left: 4em;
     }
 
+    .carousel-profile-image-container {
+        margin-left: 4em;
+    }
+    
     .profile-image {
         border-radius: 100%;
     }

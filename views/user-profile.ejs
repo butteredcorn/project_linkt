@@ -33,10 +33,11 @@
         <main>
             <div class="profile-container">
 
-                <!-- <div class="profile-image-container">
+                <%if(!userCarouselPhotos || userCarouselPhotos.length == 0) {%>
+                <div class="profile-image-container">
                 <button class="profile-picture-button" onclick="showProfilePictureGrid()"><img class="profile-photo" src="<%=user.current_profile_picture%>" alt="profile-picture"></button>
-                </div> -->
-
+                </div>
+                <%} else { %>
                 <div id="profile-picture-carousel" class="carousel slide profile-container" data-ride="carousel" data-interval="false">
                     <ol class="carousel-indicators">
                         <%if(userCarouselPhotos && userCarouselPhotos[1].photo_link){%>
@@ -73,6 +74,7 @@
                     </a>
                     <%}%>
                   </div>
+                  <%}%>
 
 
                 <div class="profile-info-container">
