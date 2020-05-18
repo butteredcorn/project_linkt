@@ -19,7 +19,7 @@ body {
 }
 
 .profile-info-container {
-    width: 80%;
+    width: 95%;
 }
 
 .profile-ribbon-container {
@@ -29,9 +29,15 @@ body {
 }
 
 .profile-photo {
+    display: flex;
+    justify-content: center;
     width: 80%;
     border: none;
 }
+
+.carousel-inner > .carousel-item > img {
+    margin: 0 auto;
+  }
 
 
 .profile-ribbon {
@@ -101,7 +107,7 @@ button {
 @media only screen and (min-width: 501px) {
 
     .profile-photo {
-        max-width: 400px;
+        max-width: 320px;
     }
 
     header {
