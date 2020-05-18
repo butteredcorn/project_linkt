@@ -1,4 +1,5 @@
-function showProfilePictureGrid () {
+function showProfilePictureGrid (value) {
+    $('#selected-profile-position').val(value)
     $('#profile-picture-modal').modal('show');
 }
 

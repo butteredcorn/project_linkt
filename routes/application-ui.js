@@ -347,6 +347,16 @@ router.post('/profile-settings', protectedRoute, async(req, res) => {
 
 router.post('/user-profile-picture', protectedRoute, async(req, res) => {
     try {
+        console.log(req.body)
+        
+        if (req.body.selectedProfilePosition == 1) {
+
+        } else if (req.body.selectedProfilePosition == 2) {
+
+        } else if (req.body.selectedProfilePosition == 3) {
+
+        }
+
         await db.updateUserProfilePhoto(req.user.id, req.body.selectedProfilePicture)
         
         res.redirect('/user-profile')

@@ -19,8 +19,6 @@ h4 {
 }
 
 .profile-info-container {
-    width: 80%;
-    padding-left: 0.5em;
 }
 
 .profile-ribbon-container {
@@ -99,6 +97,7 @@ h4 {
 .modal-profile-picture-selector {
     border: none;
     box-shadow: none;
+
 }
 
 
@@ -133,5 +132,9 @@ h4 {
 
     main {
         max-width: 1000px;
+    }
+
+    .modal-content {
+        width: 540px;
     }
 }
