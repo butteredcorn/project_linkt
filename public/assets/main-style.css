@@ -2,6 +2,7 @@
     font-family: Helvetica, sans-serif;
     margin: 0;
     padding: 0;
+    color: #303030;
 }
 
 html {
@@ -91,6 +92,8 @@ main {
 button {
     padding-left:0.5em;
     padding-right: 0.5em;
+    padding-top: 0.1em;
+    padding-bottom: 0.1em;
     border-radius: 25px;
     color: #FAFAFA;
     font-weight: bold;

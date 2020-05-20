@@ -50,6 +50,7 @@ main {
     background-color: rgb(241, 241, 241);
     height: 45vh;
     min-width: 300px;
+    margin-top: 1.5em;
     margin-bottom: 1.5em;
     overflow: hidden;
 }

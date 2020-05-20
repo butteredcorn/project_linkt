@@ -57,7 +57,7 @@ main :first-child {
     align-items: center;
     margin: 15px;
     padding: 15px;
-    color: #1E757E;
+    color: #303030;
 }
 
 .message-card > * {
@@ -72,6 +72,10 @@ main :first-child {
     width: 50%;
     word-wrap: break-word;
 
+}
+
+.most-recent-message {
+    word-wrap: break-word;
 }
 
 .match-username{
@@ -91,8 +95,12 @@ main :first-child {
         font-size: 11px;
     }
 
+    .most-recent-message {
+        font-size: 12px;
+    }
+
     .match-username {
-        font-size: 14px;
+        font-size: 16px;
     }
 
     .match-user-profile-photo {
@@ -114,6 +122,10 @@ main :first-child {
 
     * {
         font-size: 16px;
+    }
+
+    .match-username {
+        font-size: 20px;
     }
 
     .message-card {

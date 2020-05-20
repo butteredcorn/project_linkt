@@ -100,6 +100,10 @@ form {
         font-size: 11px;
     }
 
+    .profile-name {
+        font-size: 14px;
+    }
+
     a {
         font-size: 12px;
     }
@@ -132,6 +136,10 @@ form {
     
     h4 {
         font-size: 16px;
+    }
+
+    .profile-name {
+        font-size: 18px;
     }
 
     header {
