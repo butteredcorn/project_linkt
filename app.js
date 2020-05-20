@@ -188,11 +188,13 @@ module.exports = function () {
 
     app.get('/geolocationTest', protectedRoute, async(req, res) => {
         try {
-            console.log(req.ip)
-            // const geolocate = require('./controllers/ip-geolocation').getIPGeolocationData
-            // const data = await geolocate(req.ip)
+            // console.log(req.ip)
+            const geolocate = require('./controllers/ip-geolocation').getIPGeolocationData
+            const data = await geolocate(req.ip)
             // console.log(data)
-            res.send(req.ip)
+            const result = {ip_address: req.ip, geolocation_data: data}
+            console.log(result)
+            res.send(result)
         } catch (error) {
             console.log(error)
             res.send({message: 'error.'})
