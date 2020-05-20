@@ -81,9 +81,9 @@ main {
 .other-message {
     float: left;
     background-color: #1E757E;
-    width: 45%;
+    max-width: 45%;
     clear: both;
-    padding: 0.3em;
+    padding: 0.3em 0.5em;
     margin-top: 0.3em;
     text-align: left;
     color: white;
@@ -94,9 +94,9 @@ main {
 .my-message {
     float: right;
     background-color: #3BA3A8 ;
-    width: 45%;
+    max-width: 45%;
     clear: both;
-    padding: 0.3em;
+    padding: 0.3em 0.5em;
     text-align: right;
     color: white;
     border-radius: 10px;
