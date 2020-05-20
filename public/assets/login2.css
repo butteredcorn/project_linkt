@@ -88,3 +88,19 @@ form {
 .modal-input {
     margin-bottom:0.5em;
 }
+
+#account_signup {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+#account_signup > * {
+    margin: 0;
+}
+
+#signup-button {
+    padding: 0.5em;
+    padding-top: 0.4em;
+    padding-bottom: 0.4em;
+}
