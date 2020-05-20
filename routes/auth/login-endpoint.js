@@ -57,7 +57,10 @@ router.post('/', async (req, res) => {
         loginUser(email, password)
             .then(async (user) => {
                     user.current_location = currentLocation
-                    await db.updateUserCoordinates(user.id, currentLatitude, currentLongitude)
+
+                    if (currentLocation && currentLocation.latitude && currentLocation.longitude) {
+                        await db.updateUserCoordinates(user.id, currentLatitude, currentLongitude)
+                    }
 
                     if (locationData.geolocation_data.status == 'success') {
                         const city_of_residence = `${locationData.geolocation_data.city}, ${locationData.geolocation_data.region}`
