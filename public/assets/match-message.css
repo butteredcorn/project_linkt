@@ -19,7 +19,7 @@ ul {
 
 main {
     margin-top:5.1em;
-    margin-bottom: 5.1em;
+    /* margin-bottom: 5.1em; */
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
