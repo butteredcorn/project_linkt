@@ -105,11 +105,11 @@ main > * {
     overflow: hidden;
 }
 
-#image2 {
+.image2 {
     display: hidden;
 }
 
-#image3 {
+.image3 {
     display: hidden;
 }
 

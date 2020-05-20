@@ -116,6 +116,10 @@ main :first-child {
         font-size: 16px;
     }
 
+    .message-card {
+        min-width: 500px;
+    }
+
     header {
         max-width: 1000px;
     }

@@ -59,7 +59,26 @@ form {
 }
 
 #home_button {
-    margin: 50px 0 50px 0;
+    margin: 25px 0 25px 0;
+    height: 35px;
+    width: 125px;
+    background-color: #ED2265;
+    border-radius: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+#logout {
+    color: white;
+    display: flex;
+    justify-content: center;
+}
+
+#logout-button {
+    margin: 25px 0 25px 0;
     height: 35px;
     width: 125px;
     background-color: #ED2265;

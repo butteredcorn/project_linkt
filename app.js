@@ -191,8 +191,8 @@ module.exports = function () {
             // console.log(req.ip)
             const geolocate = require('./controllers/ip-geolocation').getIPGeolocationData
             const data = await geolocate(req.ip)
-            // console.log(data)
-            const result = {ip_address: req.ip, request_date: data.date, geolocation_data: data.data}
+            console.log(data)
+            const result = {ip_address: req.ip, request_date: data.headers.date, geolocation_data: data.data}
             console.log(result)
             res.send(result)
         } catch (error) {
