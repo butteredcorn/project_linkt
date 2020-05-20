@@ -177,9 +177,22 @@ module.exports = function () {
         }
     })
 
-    app.get('/api', async(req, res) => {
+    app.get('/api', protectedRoute, async(req, res) => {
         try {
             res.send({ data: 'Hello from express server!'})
+        } catch (error) {
+            console.log(error)
+            res.send({message: 'error.'})
+        }
+    })
+
+    app.get('/geolocationTest', protectedRoute, async(req, res) => {
+        try {
+            console.log(req.ip)
+            // const geolocate = require('./controllers/ip-geolocation').getIPGeolocationData
+            // const data = await geolocate(req.ip)
+            // console.log(data)
+            res.send(req.ip)
         } catch (error) {
             console.log(error)
             res.send({message: 'error.'})
