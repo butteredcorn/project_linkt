@@ -13,13 +13,15 @@ body {
 }
 
 .profile-container > * {
-    max-width: 400px;
+    width: 100%;
     margin-left: auto;
     margin-right: auto;
 }
 
 .profile-info-container {
-    width: 80%;
+    margin: 0;
+    margin-top: 1em;
+    width: 95%;
 }
 
 .profile-ribbon-container {
@@ -29,14 +31,31 @@ body {
 }
 
 .profile-photo {
+    display: flex;
+    justify-content: center;
     width: 80%;
     border: none;
 }
+
+.carousel-inner > .carousel-item > img {
+    margin: 0 auto;
+  }
 
 
 .profile-ribbon {
     display: flex;
     align-items: center;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+}
+
+.name {
+    text-transform: capitalize;
+    font-weight: bold;
+}
+
+.bio {
+    word-wrap: break-word;
 }
 
 .ribbon-content {
@@ -71,10 +90,14 @@ button {
     background-color: #ED2265;
     margin-left: 0.5em;
     margin-right: 0.5em;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
 }
 
 .like {
     background-color: #3BA3A8;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
     margin-left: 0.5em;
     margin-right: 0.5em;
 }
@@ -87,7 +110,21 @@ button {
 
 @media only screen and (max-width: 500px) {
     * {
-        font-size: 10px;
+        font-size: 11px;
+    }
+
+    button {
+        font-size: 12px;
+    }
+
+    .name {
+        font-size: 14px;
+    }
+
+    .profile-container {
+        margin-top: 6em;
+        margin-bottom: 6em;
+        width: 300px;
     }
 
     .profile-photo {
@@ -100,8 +137,14 @@ button {
 }
 @media only screen and (min-width: 501px) {
 
+    .profile-container {
+        margin-top: 3em;
+        margin-bottom: 3em;
+        width: 320px;
+    }
+
     .profile-photo {
-        max-width: 400px;
+        max-width: 320px;
     }
 
     header {

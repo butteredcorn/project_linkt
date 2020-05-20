@@ -6,6 +6,7 @@ DROP TABLE IF EXISTS user_preferences;
 DROP TABLE IF EXISTS user_personality_aspects;
 DROP TABLE IF EXISTS user_psychometrics;
 DROP TABLE IF EXISTS photo_labels;
+DROP TABLE IF EXISTS user_public_photos;
 DROP TABLE IF EXISTS user_photos;
 DROP TABLE IF EXISTS user_instagram;
 DROP TABLE IF EXISTS users;
@@ -46,6 +47,16 @@ CREATE TABLE user_photos (
     caption                 VARCHAR(255),
     media_type              VARCHAR(255),
     video_thumbnail_url     VARCHAR(255),
+    FOREIGN KEY (user_id)   REFERENCES users(id)
+);
+
+CREATE TABLE user_public_photos (
+    id                      INT PRIMARY KEY AUTO_INCREMENT,
+    instagram_post_id       BIGINT UNIQUE,
+    user_id                 INT NOT NULL,
+    photo_link              VARCHAR(255) NOT NULL,
+    position                INT NOT NULL,
+    last_updated            TIMESTAMP NOT NULL DEFAULT NOW(),
     FOREIGN KEY (user_id)   REFERENCES users(id)
 );
 

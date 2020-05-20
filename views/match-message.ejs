@@ -14,7 +14,7 @@
         <header class="main-header">
             <a href="/dashboard"><img class="back-button" src="assets/icons/left-arrow.png" alt="back-button"></a>
             <div class="header-element">
-                <p class="header-text">Message</p>
+                <p class="header-text"><%=match_username%></p>
             </div>
             <div class="header-element">
                 <img class="header-logo" src="/assets/icons/logo.png" alt="linkt-logo">
@@ -27,14 +27,14 @@
     <div class="main-container">
         <main>
             <div class="match-profile-container">
-                <div class="match-username"><h2><%=match_username%></h2></div>
+                <!-- <div class="match-username"><h2><%=match_username%></h2></div> -->
                 <input id="receiver_user_id" type="hidden" value="<%=match_user_id%>">
                 <input id="receiver_username" type="hidden" value="<%=match_username%>">
                 <div class="match-profile-photo-container"><img class="match-profile-photo" src="<%=match_profile_photo%>" alt="match-profile-photo"></div>
             </div>
             <div class="message-box-container">
                 <div class="message-box">
-                    <ul class="messages" id="messages"></ul>
+                    <ul class="messages"><div id="messages"></div></ul>
                 </div>
             </div>
 
@@ -55,9 +55,19 @@
             </nav>
         </footer>
     </div>
+    <input id="error" type="hidden" value="<%=error%>">
+
+    <form id="socket-error-form" action="/match-message" method="POST">
+        <input class="error-redirect" id="error_user_id" name="receiver_user_id" type="hidden" value="">
+        <input class="error-redirect" id="error_username" name="receiver_username" type="hidden" value="">
+        <input class="error-redirect" id="error_profile_picture" name="profile_picture" type="hidden" value="">
+        <input class="error-redirect" id="error_likes_user" name="likes_user" type="hidden" value="">
+    </form>
 </body>
+
 <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.dev.js"></script>
 <script src="assets/socket-io.js"></script>
+<script src="assets/error.js"></script>
 </html>

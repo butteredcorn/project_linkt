@@ -67,6 +67,14 @@ const getUserMatches = (user) => {
                 for(let match of otherUsers) {
                     delete match.password_hash
 
+                    const matchCarousel = await db.getUserPublicPhotos(undefined, `WHERE user_id = ${match.user_id} ORDER BY position`)
+                    
+                    if (matchCarousel && matchCarousel.length > 0) {
+                        match.carousel_photos = matchCarousel
+                    } else {
+                        match.carousel_photos = null
+                    }
+
                     //handled
                     const likesUser = await db.getUsersLikes(undefined, `WHERE user_id = ${match.user_id} AND likes_user_id = ${user.id}`)
 
@@ -87,6 +95,14 @@ const getUserMatches = (user) => {
     
                 for (let match of otherUsers) {
                     delete match.password_hash
+
+                    const matchCarousel = await db.getUserPublicPhotos(undefined, `WHERE user_id = ${match.user_id} ORDER BY position`)
+                    
+                    if (matchCarousel && matchCarousel.length > 0) {
+                        match.carousel_photos = matchCarousel
+                    } else {
+                        match.carousel_photos = null
+                    }
 
                     const likesUser = await db.getUsersLikes(undefined, `WHERE user_id = ${match.user_id} AND likes_user_id = ${user.id}`)
                     console.log(likesUser)
@@ -118,6 +134,9 @@ const getUserMatches = (user) => {
     
                 if (matchesWithNullDistance.length > 0) {
                     console.log(`Matches without distance_kms detected: ${matchesWithNullDistance}.`)
+                    // for (let match of matchesWithNullDistance) {
+                    //     matchesThatMeetDistanceRequirements.push(match) //push to the end for now.
+                    // }
                 }
     
                 //filters for user's gender setting, and age setting, joined with other users' personality aspects
@@ -147,6 +166,14 @@ const getUserMatchesUnhandled = (user) => {
                 for(let match of otherUsers) {
                     delete match.password_hash
 
+                    const matchCarousel = await db.getUserPublicPhotosUnhandled(undefined, `WHERE user_id = ${match.user_id} ORDER BY position`)
+                    
+                    if (matchCarousel && matchCarousel.length > 0) {
+                        match.carousel_photos = matchCarousel
+                    } else {
+                        match.carousel_photos = null
+                    }
+
                     //unhandled
                     const likesUser = await db.getUsersLikesUnhandled(undefined, `WHERE user_id = ${match.user_id} AND likes_user_id = ${user.id}`)
 
@@ -167,6 +194,14 @@ const getUserMatchesUnhandled = (user) => {
 
                 for (let match of otherUsers) {
                     delete match.password_hash
+
+                    const matchCarousel = await db.getUserPublicPhotosUnhandled(undefined, `WHERE user_id = ${match.user_id} ORDER BY position`)
+                    
+                    if (matchCarousel && matchCarousel.length > 0) {
+                        match.carousel_photos = matchCarousel
+                    } else {
+                        match.carousel_photos = null
+                    }
 
                     //unhandled
                     const likesUser = await db.getUsersLikesUnhandled(undefined, `WHERE user_id = ${match.user_id} AND likes_user_id = ${user.id}`)

@@ -111,6 +111,10 @@ const dropAndRecreateTables = () => {
         })
         .then((result) => {
             console.log(result.message)
+            return sqlCallback('DROP TABLE IF EXISTS user_public_photos')
+        })
+        .then((result) => {
+            console.log(result.message)
             return sqlCallback('DROP TABLE IF EXISTS user_photos')
         })
         .then((result) => {
@@ -163,6 +167,18 @@ const dropAndRecreateTables = () => {
                 caption                 VARCHAR(255),
                 media_type              VARCHAR(255),
                 video_thumbnail_url     VARCHAR(255),
+                FOREIGN KEY (user_id)   REFERENCES users(id)
+            )`)
+        })
+        .then((result) => {
+            console.log(result.message)
+            return sqlCallback(`CREATE TABLE user_public_photos (
+                id                      INT PRIMARY KEY AUTO_INCREMENT,
+                instagram_post_id       BIGINT UNIQUE,
+                user_id                 INT NOT NULL,
+                photo_link              VARCHAR(255) NOT NULL,
+                position                INT NOT NULL,
+                last_updated            TIMESTAMP NOT NULL DEFAULT NOW(),
                 FOREIGN KEY (user_id)   REFERENCES users(id)
             )`)
         })
@@ -347,6 +363,38 @@ const resetUserMessages = () => {
     })
 }
 
+const resetUserPublicPhotos = () => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            await createConnection()
+            sqlCallback('DROP TABLE IF EXISTS user_public_photos')
+            .then((result) => {
+                console.log(result.message)
+                return sqlCallback(`CREATE TABLE user_public_photos (
+                    id                      INT PRIMARY KEY AUTO_INCREMENT,
+                    instagram_post_id       BIGINT UNIQUE,
+                    user_id                 INT NOT NULL,
+                    photo_link              VARCHAR(255) NOT NULL,
+                    position                INT NOT NULL,
+                    last_updated            TIMESTAMP NOT NULL DEFAULT NOW(),
+                    FOREIGN KEY (user_id)   REFERENCES users(id)
+                )`)
+                .then((result) => {
+                    resolve(result)
+                })
+                .catch((error) => {
+                    reject(error)
+                })
+                .finally(() => {
+                    closeConnection()
+                })
+            })
+        } catch (error) {
+            reject(error)
+        }
+    })
+}
+
 const resetUsersLikes = () => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -514,6 +562,29 @@ const updateUserCoordinates = (id, current_latitude, current_longitude) => {
     })
 }
 
+const updateUserCityRegion = (id, city_region) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            await createConnection()
+            const table = 'users'
+            const sql = `UPDATE ${table} SET city_of_residence = ? WHERE id = ?`
+            const params = [city_region, id]
+            db.query(sql, params, (error, result) => {
+                if (error) {
+                    console.log(new Error(`${error} Problem updating user city_of_residence for ${id} in ${table}.`))
+                    reject(error)
+                }
+                resolve(rawDataPacketConverter(result))
+            })
+        } catch (error) {
+            console.log(error)
+            reject(error)
+        } finally {
+            closeConnection()
+        }
+    })
+}
+
 const updateUserProfilePhoto = (id, current_profile_picture) => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -533,6 +604,29 @@ const updateUserProfilePhoto = (id, current_profile_picture) => {
             reject(error)
         } finally {
             closeConnection()
+        }
+    })
+}
+
+const updateUserProfilePhotoUnhandled = (id, current_profile_picture) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            //await createConnection()
+            const table = 'users'
+            const sql = `UPDATE ${table} SET current_profile_picture = ? WHERE id = ?`
+            const params = [current_profile_picture, id]
+            db.query(sql, params, (error, result) => {
+                if (error) {
+                    console.log(new Error(`${error} Problem updating user profile photo for ${id} in ${table}.`))
+                    reject(error)
+                }
+                resolve(rawDataPacketConverter(result))
+            })
+        } catch (error) {
+            console.log(error)
+            reject(error)
+        } finally {
+            //closeConnection()
         }
     })
 }
@@ -765,6 +859,147 @@ const updateUserPhotoNonHandles = (instagram_post_id, user_id, photo_link, video
             db.query(sql, params, (error, result) => {
                 if (error) {
                     console.log(`${error} Problem creating updating user photo for ${table}.`)
+                    reject(error)
+                }
+                resolve(rawDataPacketConverter(result))
+            })
+        } catch (error) {
+            console.log(error)
+            reject(error)
+        } finally {
+            //closeConnection()
+        }     
+    })
+}
+
+/**
+ * user_public_photos
+ * @param {*} selectBy 
+ * @param {*} searchBy 
+ */
+const getUserPublicPhotos = (selectBy = '*', searchBy = '') => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            await createConnection()
+            const table = 'user_public_photos'
+            const sql = `SELECT ${selectBy} FROM ${table} ${searchBy}`
+            db.query(sql, (error, result) => {
+                if (error) {
+                    console.log(`Problem searching for ${table} by ${searchBy}.`)
+                    reject(error)
+                }
+                resolve(rawDataPacketConverter(result))
+            })
+        } catch (error) {
+            console.log(error)
+            reject(error)
+        } finally {
+            closeConnection()
+        }
+    })
+}
+
+const getUserPublicPhotosUnhandled = (selectBy = '*', searchBy = '') => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            //await createConnection()
+            const table = 'user_public_photos'
+            const sql = `SELECT ${selectBy} FROM ${table} ${searchBy}`
+            db.query(sql, (error, result) => {
+                if (error) {
+                    console.log(`Problem searching for ${table} by ${searchBy}.`)
+                    reject(error)
+                }
+                resolve(rawDataPacketConverter(result))
+            })
+        } catch (error) {
+            console.log(error)
+            reject(error)
+        } finally {
+            //closeConnection()
+        }
+    })
+}
+
+const createUserPublicPhoto = (user_id, photo_link, position, instagram_post_id) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            await createConnection()
+            const table = 'user_public_photos'
+            const sql = `INSERT INTO ${table} (user_id, photo_link, position, instagram_post_id) VALUES (?, ?, ?, ?)`
+            const params = [user_id, photo_link, position, instagram_post_id]
+            db.query(sql, params, (error, result) => {
+                if (error) {
+                    console.log(`${error} Problem creating user public photo and inserting into ${table}.`)
+                    reject(error)
+                }
+                resolve(rawDataPacketConverter(result))
+            })
+        } catch (error) {
+            console.log(error)
+            reject(error)
+        } finally {
+            closeConnection()
+        }     
+    })
+}
+
+const createUserPublicPhotoUnhandled = (user_id, photo_link, position, instagram_post_id) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            //await createConnection()
+            const table = 'user_public_photos'
+            const sql = `INSERT INTO ${table} (user_id, photo_link, position, instagram_post_id) VALUES (?, ?, ?, ?)`
+            const params = [user_id, photo_link, position, instagram_post_id]
+            db.query(sql, params, (error, result) => {
+                if (error) {
+                    console.log(`${error} Problem creating user public photo and inserting into ${table}.`)
+                    reject(error)
+                }
+                resolve(rawDataPacketConverter(result))
+            })
+        } catch (error) {
+            console.log(error)
+            reject(error)
+        } finally {
+            //closeConnection()
+        }     
+    })
+}
+
+const updateUserPublicPhoto = (user_id, photo_link, position, instagram_post_id) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            await createConnection()
+            const table = 'user_public_photos'
+            const sql = `UPDATE ${table} SET photo_link = ?, instagram_post_id = ? WHERE position = ? AND user_id = ?`
+            const params = [photo_link, instagram_post_id, position, user_id]
+            db.query(sql, params, (error, result) => {
+                if (error) {
+                    console.log(`${error} Problem creating updating user public photo for ${table}.`)
+                    reject(error)
+                }
+                resolve(rawDataPacketConverter(result))
+            })
+        } catch (error) {
+            console.log(error)
+            reject(error)
+        } finally {
+            closeConnection()
+        }     
+    })
+}
+
+const updateUserPublicPhotoUnhandled = (user_id, photo_link, position, instagram_post_id) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            //await createConnection()
+            const table = 'user_public_photos'
+            const sql = `UPDATE ${table} SET photo_link = ?, instagram_post_id = ? WHERE position = ? AND user_id = ?`
+            const params = [photo_link, instagram_post_id, position, user_id]
+            db.query(sql, params, (error, result) => {
+                if (error) {
+                    console.log(`${error} Problem creating updating user public photo for ${table}.`)
                     reject(error)
                 }
                 resolve(rawDataPacketConverter(result))
@@ -1098,6 +1333,28 @@ const getUserMessages = (selectBy = '*', searchBy = '') => {
     })
 }
 
+const getUserMessagesUnhandled = (selectBy = '*', searchBy = '') => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            //await createConnection()
+            const table = 'user_messages'
+            const sql = `SELECT ${selectBy} FROM ${table} ${searchBy}`
+            db.query(sql, (error, result) => {
+                if (error) {
+                    console.log(`Problem searching for ${table} by ${searchBy}.`)
+                    reject(error)
+                }
+                resolve(rawDataPacketConverter(result))
+            })
+        } catch (error) {
+            console.log(error)
+            reject(error)
+        } finally {
+            //closeConnection()
+        }
+    })
+}
+
 const createUserMessage = (sender_id, receiver_id, socket_key, message_text) => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -1274,13 +1531,16 @@ module.exports = {
     resetDatabase,
     resetUserMessages,
     resetUsersLikes,
+    resetUserPublicPhotos,
     getUsers,
     getUsersUnhandled,
     getUserByID,
     createUser,
     updateUserGenderAndMaxDistance,
     updateUserCoordinates,
+    updateUserCityRegion,
     updateUserProfilePhoto,
+    updateUserProfilePhotoUnhandled,
     updateUserProfileBioAndHeadline,
     getUserInstagrams,
     getUserInstagramsNonHandled,
@@ -1291,6 +1551,12 @@ module.exports = {
     getUserPhotosUnhandled,
     createUserPhotoNonHandled,
     updateUserPhotoNonHandles,
+    getUserPublicPhotos,
+    getUserPublicPhotosUnhandled,
+    createUserPublicPhoto,
+    createUserPublicPhotoUnhandled,
+    updateUserPublicPhoto,
+    updateUserPublicPhotoUnhandled,
     getPhotoLabels,
     createPhotoLabelNonHandled,
     getUserMetrics,
@@ -1304,6 +1570,7 @@ module.exports = {
     createUserPersonalityAspects,
     createUserPersonalityAspectsUnhandled,
     getUserMessages,
+    getUserMessagesUnhandled,
     createUserMessage,
     getUserCareerAndEducation,
     createUserCareerAndEducation,

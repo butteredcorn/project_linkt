@@ -6,6 +6,7 @@ module.exports = function () {
     require('dotenv').config()
     const { verifyExistingToken } = require('./controllers/json-web-token')
     const db = require('./sql/database-interface')
+    const { MAX_UNLIKED_MESSAGES_PER_USER_FREE } = require('./globals')
 
     const app = express()
     const server = require('http').createServer(app);
@@ -80,29 +81,61 @@ module.exports = function () {
             try {
                 console.log(`user_id: ${socket.user.id} sender_username: ${socket.username} receiver_username: ${data.receiver_username} message: ${data.message}`) //data also has data.token property with the full token (not parsed)
 
-                //take received message and emit to the right user
-                if(data.receiver_username in users) {
-                    for (let key in users) {
-                        if(key == data.receiever_username) {
-                            //receiver user join the private room
-                            users[key].join(socketKey)
+                const userLikedByMatch = await db.getUsersLikes(undefined, `WHERE user_id = ${socket.receiver_user_id} AND likes_user_id = ${socket.user.id}`)
+                
+                //get messages in the last day
+                const messagesToday = await db.getUserMessages(undefined, `WHERE (date_created > DATE_SUB(NOW(), INTERVAL 24 HOUR)) AND (sender_id = ${socket.user.id} OR receiver_id = ${socket.user.id}) AND (sender_id = ${socket.receiver_user_id} OR receiver_id = ${socket.receiver_user_id})`)
+                
+                // console.log(messagesToday)
+                // console.log(userLikedByMatch)
+                
+                if (userLikedByMatch && userLikedByMatch.length > 0 || (messagesToday && messagesToday.length < MAX_UNLIKED_MESSAGES_PER_USER_FREE)) {
+
+                    //take received message and emit to the right user
+                    if(data.receiver_username in users) {
+                        for (let key in users) {
+                            if(key == data.receiever_username) {
+                                //receiver user join the private room
+                                users[key].join(socketKey)
+                            }
                         }
+                        //message the 'user' socket
+                        //users[socket.username].emit('new message', [{username: socket.username, receiver_username: data.receiver_username, message: data.message}])
+                        //users[data.receiver_username].emit('new message', [{username: socket.username, receiver_username: data.receiver_username, message: data.message}])                            
                     }
-                    //message the 'user' socket
-                    //users[socket.username].emit('new message', [{username: socket.username, receiver_username: data.receiver_username, message: data.message}])
-                    //users[data.receiver_username].emit('new message', [{username: socket.username, receiver_username: data.receiver_username, message: data.message}])                            
+        
+                    //push message to database, and have receiving user load messages upon socket initialization
+                    //alternative to data.receiver_user_id - socket.receiver_user_id
+                    await db.createUserMessage(socket.user.id, socket.receiver_user_id, socketKey, data.message) 
+        
+                    //message the 'room' socket
+                    //don't need user_id for data?
+                    io.sockets.in(socketKey).emit('new message', [{username: socket.username, receiver_username: data.receiver_username, message: data.message}]);
+                    resolve('done.')
+                } else {
+                    const userLikeError = (new Error(`This user has yet to like you back. Until you both like eachother, you can only send ${MAX_UNLIKED_MESSAGES_PER_USER_FREE} message to this user per day.`))
+                    const match = await (db.getUsers(undefined, `WHERE id = ${socket.receiver_user_id}`))
+                
+                    //console.log(match[0])
+                    //console.log(userLikeError)
+
+                    const querystring = require('querystring')
+                    const query = querystring.stringify({
+                        error: userLikeError.message
+                    })
+
+                    socket.emit('not liked error', [{
+                        match_user_id: socket.receiver_user_id,
+                        match_username: socket.receiver_username,
+                        match_profile_photo: match[0].current_profile_picture,
+                        // match_user_likes: ,
+                        url: '/match-message' + '?' + query,
+                        error_message: userLikeError.message
+                    }])
                 }
-    
-                //push message to database, and have receiving user load messages upon socket initialization
-                //alternative to data.receiver_user_id - socket.receiver_user_id
-                await db.createUserMessage(socket.user.id, socket.receiver_user_id, socketKey, data.message) 
-    
-                //message the 'room' socket
-                //don't need user_id for data?
-                io.sockets.in(socketKey).emit('new message', [{username: socket.username, receiver_username: data.receiver_username, message: data.message}]);
-            
             } catch (error) {
                 console.log(error)
+                
             }
         })
 
@@ -144,9 +177,32 @@ module.exports = function () {
         }
     })
 
-    app.get('/api', async(req, res) => {
+    app.get('/api', protectedRoute, async(req, res) => {
         try {
             res.send({ data: 'Hello from express server!'})
+        } catch (error) {
+            console.log(error)
+            res.send({message: 'error.'})
+        }
+    })
+
+    app.get('/geolocationTest', protectedRoute, async(req, res) => {
+        try {
+            // console.log(req.ip)
+            const {getIPGeolocationData, getIP} = require('./controllers/ip-geolocation')
+
+            const ip = await getIP(req)
+            console.log(ip)
+
+            const headersIPData = await getIPGeolocationData(ip)
+            const reqIPData = await getIPGeolocationData(req.ip)
+                        
+            const reqIPresult = {req_ip_address: req.ip, request_date: reqIPData.headers.date, geolocation_data: reqIPData.data}
+            const headersIPresult = {headers_ip_address: ip, request_date: headersIPData.headers.date, geolocation_data: headersIPData.data }
+            
+            const result = {req_ip_data: reqIPresult, headers_ip_data: headersIPresult}
+            console.log(result)
+            res.send(result)
         } catch (error) {
             console.log(error)
             res.send({message: 'error.'})

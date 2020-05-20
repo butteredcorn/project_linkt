@@ -33,12 +33,15 @@
                     <div class="ribbon"><img class="profile-photo-thumbnail" src="<%=user.current_profile_picture%>" alt="profile thumbnail"><p class="profile-name"><%=`${user.first_name} ${user.last_name}`%></p></div>
                     <div class="ribbon"><h4>Email</h4><p class="profile-email"><%= user.email%></p></div>
                     <div class="ribbon"><h4>Location</h4><p><%=`Latitude: ${user.current_latitude} Longitude: ${user.current_longitude}`%></p></div>
+                    <%if (user.city_of_residence) {%>
+                    <div class="ribbon"><h4>Current City</h4><p><%=user.city_of_residence%></p></div>
+                    <%}%>
                 </div>
     
                 <div class="discovery-settings">
                     <div class="ribbon header-ribbon"><h2 class="discovery-settings-header">DISCOVERY SETTINGS</h2><a href="/user-settings">Edit Discovery</a></div>
                     <div class="ribbon"><h4>Maximum Distance</h4><p><%=`${user.max_distance} KMs`%></p></div>
-                    <div class="ribbon"><h4>Show Me</h4><p><%=user.partner_gender%></p></div>
+                    <div class="ribbon show-me"><h4>Show Me</h4><p><%=user.partner_gender%></p></div>
                     <div class="ribbon"><h4>Age Range</h4><p><%=`${user.partner_age_min} - ${user.partner_age_max}`%></p></div>
                 </div>
     
@@ -47,12 +50,18 @@
                     <div class="ribbon"><h4>Show me on Linkt</h4></div>
                 </div>
 
+                
+
                 <div id="user_settings_form">
                     <form method='post' action='/user-settings-page'>
                         <input class="" id="" name="" type="hidden" value="">
                         <button id="home_button" type='submit'>Save</button>
                     </form>
                 </div>
+
+                <!-- <div id="logout">
+                    <button id="logout-button" type="button" onclick="logout()">Logout</button>
+                </div> -->
 
             </div>
         </main>
@@ -68,4 +77,5 @@
         </footer>
     </div>
 </body>
+<script src="assets/logout.js"></script>
 </html>

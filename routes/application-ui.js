@@ -112,8 +112,18 @@ router.post('/match-profile', protectedRoute, async(req, res) => {
 
         console.log(req.body)
 
+        let matchCarouselPhotos
+        const result = await db.getUserPublicPhotos(undefined, `WHERE user_id = ${req.body.user_id} ORDER BY position`)
+        if (result && result.length > 0) {
+            matchCarouselPhotos = result
+        } else {
+            matchCarouselPhotos = undefined
+        }
+
+
         res.render('match-profile', {
-            matchProfile: req.body
+            matchProfile: req.body,
+            matchCarouselPhotos: matchCarouselPhotos
         })
     } catch (error) {
         console.log(error)
@@ -155,12 +165,14 @@ router.get('/match-message', protectedRoute, async(req, res) => {
 router.post('/match-message', protectedRoute, async(req, res) => {
     try {
         console.log(req.body)
-
+        
         res.render('match-message', {
             match_user_id: req.body.receiver_user_id,
             match_username: req.body.receiver_username,
             match_profile_photo: req.body.profile_picture,
-            socket_url: SOCKET_IO_URL
+            match_user_likes: req.body.match_likes_user,
+            socket_url: SOCKET_IO_URL,
+            error: req.query.error
         })
     } catch (error) {
         console.log(error)
@@ -182,6 +194,7 @@ router.get('/user-messages', protectedRoute, async(req, res) => {
                     message.match_id = user.user_id
                     message.match_username = user.first_name + " " + user.last_name
                     message.match_profile_picture = user.current_profile_picture
+                    message.match_likes_user = user.likes_user
                     otherUsersThatHaveMessaged.push(user)
                     message.username = user.first_name + " " + user.last_name
                     break;
@@ -189,6 +202,7 @@ router.get('/user-messages', protectedRoute, async(req, res) => {
                     message.match_id = user.user_id
                     message.match_username = user.first_name + " " + user.last_name
                     message.match_profile_picture = user.current_profile_picture
+                    message.match_likes_user = user.likes_user
                     otherUsersThatHaveMessaged.push(user)
                     message.receiver_username = user.first_name + " " + user.last_name
                     break;
@@ -291,11 +305,12 @@ router.post('/user-settings-page', protectedRoute, async(req, res) => {
 
 router.get('/user-profile', protectedRoute, async(req, res) => {
     try {
-        const {userObject, userPhotos} = await loadUserProfile(req.user)
+        const {userObject, userPhotos, userCarouselPhotos} = await loadUserProfile(req.user)
         console.log(userObject)
         res.render('user-profile', {
             user: userObject,
-            userPhotos: userPhotos
+            userPhotos: userPhotos,
+            userCarouselPhotos: userCarouselPhotos
         })
 
     } catch (error) {
@@ -343,13 +358,27 @@ router.post('/profile-settings', protectedRoute, async(req, res) => {
 
 router.post('/user-profile-picture', protectedRoute, async(req, res) => {
     try {
-        await db.updateUserProfilePhoto(req.user.id, req.body.selectedProfilePicture)
+        console.log(req.body)
+        await db.createConnection()
+        //leave for legacy support
+        await db.updateUserProfilePhotoUnhandled(req.user.id, req.body.selectedProfilePicture)
+
+        //migrate to this new table
+        const publicPosition = await db.getUserPublicPhotosUnhandled(undefined, `WHERE position = ${req.body.selectedProfilePosition} AND user_id = ${req.user.id}`)
+        
+        if(publicPosition && publicPosition.length == 0) {
+            await db.createUserPublicPhotoUnhandled(req.user.id, req.body.selectedProfilePicture, req.body.selectedProfilePosition)
+        } else {
+            await db.updateUserPublicPhotoUnhandled(req.user.id, req.body.selectedProfilePicture, req.body.selectedProfilePosition, undefined)
+        }
         
         res.redirect('/user-profile')
 
     } catch (error) {
         console.log(error)
         res.send(UI_ROUTE_ERROR)
+    } finally {
+        db.closeConnection()
     }
 })
 

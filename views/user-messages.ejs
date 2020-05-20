@@ -29,14 +29,15 @@
                     <% for (let message of user_messages) {  %>
                         <form action="/match-message" method="POST">
                             <button class="message-card" type="submit">
-                            <img class="match-user-profile-photo" src="<%=message.match_profile_picture%>" alt="other-user-profile-photo">
-                            <div class="text-column">
-                                <p class="match-username"><%=message.match_username%></p>
-                                <p class="most-recent-message"><%=message.message_text%></p>
-                            </div>
-                            <input class="message-selected" name="receiver_user_id" type="hidden" value="<%=message.match_id%>">
-                            <input class="message-selected" name="receiver_username" type="hidden" value="<%=message.match_username%>">
-                            <input class="message-selected" name="profile_picture" type="hidden" value="<%=message.match_profile_picture%>">
+                                <img class="match-user-profile-photo" src="<%=message.match_profile_picture%>" alt="other-user-profile-photo">
+                                <div class="text-column">
+                                    <p class="match-username"><%=message.match_username%></p>
+                                    <p class="most-recent-message"><%=message.message_text%></p>
+                                </div>
+                                <input class="message-selected" name="receiver_user_id" type="hidden" value="<%=message.match_id%>">
+                                <input class="message-selected" name="receiver_username" type="hidden" value="<%=message.match_username%>">
+                                <input class="message-selected" name="profile_picture" type="hidden" value="<%=message.match_profile_picture%>">
+                                <input class="message-selected" name="likes_user" type="hidden" value="<%=message.match_likes_user%>">
                             </button>
                         </form>
                     <%}%>

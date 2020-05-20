@@ -1,15 +1,4 @@
 /* test CSS */
-.other-message {
-    display: flex;
-    flex-direction: row-reverse;
-    color: #3BA3A8;
-  }
-  
-.my-message {
-    display: flex;
-    color: #303030;
-}
-
 ul {
     list-style-type: none;
 }
@@ -17,15 +6,24 @@ ul {
 
 
 .main-container {
-    padding-top: 8em;
-    padding-bottom: 4em;
+    
 }
 
 .message {
     background-color: #ED2265;
 }
 
+.main-container {
+    height: 100vh;
+}
+
 main {
+    margin-top:5.1em;
+    /* margin-bottom: 5.1em; */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    height: 80%;
     margin-left: auto;
     margin-right: auto;
 }
@@ -36,6 +34,7 @@ main {
 }
 
 .match-profile-photo {
+    margin-top:5.1em;
     border-radius: 100%;
     max-width: 80vw;
 }
@@ -47,21 +46,27 @@ main {
 }
 
 .message-box {
+    display: flex;
     background-color: rgb(241, 241, 241);
-    min-height: 30vw;
+    height: 45vh;
     min-width: 300px;
-    margin-bottom: 2em;
+    margin-top: 1.5em;
+    margin-bottom: 1.5em;
+    overflow: hidden;
 }
 
 #outGoingMessage {
     border: 2px solid lightgray;
+    min-width: 200px;
 }
 
 .message-submit-button {
     background-color: #ED2265;
     font-weight: normal;
-    padding-left: 0.2em;
-    padding-right: 0.2em;
+    padding-left: 0.4em;
+    padding-right: 0.4em;
+    margin-bottom: 5.1em;
+
 }
 
 .input-box {
@@ -74,10 +79,43 @@ main {
     justify-content: space-around;
 }
 
+.messages {
+    width: 100%;
+    word-wrap: break-word;
+    padding: 1em;
+}
+
+.other-message {
+    float: left;
+    background-color: #1E757E;
+    max-width: 45%;
+    clear: both;
+    padding: 0.3em 0.5em;
+    margin-top: 0.3em;
+    text-align: left;
+    color: white;
+    border-radius: 10px;
+
+  }
+  
+.my-message {
+    float: right;
+    background-color: #3BA3A8 ;
+    max-width: 45%;
+    clear: both;
+    padding: 0.3em 0.5em;
+    text-align: right;
+    color: white;
+    border-radius: 10px;
+    margin-top: 0.3em;
+
+
+}
+
 @media only screen and (max-width: 500px) {
     
     * {
-        font-size: 10px;
+        font-size: 12px;
     }
 
     .match-profile-photo {

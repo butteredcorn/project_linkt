@@ -1,5 +1,14 @@
 h4 {
-    font-size: 1.20em;
+    font-size: 1.25em;
+}
+
+h2 {
+    font-size: 1.6em;
+}
+
+.edit-link {
+    font-size: 1.1em;
+    margin-bottom: 0.5em;
 }
 
 .main-container {
@@ -19,8 +28,6 @@ h4 {
 }
 
 .profile-info-container {
-    width: 80%;
-    padding-left: 0.5em;
 }
 
 .profile-ribbon-container {
@@ -35,6 +42,7 @@ h4 {
 }
 
 .name {
+    margin-bottom: 0.5em;
     margin-top: 1em;
     font-size: 1.5em;
 }
@@ -99,16 +107,35 @@ h4 {
 .modal-profile-picture-selector {
     border: none;
     box-shadow: none;
+
+}
+
+.profile-ribbon {
+    display: flex;
+    align-items: center;
+    margin-top: 0.2em;
+    margin-bottom: 0.2em;
+}
+
+.ribbon-content, .raw-location {
+    display: flex;
+    align-items: center;
+    margin: 0;
 }
 
 
 @media only screen and (max-width: 500px) {
     * {
-        font-size: 10px;
+        font-size: 11px;
     }
 
-    .profile-photo {
-        max-width: 300px;
+    .edit-link {
+        font-size: 1.1em;
+        margin-bottom: 0.5em;
+    }
+
+    .profile-container {
+        max-width:320px;
     }
 
     .main-container {
@@ -116,10 +143,33 @@ h4 {
     }
 
     main {
-        padding-top: 6em;
+        padding-top: 2em;
         padding-bottom: 3em;
         width: 100vw;
     }
+
+    .modal-profile-picture-thumbnail {
+        display: flex;
+        justify-content: center;
+    }
+
+    .modal-profile-picture-selector {
+        display: flex;
+        justify-content: center;
+        background-color: white;
+    }
+
+    .modal-body {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    /* .modal-content {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    } */
 }
 @media only screen and (min-width: 501px) {
 
@@ -133,5 +183,9 @@ h4 {
 
     main {
         max-width: 1000px;
+    }
+
+    .modal-content {
+        width: 540px;
     }
 }

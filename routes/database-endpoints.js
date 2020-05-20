@@ -59,6 +59,21 @@ router.get('/reset/resetUsersLikes', protectedRoute, async (req, res, next) => {
     }
 })
 
+router.get('/reset/resetUserPublicPhotos', protectedRoute, async (req, res, next) => {
+    try {
+        await checkAdministratorPrivilege(req.user)
+        //await db.createConnection()
+        //takes path to directory of resources, do not enter filenames
+        const result = await db.resetUserPublicPhotos()
+        console.log(result)
+        res.send(result)
+    } catch (error) {
+        throw error
+    } finally {
+        //await db.closeConnection()
+    }
+})
+
 router.get('/getUsers', protectedRoute, async (req, res, next) => {
     try {
         await checkAdministratorPrivilege(req.user)
@@ -111,6 +126,20 @@ router.get('/getUserPhotos', protectedRoute, async (req, res) => {
         const selectBy = req.query.selectBy
         const searchBy = req.query.searchBy
         const result = await db.getUserPhotos(selectBy, searchBy)
+        console.log(result)
+        res.send(result)
+    } catch (error) {
+        console.log(error)
+        throw error
+    }
+})
+
+router.get('/getUserPublicPhotos', protectedRoute, async (req, res) => {
+    try {
+        await checkAdministratorPrivilege(req.user)
+        const selectBy = req.query.selectBy
+        const searchBy = req.query.searchBy
+        const result = await db.getUserPublicPhotos(selectBy, searchBy)
         console.log(result)
         res.send(result)
     } catch (error) {
