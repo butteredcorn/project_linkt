@@ -123,6 +123,29 @@ h4 {
         padding-bottom: 3em;
         width: 100vw;
     }
+
+    .modal-profile-picture-thumbnail {
+        display: flex;
+        justify-content: center;
+    }
+
+    .modal-profile-picture-selector {
+        display: flex;
+        justify-content: center;
+        background-color: white;
+    }
+
+    .modal-body {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    /* .modal-content {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    } */
 }
 @media only screen and (min-width: 501px) {
 
