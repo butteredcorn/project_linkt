@@ -359,16 +359,17 @@ router.post('/profile-settings', protectedRoute, async(req, res) => {
 router.post('/user-profile-picture', protectedRoute, async(req, res) => {
     try {
         console.log(req.body)
-
+        await db.createConnection()
         //leave for legacy support
-        await db.updateUserProfilePhoto(req.user.id, req.body.selectedProfilePicture)
+        await db.updateUserProfilePhotoUnhandled(req.user.id, req.body.selectedProfilePicture)
 
         //migrate to this new table
-        const publicPosition = await db.getUserPublicPhotos(undefined, `WHERE position = ${req.body.selectedProfilePosition} AND user_id = ${req.user.id}`)
+        const publicPosition = await db.getUserPublicPhotosUnhandled(undefined, `WHERE position = ${req.body.selectedProfilePosition} AND user_id = ${req.user.id}`)
+        
         if(publicPosition && publicPosition.length == 0) {
-            await db.createUserPublicPhoto(req.user.id, req.body.selectedProfilePicture, req.body.selectedProfilePosition)
+            await db.createUserPublicPhotoUnhandled(req.user.id, req.body.selectedProfilePicture, req.body.selectedProfilePosition)
         } else {
-            await db.updateUserPublicPhoto(req.user.id, req.body.selectedProfilePicture, req.body.selectedProfilePosition)
+            await db.updateUserPublicPhotoUnhandled(req.user.id, req.body.selectedProfilePicture, req.body.selectedProfilePosition, undefined)
         }
         
         res.redirect('/user-profile')
@@ -376,6 +377,8 @@ router.post('/user-profile-picture', protectedRoute, async(req, res) => {
     } catch (error) {
         console.log(error)
         res.send(UI_ROUTE_ERROR)
+    } finally {
+        db.closeConnection()
     }
 })
 

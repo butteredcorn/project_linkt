@@ -1,5 +1,14 @@
 h4 {
-    font-size: 1.20em;
+    font-size: 1.25em;
+}
+
+h2 {
+    font-size: 1.6em;
+}
+
+.edit-link {
+    font-size: 1.1em;
+    margin-bottom: 0.5em;
 }
 
 .main-container {
@@ -33,6 +42,7 @@ h4 {
 }
 
 .name {
+    margin-bottom: 0.5em;
     margin-top: 1em;
     font-size: 1.5em;
 }
@@ -100,15 +110,29 @@ h4 {
 
 }
 
+.profile-ribbon {
+    display: flex;
+    align-items: center;
+    margin-top: 0.2em;
+    margin-bottom: 0.2em;
+}
+
+.ribbon-content, .raw-location {
+    display: flex;
+    align-items: center;
+    margin: 0;
+}
+
 
 @media only screen and (max-width: 500px) {
     * {
-        font-size: 10px;
+        font-size: 11px;
     }
 
-    /* .profile-photo {
-        max-width: 300px;
-    } */
+    .edit-link {
+        font-size: 1.1em;
+        margin-bottom: 0.5em;
+    }
 
     .profile-container {
         max-width:320px;

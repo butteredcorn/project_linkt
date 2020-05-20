@@ -585,6 +585,29 @@ const updateUserProfilePhoto = (id, current_profile_picture) => {
     })
 }
 
+const updateUserProfilePhotoUnhandled = (id, current_profile_picture) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            //await createConnection()
+            const table = 'users'
+            const sql = `UPDATE ${table} SET current_profile_picture = ? WHERE id = ?`
+            const params = [current_profile_picture, id]
+            db.query(sql, params, (error, result) => {
+                if (error) {
+                    console.log(new Error(`${error} Problem updating user profile photo for ${id} in ${table}.`))
+                    reject(error)
+                }
+                resolve(rawDataPacketConverter(result))
+            })
+        } catch (error) {
+            console.log(error)
+            reject(error)
+        } finally {
+            //closeConnection()
+        }
+    })
+}
+
 const updateUserProfileBioAndHeadline = (id, bio, headline) => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -898,11 +921,57 @@ const createUserPublicPhoto = (user_id, photo_link, position, instagram_post_id)
     })
 }
 
-const updateUserPublicPhoto = (user_id, photo_link, position, instagram_post_id) => {
+const createUserPublicPhotoUnhandled = (user_id, photo_link, position, instagram_post_id) => {
     return new Promise(async (resolve, reject) => {
         try {
             //await createConnection()
-            const table = 'user_photos'
+            const table = 'user_public_photos'
+            const sql = `INSERT INTO ${table} (user_id, photo_link, position, instagram_post_id) VALUES (?, ?, ?, ?)`
+            const params = [user_id, photo_link, position, instagram_post_id]
+            db.query(sql, params, (error, result) => {
+                if (error) {
+                    console.log(`${error} Problem creating user public photo and inserting into ${table}.`)
+                    reject(error)
+                }
+                resolve(rawDataPacketConverter(result))
+            })
+        } catch (error) {
+            console.log(error)
+            reject(error)
+        } finally {
+            //closeConnection()
+        }     
+    })
+}
+
+const updateUserPublicPhoto = (user_id, photo_link, position, instagram_post_id) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            await createConnection()
+            const table = 'user_public_photos'
+            const sql = `UPDATE ${table} SET photo_link = ?, instagram_post_id = ? WHERE position = ? AND user_id = ?`
+            const params = [photo_link, instagram_post_id, position, user_id]
+            db.query(sql, params, (error, result) => {
+                if (error) {
+                    console.log(`${error} Problem creating updating user public photo for ${table}.`)
+                    reject(error)
+                }
+                resolve(rawDataPacketConverter(result))
+            })
+        } catch (error) {
+            console.log(error)
+            reject(error)
+        } finally {
+            closeConnection()
+        }     
+    })
+}
+
+const updateUserPublicPhotoUnhandled = (user_id, photo_link, position, instagram_post_id) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            //await createConnection()
+            const table = 'user_public_photos'
             const sql = `UPDATE ${table} SET photo_link = ?, instagram_post_id = ? WHERE position = ? AND user_id = ?`
             const params = [photo_link, instagram_post_id, position, user_id]
             db.query(sql, params, (error, result) => {
@@ -1425,6 +1494,7 @@ module.exports = {
     updateUserGenderAndMaxDistance,
     updateUserCoordinates,
     updateUserProfilePhoto,
+    updateUserProfilePhotoUnhandled,
     updateUserProfileBioAndHeadline,
     getUserInstagrams,
     getUserInstagramsNonHandled,
@@ -1438,7 +1508,9 @@ module.exports = {
     getUserPublicPhotos,
     getUserPublicPhotosUnhandled,
     createUserPublicPhoto,
+    createUserPublicPhotoUnhandled,
     updateUserPublicPhoto,
+    updateUserPublicPhotoUnhandled,
     getPhotoLabels,
     createPhotoLabelNonHandled,
     getUserMetrics,
