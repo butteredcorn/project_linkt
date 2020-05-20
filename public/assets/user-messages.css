@@ -30,6 +30,11 @@ main {
     padding: 1em;
     color: #303030;
     text-align: left;
+    margin-top: 2em;
+}
+
+.text-column {
+    width: 50%;
 }
 
 .match-username{

@@ -20,6 +20,10 @@ main > * {
 
 }
 
+.name {
+    text-transform: capitalize;
+}
+
 .card-container {
     display: flex;
     flex-direction: column;
