@@ -562,6 +562,29 @@ const updateUserCoordinates = (id, current_latitude, current_longitude) => {
     })
 }
 
+const updateUserCityRegion = (id, city_region) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            await createConnection()
+            const table = 'users'
+            const sql = `UPDATE ${table} SET city_of_residence = ? WHERE id = ?`
+            const params = [city_region, id]
+            db.query(sql, params, (error, result) => {
+                if (error) {
+                    console.log(new Error(`${error} Problem updating user city_of_residence for ${id} in ${table}.`))
+                    reject(error)
+                }
+                resolve(rawDataPacketConverter(result))
+            })
+        } catch (error) {
+            console.log(error)
+            reject(error)
+        } finally {
+            closeConnection()
+        }
+    })
+}
+
 const updateUserProfilePhoto = (id, current_profile_picture) => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -1515,6 +1538,7 @@ module.exports = {
     createUser,
     updateUserGenderAndMaxDistance,
     updateUserCoordinates,
+    updateUserCityRegion,
     updateUserProfilePhoto,
     updateUserProfilePhotoUnhandled,
     updateUserProfileBioAndHeadline,
