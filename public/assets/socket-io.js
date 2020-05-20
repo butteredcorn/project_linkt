@@ -83,6 +83,6 @@ function newMessageComponent(message) {
     className = "my-message"
   } else if (message.username != username) {
     className = "other-message"
-  }
-  $(`<li class="${className}">${message.username}: ${message.message}</li>`).appendTo("#messages")
+  } //${message.username}: 
+  $(`<li class="message-text ${className}">${message.message}</li>`).appendTo("#messages")
 }

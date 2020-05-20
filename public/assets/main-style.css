@@ -89,9 +89,11 @@ main {
 }
 
 button {
+    padding-left:0.5em;
+    padding-right: 0.5em;
     border-radius: 25px;
     color: #FAFAFA;
-    font-weight: bolder;
+    font-weight: bold;
 }
 
 
