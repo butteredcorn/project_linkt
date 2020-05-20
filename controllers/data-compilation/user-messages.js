@@ -6,12 +6,12 @@ const { } = require('../../globals')
 //all chats/users
 //last message of each chat
 
-const getUserMessages = (user) => {
+const getUserMessagesUnhandled = (user) => {
     return new Promise(async (resolve, reject) => {
         try {
             const selectBy = 'DISTINCT socket_key, sender_id, receiver_id, message_text, date_created'
             const searchBy = `u1 WHERE date_created = (SELECT MAX(date_created) FROM user_messages u2 WHERE u1.socket_key = u2.socket_key) AND (sender_id = ${user.id} OR receiver_id = ${user.id}) ORDER BY date_created DESC`
-            const userMessage = await db.getUserMessages(selectBy, searchBy)
+            const userMessage = await db.getUserMessagesUnhandled(selectBy, searchBy)
 
             //console.log(userMessage)
 
@@ -23,7 +23,7 @@ const getUserMessages = (user) => {
 }
 
 
-const getUserMatches = (user) => {
+const getUserMatchesUnhandled = (user) => {
     return new Promise(async (resolve, reject) => {
         try {
             // const userUserPreferences = (await db.getUsers(undefined, `JOIN user_preferences ON users.id=user_preferences.user_id WHERE users.id = ${user.id}`))
@@ -31,7 +31,7 @@ const getUserMatches = (user) => {
 
             //note: users.id is getting overwritten by user_personality_aspects.id --> for user_id, call user_id, otherwise this object's id property refers to the id of user_personality_aspects
             //no need to restrict to user preferences here, since people outside of preferences may message the user
-            const otherUsers = await db.getUsers(undefined, `JOIN user_personality_aspects ON users.id=user_personality_aspects.user_id WHERE users.id != ${user.id}`)
+            const otherUsers = await db.getUsersUnhandled(undefined, `JOIN user_personality_aspects ON users.id=user_personality_aspects.user_id WHERE users.id != ${user.id}`)
         
             // console.log(latestUserPreference)
             // console.log(otherUsers)
@@ -40,7 +40,7 @@ const getUserMatches = (user) => {
                 delete match.password_hash
 
                 //handled
-                const likesUser = await db.getUsersLikes(undefined, `WHERE user_id = ${match.user_id} AND likes_user_id = ${user.id}`)
+                const likesUser = await db.getUsersLikesUnhandled(undefined, `WHERE user_id = ${match.user_id} AND likes_user_id = ${user.id}`)
 
                 if (likesUser && likesUser.length > 0) {
                     match.likes_user = true
@@ -62,9 +62,10 @@ const getUserMatches = (user) => {
 const loadMessages = (user) => {
     return new Promise(async (resolve, reject) => {
         try {
-            const otherUsers = await getUserMatches(user)
-            const userMessages = await getUserMessages(user)
-
+            await db.createConnection()
+            const otherUsers = await getUserMatchesUnhandled(user)
+            const userMessages = await getUserMessagesUnhandled(user)
+            await db.closeConnection()
             resolve({otherUsers, userMessages})
         } catch(error) {
             reject(error)
