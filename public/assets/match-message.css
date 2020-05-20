@@ -57,13 +57,14 @@ main {
 
 #outGoingMessage {
     border: 2px solid lightgray;
+    min-width: 200px;
 }
 
 .message-submit-button {
     background-color: #ED2265;
     font-weight: normal;
-    padding-left: 0.2em;
-    padding-right: 0.2em;
+    padding-left: 0.4em;
+    padding-right: 0.4em;
     margin-bottom: 5.1em;
 
 }
