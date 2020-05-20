@@ -20,6 +20,18 @@ const getIPGeolocationData = (IPAddress) => {
     })
 }
 
+const getIP = (req) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const IP = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+            resolve(IP)
+        } catch (error) {
+            reject(error)
+        }
+    })
+}
+
 module.exports = {
+    getIP,
     getIPGeolocationData
 }
