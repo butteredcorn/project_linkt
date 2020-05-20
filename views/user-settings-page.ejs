@@ -33,6 +33,9 @@
                     <div class="ribbon"><img class="profile-photo-thumbnail" src="<%=user.current_profile_picture%>" alt="profile thumbnail"><p class="profile-name"><%=`${user.first_name} ${user.last_name}`%></p></div>
                     <div class="ribbon"><h4>Email</h4><p class="profile-email"><%= user.email%></p></div>
                     <div class="ribbon"><h4>Location</h4><p><%=`Latitude: ${user.current_latitude} Longitude: ${user.current_longitude}`%></p></div>
+                    <%if (user.city_of_residence) {%>
+                    <div class="ribbon"><h4>Current City</h4><p><%=user.city_of_residence%></p></div>
+                    <%}%>
                 </div>
     
                 <div class="discovery-settings">

@@ -134,9 +134,9 @@ const getUserMatches = (user) => {
     
                 if (matchesWithNullDistance.length > 0) {
                     console.log(`Matches without distance_kms detected: ${matchesWithNullDistance}.`)
-                    for (let match of matchesWithNullDistance) {
-                        matchesThatMeetDistanceRequirements.push(match) //push to the end for now.
-                    }
+                    // for (let match of matchesWithNullDistance) {
+                    //     matchesThatMeetDistanceRequirements.push(match) //push to the end for now.
+                    // }
                 }
     
                 //filters for user's gender setting, and age setting, joined with other users' personality aspects

@@ -29,7 +29,7 @@
         <main>
             <div class="cards-container">
                 <%for (let match of matches) { %>
-                    <% const { user_id, first_name, last_name, age, current_profile_picture, carousel_photos, headline, bio, job_title, highest_education_type, current_latitude, current_longitude, distance_kms, likes_user, openess, conscientiousness, extroversion} = match %>
+                    <% const { user_id, first_name, last_name, age, current_profile_picture, carousel_photos, headline, bio, job_title, highest_education_type, current_latitude, current_longitude, city_of_residence, distance_kms, likes_user, openess, conscientiousness, extroversion} = match %>
                     <% match.username = `${first_name} ${last_name}` %>
                     <div class="card-container">
                         <div class="card">
@@ -73,6 +73,7 @@
                                         <input class="profile-selected" name="profile_picture" type="hidden" value="<%=current_profile_picture%>">
                                         <input class="profile-selected" name="current_latitude" type="hidden" value="<%=current_latitude%>">
                                         <input class="profile-selected" name="current_longitude" type="hidden" value="<%=current_longitude%>">
+                                        <input class="profile-selected" name="city_of_residence" type="hidden" value="<%=city_of_residence%>">
                                         <input class="profile-selected" name="headline" type="hidden" value="<%=headline%>">
                                         <input class="profile-selected" name="bio" type="hidden" value="<%=bio%>">
                                         <input class="profile-selected" name="job_title" type="hidden" value="<%=job_title%>">

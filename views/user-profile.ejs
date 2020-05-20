@@ -85,7 +85,11 @@
                     <h4>Bio</h4>
                     <p class="bio"><%=user.bio%></p>
                     <div class="profile-ribbon-container">
+                        <%if(user.city_of_residence){%>
+                        <div class="profile-ribbon"><img class="profile-icon" src="assets/icons/pin.png" alt="location"><p class="ribbon-content"></p><%=`${user.city_of_residence}`%></div>
+                        <%} else {%>
                         <div class="profile-ribbon"><img class="profile-icon" src="assets/icons/pin.png" alt="location"><input class="ribbon-content" id="location-coordinates" type="hidden" value="<%=`${user.current_latitude},${user.current_longitude}`%>"><p class="raw-location"><%=`Latitude: ${user.current_latitude} Longitude: ${user.current_longitude}`%></p></div>
+                        <%}%>
                         <!-- <div class="profile-ribbon"><img class="profile-icon" src="assets/icons/home-run.png" alt="place-of-origin"><p class="ribbon-content">From: <%=user%></p></div> -->
                         <div class="profile-ribbon"><img class="profile-icon" src="assets/icons/work.png" alt="career"><p class="ribbon-content occupation"><%=user.job_title%></p></div>
                         <div class="profile-ribbon"><img class="profile-icon" src="assets/icons/student.png" alt="education"><p class="ribbon-content education"><%=user.highest_education_type%></p></div>
