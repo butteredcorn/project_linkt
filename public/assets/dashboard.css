@@ -11,8 +11,6 @@
 }
 
 .main-container {
-    padding-top: 4em;
-    padding-bottom: 8em;
     min-height: 100vh;
 }
 
@@ -27,6 +25,8 @@ main > * {
 }
 
 .card-container {
+    margin-top: 4em;
+    margin-bottom: 4em;
     display: flex;
     flex-direction: column;
     color: #303030;
