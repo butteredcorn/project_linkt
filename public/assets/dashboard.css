@@ -65,6 +65,7 @@ main > * {
 
 .carousel-profile-image-container {
     max-width: 40%;
+    overflow: hidden;
 }
 
 /* .profile-image {
@@ -96,6 +97,18 @@ main > * {
     padding-right: 0.2em;
 }
 
+.profile-slide {
+    overflow: hidden;
+}
+
+#image2 {
+    display: hidden;
+}
+
+#image3 {
+    display: hidden;
+}
+
 
 
 @media only screen and (max-width: 500px) {
@@ -107,9 +120,13 @@ main > * {
         font-size: 12px;
     }
 
-    .profile-image-column, .carousel-profile-image-container {
+    .profile-image-column {
         max-width: 40%;
         margin-left: 2em;
+    }
+
+    .carousel-profile-image-container {
+        max-width: 40%;
     }
 
 

@@ -2,4 +2,3 @@
 $("#profile-picture-carousel").carousel({
     touch: true // default
     });
-
