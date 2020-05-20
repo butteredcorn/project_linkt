@@ -21,6 +21,10 @@ main {
     width: 800px;
 }
 
+.profile-name, .show-me {
+    text-transform: capitalize;
+}
+
 .profile-settings, .discovery-settings, .other-settings, .user_settings_form {
     display: flex;
     flex-direction: column;
