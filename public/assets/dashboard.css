@@ -26,8 +26,8 @@ main > * {
 }
 
 .card-container {
-    margin-top: 4em;
-    margin-bottom: 6em;
+    margin-top: 1em;
+    margin-bottom: 1em;
     display: flex;
     flex-direction: column;
     color: #303030;
@@ -134,6 +134,11 @@ main > * {
         font-size: 11px;
     }
 
+    .cards-container {
+        margin-top: 2em;
+        margin-bottom: 4em;
+    }
+
     .card {
         width: 85%;
     }
@@ -145,10 +150,10 @@ main > * {
     .profile-image-column {
         max-width: 40%;
         margin-left: 2em;
+        width: 160px;
     }
 
     .card-container {
-        margin-bottom: 4em;
     }
 
     .carousel-profile-image-container {
@@ -159,11 +164,13 @@ main > * {
     .profile-image {
         width: 80%;
         border-radius: 100%;
+        width: 102px;
+        height: 102px;
     }
 
     .info-column {
         margin-right: 2em;
-        width: 130px;
+        width: 160px;
     }
 
     main {
@@ -178,6 +185,11 @@ main > * {
 
     .card {
         width: 100%;
+    }
+
+    .cards-container {
+        margin-top: 4em;
+        margin-bottom: 6em;
     }
 
     .profile-image-column {
