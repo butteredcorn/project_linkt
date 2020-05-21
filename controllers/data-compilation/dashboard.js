@@ -305,14 +305,16 @@ const smartSortMatches = (userPersonalityAspects, matches) => {
 const loadDashboard = (user) => {
     return new Promise(async (resolve, reject) => {
         try {
-
-            const userPersonalityAspects = await getUserPersonalityAspects(user)
-            let matches = await getUserMatches(user)
+            await db.createConnection()
+            const userPersonalityAspects = await getUserPersonalityAspectsUnhandled(user)
+            let matches = await getUserMatchesUnhandled(user)
             matches = await smartSortMatches(userPersonalityAspects, matches)
             console.log(matches)
             resolve({userPersonalityAspects, matches})
         } catch(error) {
             reject(error)
+        } finally {
+            await db.closeConnection()
         }
     })
 }
