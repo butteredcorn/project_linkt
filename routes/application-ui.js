@@ -49,7 +49,7 @@ router.get('/dashboard', protectedRoute, async(req, res) => {
             })
             res.redirect(userSettings + '?' + query) //send querystring
 
-        } else if (userBioAndHeadline && userBioAndHeadline.length == 0 || req.body.newUser) {
+        } else if (userBioAndHeadline && userBioAndHeadline.length == 0 || req.body.newUser || req.query.newUser) {
             res.redirect(profileSettings)
 
         } else if (userInstagram && userInstagram.length == 0) {
@@ -291,7 +291,16 @@ router.post('/user-settings', protectedRoute, async(req, res) => {
             await db.updateUserGenderAndMaxDistance(req.user.id, req.body.max_distance, req.body.gender)
             await db.createUserPreference(req.user.id, req.body.gender_preference, req.body.min_age, req.body.max_age)
             //handle questionnaire
-            res.redirect('/dashboard')
+
+            if (req.body.routing) {
+                const query = querystring.stringify({
+                    newUser: true
+                })
+                res.redirect('/dashboard' + '?' + query)
+            } else {
+                res.redirect('/dashboard')
+            }
+
         } else {
             console.log(new Error('req.body undefined.'))
         }
