@@ -95,6 +95,10 @@ form {
     cursor: pointer;
 }
 
+#instagram {
+    background-color: #3BA3A8;
+}
+
 @media only screen and (max-width: 500px) {
     * {
         font-size: 11px;
