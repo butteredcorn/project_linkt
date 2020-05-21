@@ -53,12 +53,12 @@ router.get('/dashboard', protectedRoute, async(req, res) => {
             res.redirect(profileSettings)
 
         } else if (userInstagram && userInstagram.length == 0) {
-            // const query = querystring.stringify({
-            //     newUser: true
-            // })
+            const query = querystring.stringify({
+                newUser: true
+            })
             // res.redirect(instagramEndpoint + '?' + query)
             res.render('instagram-launcher', {
-                newUser: true
+                newUser: query
             })
 
         //else redirect to dashboard

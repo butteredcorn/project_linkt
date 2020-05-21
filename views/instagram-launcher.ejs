@@ -13,7 +13,7 @@
     <div class="main-container">
         <main id="AppMain">
             <% if (newUser) { %>
-            <form id="App" method='post' action='/instagram/login/?newUser=true'>
+            <form id="App" method='post' action='/instagram/login/?<%=newUser%>'>
             <% } else { %>
             <form id="App" method='post' action='/instagram/login'>
             <%}%>
