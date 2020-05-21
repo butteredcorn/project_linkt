@@ -22,9 +22,6 @@ router.get('/dashboard', protectedRoute, async(req, res) => {
         let userPreferences
         let userInstagram
         let userBioAndHeadline
-
-        console.log(req.body.newUser)
-        console.log(req.query.newUser)
         
         //db.createConnection() created at instagram-endpoint through calculate-metrics
         //db.closeConnection also handled via timer
@@ -43,9 +40,6 @@ router.get('/dashboard', protectedRoute, async(req, res) => {
             userBioAndHeadline = await db.getUsersUnhandled('headline, bio', `WHERE id = ${req.user.id}`)
             await db.closeConnection()
         }
-        
-        console.log(userBioAndHeadline)
-        console.log(userBioAndHeadline.length)
 
         //if user-settings doesn't exist, then redirect to set user settings
         if (userPreferences && userPreferences.length == 0) {
@@ -54,7 +48,7 @@ router.get('/dashboard', protectedRoute, async(req, res) => {
             })
             res.redirect(userSettings + '?' + query) //send querystring
 
-        } else if ((userBioAndHeadline && userBioAndHeadline.length == 0) || req.body.newUser || req.query.newUser) {
+        } else if ((userBioAndHeadline && !userBioAndHeadline[0].headline || !userBioAndHeadline[0].bio) || req.body.newUser || req.query.newUser) {
             res.redirect(profileSettings)
 
         } else if (userInstagram && userInstagram.length == 0) {
@@ -296,6 +290,8 @@ router.post('/user-settings', protectedRoute, async(req, res) => {
             await db.updateUserGenderAndMaxDistance(req.user.id, req.body.max_distance, req.body.gender)
             await db.createUserPreference(req.user.id, req.body.gender_preference, req.body.min_age, req.body.max_age)
             //handle questionnaire
+
+            console.log(req.body)
 
             if (req.body.routing) {
                 const query = querystring.stringify({
