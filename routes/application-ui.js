@@ -40,7 +40,6 @@ router.get('/dashboard', protectedRoute, async(req, res) => {
             userBioAndHeadline = await db.getUsersUnhandled('headline, bio', `WHERE id = ${req.user.id}`)
             await db.closeConnection()
         }
-        
 
         //if user-settings doesn't exist, then redirect to set user settings
         if (userPreferences && userPreferences.length == 0) {
@@ -49,14 +48,17 @@ router.get('/dashboard', protectedRoute, async(req, res) => {
             })
             res.redirect(userSettings + '?' + query) //send querystring
 
-        } else if (userBioAndHeadline && userBioAndHeadline.length == 0 || req.body.newUser) {
+        } else if ((userBioAndHeadline && !userBioAndHeadline[0].headline || !userBioAndHeadline[0].bio) || req.body.newUser || req.query.newUser) {
             res.redirect(profileSettings)
 
         } else if (userInstagram && userInstagram.length == 0) {
             const query = querystring.stringify({
                 newUser: true
             })
-            res.redirect(instagramEndpoint + '?' + query)
+            // res.redirect(instagramEndpoint + '?' + query)
+            res.render('instagram-launcher', {
+                newUser: query
+            })
 
         //else redirect to dashboard
         } else {
@@ -95,6 +97,25 @@ router.get('/dashboard', protectedRoute, async(req, res) => {
         // setTimeout(() => {
         //     db.closeConnection()
         // }, TIMEOUT/3)
+    }
+})
+
+router.get('/instagram-launcher', protectedRoute, async(req, res) => {
+    try {
+        const userInstagram = await db.getUserInstagrams(undefined, `WHERE user_id = ${req.user.id}`)
+
+        if (userInstagram && userInstagram.length == 0) {
+            res.render('instagram-launcher', {
+                newUser: true
+            })
+        } else {
+            res.render('instagram-launcher', {
+                newUser: undefined
+            })
+        }
+    } catch (error) {
+        console.log(error)
+        res.send(UI_ROUTE_ERROR)
     }
 })
 
@@ -269,7 +290,18 @@ router.post('/user-settings', protectedRoute, async(req, res) => {
             await db.updateUserGenderAndMaxDistance(req.user.id, req.body.max_distance, req.body.gender)
             await db.createUserPreference(req.user.id, req.body.gender_preference, req.body.min_age, req.body.max_age)
             //handle questionnaire
-            res.redirect('/dashboard')
+
+            console.log(req.body)
+
+            if (req.body.routing) {
+                const query = querystring.stringify({
+                    newUser: true
+                })
+                res.redirect('/dashboard' + '?' + query)
+            } else {
+                res.redirect('/dashboard')
+            }
+
         } else {
             console.log(new Error('req.body undefined.'))
         }

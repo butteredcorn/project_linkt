@@ -36,11 +36,11 @@
 
                     <div id="profile-picture-carousel" class="carousel slide profile-image-container" data-ride="carousel" data-interval="false">
                         <ol class="carousel-indicators">
-                            <%if(matchCarouselPhotos && matchCarouselPhotos[1].photo_link){%>
+                            <%if(matchCarouselPhotos[1] && matchCarouselPhotos[1].photo_link){%>
                             <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
                             <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
                             <%}%>
-                            <%if(matchCarouselPhotos && matchCarouselPhotos[2].photo_link){%>
+                            <%if(matchCarouselPhotos[2] && matchCarouselPhotos[2].photo_link){%>
                             <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
                             <%}%>  
                         </ol>
@@ -49,17 +49,17 @@
                             <img class="d-block w-100 profile-photo" src="<%=profile_picture%>" alt="First slide">
                           </div>
                           <div class="carousel-item">
-                              <%if(matchCarouselPhotos && matchCarouselPhotos[1].photo_link){%>
+                              <%if(matchCarouselPhotos[1] && matchCarouselPhotos[1].photo_link){%>
                             <img class="d-block w-100 profile-photo" src="<%=matchCarouselPhotos[1].photo_link%>" alt="Second slide">
                             <%}%>
                         </div>
                           <div class="carousel-item">
-                            <%if(matchCarouselPhotos && matchCarouselPhotos[2].photo_link){%>
+                            <%if(matchCarouselPhotos[2] && matchCarouselPhotos[2].photo_link){%>
                             <img class="d-block w-100 profile-photo" src="<%=matchCarouselPhotos[2].photo_link%>" alt="Third slide">
                             <%}%>  
                         </div>
                         </div>
-                        <%if(matchCarouselPhotos && matchCarouselPhotos[1].photo_link){%>
+                        <%if(matchCarouselPhotos[1] && matchCarouselPhotos[1].photo_link){%>
                         <a class="carousel-control-prev" href="#profile-picture-carousel" role="button" data-slide="prev">
                           <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                           <span class="sr-only">Previous</span>

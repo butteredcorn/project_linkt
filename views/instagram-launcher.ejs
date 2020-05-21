@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+      <link rel="stylesheet" href="assets/instagram-launcher.css" type="text/css">
+      <title>Linkt</title>
+</head>
+<body>
+    <div class="main-container">
+        <main id="AppMain">
+            <form id="App" method='GET' action='/instagram/login'>
+                <div class="TitleDiv">
+                    <h1 class="Title">Our Data Policy</h1>
+                    <p class="sub-text">To provide our product, we must collect and process certain information about you. This includes data and information related to your interactions with our product, and device related data and information used to interact with our product.</p>
+                </div>
+    
+                <div class="QuestionBox">
+                    <div class="QuestionTextBox">
+                        <p id="QuestionTitle">Information and Content</p>
+                        <div class="result"></div>
+                    </div>
+                    <div class="QuestionTextBox">
+                        <p class="QuestionText">We collect data and information releated to the content you provide while using our product, and this includes your Instagram content. Data collection includes when you sign up for our product, communicate with others, and create and/or share content. Our data collection practices will also include the collection of metadata such as location and time related data. Our product automatically processes, analyzes, and collects this information in order to provide you our signature user experience.</p>
+                    </div>
+                </div>
+
+                <div class="QuestionBox">
+                    <div class="QuestionTextBox">
+                        <p id="QuestionTitle">User Connections</p>
+                        <div class="result"></div>
+                    </div>
+                    <div class="QuestionTextBox">
+                        <p class="QuestionText">We collect data and information about the people you communicate and interact with.</p>
+                    </div>
+                </div>
+
+                <div class="QuestionBox">
+                    <div class="QuestionTextBox">
+                        <p id="QuestionTitle">Product Usage</p>
+                        <div class="result"></div>
+                    </div>
+                    <div class="QuestionTextBox">
+                        <p class="QuestionText">We collect data and information about how you use our product. This includes the content you interact with, the features you use, and the frequency and duration of usage.</p>
+                    </div>
+                </div>
+
+                <div class="QuestionBox">
+                    <div class="QuestionTextBox">
+                        <p id="QuestionTitle">Product Transactions</p>
+                        <div class="result"></div>
+                    </div>
+                    <div class="QuestionTextBox">
+                        <p class="QuestionText">We collect data and information about any purchases or any other financial transactions that happens on our product, and affiliate products. This will include collecting data regarding to your payment details, contact, and billing details.</p>
+                    </div>
+                </div>
+
+    
+                <div class="button_container">
+                    <input class="new_user" type="hidden" name="new_user" value="<%=newUser%>">
+                    <button type="submit" class="button_container_inner">Login to Instagram</button>
+                </div>
+    
+            </form>
+        </main>
+    </div>
+</body>
+</html>

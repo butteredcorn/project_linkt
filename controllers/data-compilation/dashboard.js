@@ -52,13 +52,16 @@ const getUserMatches = (user) => {
             const userUserPreferences = (await db.getUsers(undefined, `JOIN user_preferences ON users.id=user_preferences.user_id WHERE users.id = ${user.id}`))
             const latestUserPreference = userUserPreferences[userUserPreferences.length - 1]
             const { user_id, partner_gender, partner_age_min, partner_age_max, current_latitude, current_longitude, max_distance } = latestUserPreference
-
+            let otherUsers
             //note: users.id is getting overwritten by user_personality_aspects.id --> for user_id, call user_id, otherwise this object's id property refers to the id of user_personality_aspects
-            const otherUsers = await db.getUsers(undefined, `LEFT OUTER JOIN user_career_and_education ON users.id=user_career_and_education.user_id JOIN user_personality_aspects ON users.id=user_personality_aspects.user_id WHERE users.gender = '${partner_gender}' AND users.age >= ${partner_age_min} AND users.age <= ${partner_age_max} AND users.id != ${user.id}`)
-        
+            if (partner_gender == 'both') {
+                otherUsers = await db.getUsers(undefined, `LEFT OUTER JOIN user_career_and_education ON users.id=user_career_and_education.user_id JOIN user_personality_aspects ON users.id=user_personality_aspects.user_id WHERE users.age >= ${partner_age_min} AND users.age <= ${partner_age_max} AND users.id != ${user.id}`)
+            } else {
+                otherUsers = await db.getUsers(undefined, `LEFT OUTER JOIN user_career_and_education ON users.id=user_career_and_education.user_id JOIN user_personality_aspects ON users.id=user_personality_aspects.user_id WHERE users.gender = '${partner_gender}' AND users.age >= ${partner_age_min} AND users.age <= ${partner_age_max} AND users.id != ${user.id}`)
+            }
 
             // console.log(latestUserPreference)
-            //console.log(otherUsers)
+            // console.log(otherUsers)
 
             //handle here if user disallows location and backfall fails --> currently, bypass
             if (!current_latitude || !current_longitude) {
@@ -247,6 +250,7 @@ const getUserMatchesUnhandled = (user) => {
 const smartSortMatches = (userPersonalityAspects, matches) => {
     return new Promise(async (resolve, reject) => {
         try {
+            console.log(userPersonalityAspects)
             const user = userPersonalityAspects[0]
 
             if (user && user.openess && user.conscientiousness && user.extroversion) {

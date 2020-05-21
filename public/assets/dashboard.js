@@ -1,6 +1,6 @@
 $(() => {
-    $('.image2').fadeOut()
-    $('.image3').fadeOut()
+    $('.image2').fadeOut(0)
+    $('.image3').fadeOut(0)
     let count = 1
     timeoutInterval = 5000
     

@@ -111,7 +111,6 @@ module.exports = function () {
                     //message the 'room' socket
                     //don't need user_id for data?
                     io.sockets.in(socketKey).emit('new message', [{username: socket.username, receiver_username: data.receiver_username, message: data.message}]);
-                    resolve('done.')
                 } else {
                     const userLikeError = (new Error(`This user has yet to like you back. Until you both like eachother, you can only send ${MAX_UNLIKED_MESSAGES_PER_USER_FREE} message to this user per day.`))
                     const match = await (db.getUsers(undefined, `WHERE id = ${socket.receiver_user_id}`))
