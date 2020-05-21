@@ -49,7 +49,7 @@ router.get('/dashboard', protectedRoute, async(req, res) => {
             })
             res.redirect(userSettings + '?' + query) //send querystring
 
-        } else if (userBioAndHeadline && userBioAndHeadline.length == 0 || req.body.newUser || req.query.newUser) {
+        } else if ((userBioAndHeadline && userBioAndHeadline.length == 0) || req.body.newUser || req.query.newUser) {
             res.redirect(profileSettings)
 
         } else if (userInstagram && userInstagram.length == 0) {
