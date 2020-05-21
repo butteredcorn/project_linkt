@@ -44,7 +44,11 @@
                     <div class="carousel-inner">
                       <div class="carousel-item active profile-image-container">
                         <%if(!userCarouselPhotos || userCarouselPhotos.length == 0 || !userCarouselPhotos[0].photo_link) {%>
+                          <%if(!user.current_profile_picture) {%>
+                          <button class="profile-picture-button" value="1" onclick="showProfilePictureGrid(this.value)"><img class="d-block w-100 profile-photo" id="position-one" src="assets/icons/default-image.png" alt="profile-picture"></button>
+                          <%} else {%>
                           <button class="profile-picture-button" value="1" onclick="showProfilePictureGrid(this.value)"><img class="d-block w-100 profile-photo" id="position-one" src="<%=user.current_profile_picture%>" alt="profile-picture"></button>
+                          <%}%>
                         <%} else { %>
                           <button class="profile-picture-button" value="1" onclick="showProfilePictureGrid(this.value)"><img class="d-block w-100 profile-photo" id="position-one" src="<%=userCarouselPhotos[0].photo_link%>" alt="profile-picture"></button>
                         <%}%>
