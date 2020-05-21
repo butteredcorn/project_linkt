@@ -22,6 +22,9 @@ router.get('/dashboard', protectedRoute, async(req, res) => {
         let userPreferences
         let userInstagram
         let userBioAndHeadline
+
+        console.log(req.body.newUser)
+        console.log(req.query.newUser)
         
         //db.createConnection() created at instagram-endpoint through calculate-metrics
         //db.closeConnection also handled via timer
@@ -41,6 +44,8 @@ router.get('/dashboard', protectedRoute, async(req, res) => {
             await db.closeConnection()
         }
         
+        console.log(userBioAndHeadline)
+        console.log(userBioAndHeadline.length)
 
         //if user-settings doesn't exist, then redirect to set user settings
         if (userPreferences && userPreferences.length == 0) {
