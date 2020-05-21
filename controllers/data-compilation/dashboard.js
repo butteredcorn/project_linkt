@@ -247,6 +247,7 @@ const getUserMatchesUnhandled = (user) => {
 const smartSortMatches = (userPersonalityAspects, matches) => {
     return new Promise(async (resolve, reject) => {
         try {
+            console.log(userPersonalityAspects)
             const user = userPersonalityAspects[0]
 
             if (user && user.openess && user.conscientiousness && user.extroversion) {
