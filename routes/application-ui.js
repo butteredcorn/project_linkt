@@ -53,10 +53,13 @@ router.get('/dashboard', protectedRoute, async(req, res) => {
             res.redirect(profileSettings)
 
         } else if (userInstagram && userInstagram.length == 0) {
-            const query = querystring.stringify({
+            // const query = querystring.stringify({
+            //     newUser: true
+            // })
+            // res.redirect(instagramEndpoint + '?' + query)
+            res.render('instagram-launcher', {
                 newUser: true
             })
-            res.redirect(instagramEndpoint + '?' + query)
 
         //else redirect to dashboard
         } else {
@@ -95,6 +98,25 @@ router.get('/dashboard', protectedRoute, async(req, res) => {
         // setTimeout(() => {
         //     db.closeConnection()
         // }, TIMEOUT/3)
+    }
+})
+
+router.get('/instagram-launcher', protectedRoute, async(req, res) => {
+    try {
+        const userInstagram = await db.getUserInstagrams(undefined, `WHERE user_id = ${req.user.id}`)
+
+        if (userInstagram && userInstagram.length == 0) {
+            res.render('instagram-launcher', {
+                newUser: true
+            })
+        } else {
+            res.render('instagram-launcher', {
+                newUser: undefined
+            })
+        }
+    } catch (error) {
+        console.log(error)
+        res.send(UI_ROUTE_ERROR)
     }
 })
 
