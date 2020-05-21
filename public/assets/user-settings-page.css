@@ -104,6 +104,10 @@ form {
     justify-content: center;
 }
 
+#show-me-on-linkt {
+    width: 4em;
+}
+
 /* .main-footer {
     display: flex;
     flex-direction: column;
