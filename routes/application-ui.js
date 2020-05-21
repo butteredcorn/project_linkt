@@ -425,5 +425,16 @@ router.get('/questionnaire', protectedRoute, async(req, res) => {
     }
 })
 
+router.get('/help', protectedRoute, async(req, res) => {
+    try {
+        res.render('help', {
+
+        })
+    } catch (error) {
+        console.log(error)
+        res.send(UI_ROUTE_ERROR)
+    }
+})
+
 
 module.exports = router
