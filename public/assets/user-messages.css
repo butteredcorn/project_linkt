@@ -8,8 +8,8 @@
 }
 
 main {
-    margin-top: 8em;
-    margin-bottom: 8em;
+    padding-top: 8em;
+    padding-bottom: 8em;
     background-color: #3BA3A8;
 }
 
@@ -137,6 +137,7 @@ main :first-child {
     }
 
     main {
-        max-width: 1000px;
+        padding-top: 4em;
+        max-width: 2000px;
     }
 }
