@@ -5,9 +5,6 @@ const signUpUser = require('../../controllers/login-and-signup').signUpUser
 const path = require('path')
 const querystring = require('querystring')
 
-const dashboard = '/dashboard'
-
-
 router.get('/', authUserRedirect, (req, res) => {
     res.sendFile(path.join(__dirname, '../../public/signup.html'))
 })
@@ -30,7 +27,10 @@ router.post('/', authUserRedirect, async (req, res) => {
     if(email && password) {
         try {
             await signUpUser(email, password, firstName, lastName, age, latitude, longitude)
-            res.redirect(dashboard)
+            const query = querystring.stringify({
+                newUser: true
+            })
+            res.redirect('/login' + '?' + query)
         } catch (error) {
             console.log(error)
             const query = querystring.stringify({

@@ -104,3 +104,38 @@ form {
     padding-top: 0.4em;
     padding-bottom: 0.4em;
 }
+
+#terms-of-use, li {
+    color: #303030;
+    text-align: left;
+}
+
+.modal-section {
+    color: #303030;
+    text-align: left;
+    font-weight: bold;
+    margin-top: 1em;
+}
+
+#tos-modal-title {
+    font-weight: bold;
+    font-size: 18px;
+    color: #303030;
+    text-align: center;
+}
+
+.accept-container {
+    display: flex;
+    justify-content: center;
+}
+
+#accept-button {
+    background-color: #ED2265;
+    border-radius: 25px;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+    padding-top: 0.3em;
+    padding-bottom: 0.3em;
+    color: white;
+    width: 100px;
+}
