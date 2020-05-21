@@ -126,10 +126,6 @@ form {
         font-size: 10px;
     }
 
-    .link-to-help-container {
-        margin-bottom: 4em;
-    }
-
     .profile-name {
         font-size: 14px;
     }
@@ -140,6 +136,8 @@ form {
 
     .page {
         width: 100vw;
+        margin-top: 4em;
+        margin-bottom: 4em;
     }
 
     h2 {
@@ -164,7 +162,8 @@ form {
         font-size: 12px;
     }
 
-    .link-to-help-container {
+    .page {
+        margin-top: 6em;
         margin-bottom: 6em;
     }
 
