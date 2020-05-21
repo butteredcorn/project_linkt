@@ -14,6 +14,7 @@ const dashboard = '/dashboard'
 
 router.get('/', authUserRedirect, (req, res) => {
     res.render('login2', {
+        newUser: req.query.newUser,
         error: req.query.error
     })
 })
