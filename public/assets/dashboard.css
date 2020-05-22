@@ -11,9 +11,14 @@
 }
 
 .main-container {
-    background-color: white;
+    background-color: #FAFAFA;
     min-height: 100vh;
 }
+
+main {
+    background-color: #FAFAFA;
+}
+
 
 main > * {
     padding-top: 4em;
