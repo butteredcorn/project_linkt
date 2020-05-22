@@ -311,6 +311,10 @@ html body {
     font-size: 32px;
   }
 
+  .SubText {
+    font-size: 18px;
+  }
+
   .TitleDiv {
     max-height: 50px;
   }
