@@ -377,9 +377,9 @@ router.get('/profile-settings', protectedRoute, async(req, res) => {
 router.post('/profile-settings', protectedRoute, async(req, res) => {
     try {
         if(req.body) {
-            if (req.query.delayDBHandling) {
+            // if (req.query.delayDBHandling) {
 
-            } else {
+            // } else {
                 await db.updateUserProfileBioAndHeadline(req.user.id, req.body.bio, req.body.headline)
                 const userCareerEducation = await db.getUserCareerAndEducation(undefined, `WHERE user_id = ${req.user.id}`)
                 if (userCareerEducation && userCareerEducation.length ==0) {
@@ -387,7 +387,7 @@ router.post('/profile-settings', protectedRoute, async(req, res) => {
                 } else {
                     await db.updateUserCareerAndEducation(req.user.id, req.body.education_level, req.body.occupation)
                 }
-            }
+            // }
             res.redirect('/dashboard')
         } else {
             console.log(new Error('req.body undefined.'))
