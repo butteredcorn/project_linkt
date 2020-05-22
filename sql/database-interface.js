@@ -425,6 +425,55 @@ const resetUsersLikes = () => {
     })
 }
 
+const deleteUserByID = (id) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            await createConnection()
+            sqlCallback(`DELETE FROM user_career_and_education WHERE user_id = ${id}`)
+                .then((result) => {
+                    console.log(result.message)
+                    return sqlCallback(`DELETE FROM users_likes WHERE user_id = ${id}`)
+                })    
+                .then((result) => {
+                    console.log(result.message)
+                    return sqlCallback(`DELETE FROM user_messages WHERE sender_id = ${id}`)
+                })
+                .then((result) => {
+                    console.log(result.message)
+                    return sqlCallback(`DELETE FROM user_preferences WHERE user_id = ${id}`)
+                })
+                .then((result) => {
+                    console.log(result.message)
+                    return sqlCallback(`DELETE FROM user_personality_aspects WHERE user_id = ${id}`)
+                })
+                .then((result) => {
+                    console.log(result.message)
+                    return sqlCallback(`DELETE FROM user_psychometrics WHERE user_id = ${id}`)
+                })
+                .then((result) => {
+                    console.log(result.message)
+                    return sqlCallback(`DELETE FROM user_instagram WHERE user_id = ${id}`)
+                })
+                .then((result) => {
+                    console.log(result.message)
+                    return sqlCallback(`DELETE FROM users WHERE id = ${id}`)
+                })
+                .then((result) => {
+                    resolve(result)
+                })
+                .catch((error) => {
+                    reject(error)
+                })
+                .finally(() => {
+                    closeConnection()
+                })
+            
+        } catch (error) {
+            reject(error)
+        }
+    })
+}
+
 const getUsers = (selectBy = '*', searchBy = '') => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -653,6 +702,31 @@ const updateUserProfileBioAndHeadline = (id, bio, headline) => {
         }
     })
 }
+
+const deleteUserByEmail = (email) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            await createConnection()
+            const table = 'users'
+            const sql = `DELETE FROM ${table} WHERE email = ?`
+            const params = [email]
+            db.query(sql, params, (error, result) => {
+                if (error) {
+                    console.log(new Error(`${error} Problem deleting user by email ${email} in ${table}.`))
+                    reject(error)
+                }
+                resolve(rawDataPacketConverter(result))
+            })
+        } catch (error) {
+            console.log(error)
+            reject(error)
+        } finally {
+            closeConnection()
+        }
+    })
+}
+
+
 
 /**
  * user_instagram
@@ -1542,6 +1616,8 @@ module.exports = {
     updateUserProfilePhoto,
     updateUserProfilePhotoUnhandled,
     updateUserProfileBioAndHeadline,
+    deleteUserByID,
+    deleteUserByEmail,
     getUserInstagrams,
     getUserInstagramsNonHandled,
     createUserIG,

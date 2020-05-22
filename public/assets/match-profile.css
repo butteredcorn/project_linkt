@@ -2,11 +2,6 @@ body {
     background-color: #FAFAFA;
 }
 
-.main-container {
-    margin-top: 6em;
-    margin-bottom: 6em;
-}
-
 .profile-container {
     margin-left: auto;
     margin-right: auto;
@@ -113,6 +108,11 @@ button {
         font-size: 11px;
     }
 
+    .main-container {
+        margin-top: 5em;
+        margin-bottom: 5em;
+    }
+
     button {
         font-size: 12px;
     }
@@ -122,8 +122,8 @@ button {
     }
 
     .profile-container {
-        margin-top: 6em;
-        margin-bottom: 6em;
+        margin-top: 5em;
+        margin-bottom: 5em;
         width: 300px;
     }
 
@@ -137,9 +137,14 @@ button {
 }
 @media only screen and (min-width: 501px) {
 
+    .main-container {
+        margin-top: 6em;
+        margin-bottom: 6em;
+    }
+
     .profile-container {
-        margin-top: 3em;
-        margin-bottom: 3em;
+        margin-top: 2.5em;
+        margin-bottom: 2.5em;
         width: 320px;
     }
 

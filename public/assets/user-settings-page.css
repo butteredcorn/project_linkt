@@ -136,6 +136,8 @@ form {
 
     .page {
         width: 100vw;
+        margin-top: 6em;
+        margin-bottom: 6em;
     }
 
     h2 {
@@ -158,6 +160,11 @@ form {
 
     .link-to-help {
         font-size: 12px;
+    }
+
+    .page {
+        margin-top: 6em;
+        margin-bottom: 6em;
     }
 
     h2 {

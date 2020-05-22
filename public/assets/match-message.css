@@ -3,7 +3,9 @@ ul {
     list-style-type: none;
 }
 
-
+.header-text {
+    text-transform: capitalize;
+}
 
 .main-container {
     
@@ -18,7 +20,7 @@ ul {
 }
 
 main {
-    margin-top:5.1em;
+    margin-top:5.2em;
     /* margin-bottom: 5.1em; */
     display: flex;
     flex-direction: column;
@@ -29,7 +31,8 @@ main {
 }
 
 .match-profile-photo-container {
-    margin-top: 6em;
+    margin-top: 5.2em;
+    padding-top: 1em;
     display: flex;
     justify-content: center;
 }
@@ -118,9 +121,17 @@ main {
         font-size: 12px;
     }
 
+    .match-profile-photo-container {
+        margin-top: 4em;
+        padding-top: 0;
+    }
+
+    .message-submit-button {
+        margin-bottom: 4em;
+    }
     .match-profile-photo {
-        width: 168px;
-        height: 168px;
+        width: 132px;
+        height: 132px;
     }
 
     main {

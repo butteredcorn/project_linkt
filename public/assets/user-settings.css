@@ -31,7 +31,7 @@ html body {
 
 
 .TitleDiv {
-    height: 200px;
+    /* height: 200px; */
     width: 50%;
     position: relative;
     display: inline-flex;
@@ -311,9 +311,13 @@ html body {
     font-size: 32px;
   }
 
-  .TitleDiv {
-    max-height: 50px;
+  .SubText {
+    font-size: 18px;
   }
+
+  /* .TitleDiv {
+    max-height: 100px;
+  } */
 
   .QuestionBox {
     width: 80%;

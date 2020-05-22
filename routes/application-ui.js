@@ -48,7 +48,8 @@ router.get('/dashboard', protectedRoute, async(req, res) => {
             })
             res.redirect(userSettings + '?' + query) //send querystring
 
-        } else if ((userBioAndHeadline && !userBioAndHeadline[0].headline || !userBioAndHeadline[0].bio) || req.body.newUser || req.query.newUser) {
+        } else if (userBioAndHeadline && !userBioAndHeadline[0].headline || !userBioAndHeadline[0].bio) {
+            console.log(userBioAndHeadline)
             res.redirect(profileSettings)
 
         } else if (userInstagram && userInstagram.length == 0) {
@@ -155,6 +156,16 @@ router.post('/match-profile', protectedRoute, async(req, res) => {
 router.post('/match-liked', protectedRoute, async(req, res) => {
     try {
         console.log(req.body)
+
+        let matchCarouselPhotos
+        const result = await db.getUserPublicPhotos(undefined, `WHERE user_id = ${req.body.user_id} ORDER BY position`)
+        if (result && result.length > 0) {
+            matchCarouselPhotos = result
+        } else {
+            matchCarouselPhotos = undefined
+        }
+
+
         const liked = await db.getUsersLikes(undefined, `WHERE user_id = ${req.user.id} AND likes_user_id = ${req.body.user_id}`)
         
         if(liked && liked.length == 0) {
@@ -164,7 +175,8 @@ router.post('/match-liked', protectedRoute, async(req, res) => {
         }
 
         res.render('match-profile', {
-            matchProfile: req.body
+            matchProfile: req.body,
+            matchCarouselPhotos: matchCarouselPhotos
         })
     } catch (error) {
         console.log(error)
@@ -366,17 +378,20 @@ router.get('/profile-settings', protectedRoute, async(req, res) => {
 router.post('/profile-settings', protectedRoute, async(req, res) => {
     try {
         if(req.body) {
-            if (req.query.delayDBHandling) {
+            // if (req.query.delayDBHandling) {
 
-            } else {
+            // } else {
                 await db.updateUserProfileBioAndHeadline(req.user.id, req.body.bio, req.body.headline)
                 const userCareerEducation = await db.getUserCareerAndEducation(undefined, `WHERE user_id = ${req.user.id}`)
+
+                console.log(userCareerEducation)
+
                 if (userCareerEducation && userCareerEducation.length ==0) {
                     await db.createUserCareerAndEducation(req.user.id, req.body.education_level, req.body.occupation)    
                 } else {
                     await db.updateUserCareerAndEducation(req.user.id, req.body.education_level, req.body.occupation)
                 }
-            }
+            // }
             res.redirect('/dashboard')
         } else {
             console.log(new Error('req.body undefined.'))

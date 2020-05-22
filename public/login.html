@@ -28,3 +28,26 @@
     </body>
     
     </html>
+
+
+    $(window).load(function() {
+        $('#loader').hide();
+    });
+
+    .loader {
+        border: 16px solid #FAFAFA; /* Light grey */
+        border-top: 16px solid #ED2265; /* Blue */
+        border-radius: 50%;
+        width: 120px;
+        height: 120px;
+        animation: spin 2s linear infinite;
+        top: 50vh;
+        left: 50vw;
+        position: absolute;
+        z-index: 0;
+      }
+      
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }

@@ -4,13 +4,13 @@
 
 .main-container {
     height: 100vh;
-    background-color: #3BA3A8;
+    background-color: #FAFAFA;
 }
 
 main {
     padding-top: 8em;
     padding-bottom: 8em;
-    background-color: #3BA3A8;
+    background-color: #FAFAFA;
 }
 
 .messages-container {
@@ -49,8 +49,8 @@ main :first-child {
 
 .message-card {
     width: 50%;
-    background-color: white;
-    box-shadow:#1E757E 4px 8px 6px;
+    background-color: #FAFAFA;
+    box-shadow:rgb(241, 241, 241) 4px 8px 6px;
     border-radius: 30px;
     display: flex;
     justify-content: space-around;

@@ -123,6 +123,10 @@ h2 {
     margin: 0;
 }
 
+.modal-profile-picture-selector {
+    background-color: white;
+}
+
 
 @media only screen and (max-width: 500px) {
     * {
@@ -156,7 +160,6 @@ h2 {
     .modal-profile-picture-selector {
         display: flex;
         justify-content: center;
-        background-color: white;
     }
 
     .modal-body {
@@ -185,7 +188,12 @@ h2 {
         max-width: 1000px;
     }
 
+    .modal-body {
+        margin-left: auto;
+        margin-right: auto;
+    }
+
     .modal-content {
-        width: 540px;
+        min-width: 575px;
     }
 }

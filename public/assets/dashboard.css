@@ -10,10 +10,19 @@
     margin-right: 1em;
 }
 
+body {
+    background-color: #FAFAFA;
+}
+
 .main-container {
-    background-color: white;
+    background-color: #FAFAFA;
     min-height: 100vh;
 }
+
+main {
+    background-color: #FAFAFA;
+}
+
 
 main > * {
     padding-top: 4em;
@@ -181,6 +190,8 @@ main > * {
         font-size: 10px;
     }
 }
+
+
 @media only screen and (min-width: 501px) {
 
     .card {
