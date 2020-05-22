@@ -246,20 +246,20 @@ router.get('/getUsersLikes', protectedRoute, async (req, res) => {
     }
 })
 
-router.get('/deleteUserByEmail', protectedRoute, async (req, res) => {
-    try {
-        await checkAdministratorPrivilege(req.user)
-        const email = req.query.email
-        let result
-        if(email) {
-            result = await db.deleteUserByEmail(email)
-        }
-        console.log(result)
-        res.send(result)
-    } catch (error) {
-        console.log(error)
-        throw error
-    }
-})
+// router.get('/deleteUserByID', protectedRoute, async (req, res) => {
+//     try {
+//         await checkAdministratorPrivilege(req.user)
+//         const id = req.query.id
+//         let result
+//         if(id) {
+//             result = await db.deleteUserByID(id)
+//         }
+//         console.log(result)
+//         res.send(result)
+//     } catch (error) {
+//         console.log(error)
+//         throw error
+//     }
+// })
 
 module.exports = router
