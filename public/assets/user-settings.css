@@ -31,7 +31,7 @@ html body {
 
 
 .TitleDiv {
-    height: 200px;
+    /* height: 200px; */
     width: 50%;
     position: relative;
     display: inline-flex;
