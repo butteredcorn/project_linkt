@@ -161,11 +161,12 @@ const getUserMatchesUnhandled = (user) => {
 
 
             //note: users.id is getting overwritten by user_personality_aspects.id --> for user_id, call user_id, otherwise this object's id property refers to the id of user_personality_aspects
-            let otherUsers = await db.getUsersUnhandled(undefined, `LEFT OUTER JOIN user_career_and_education ON users.id=user_career_and_education.user_id JOIN user_personality_aspects ON users.id=user_personality_aspects.user_id WHERE users.gender = '${partner_gender}' AND users.age >= ${partner_age_min} AND users.age <= ${partner_age_max} AND users.id != ${user.id}`)
+            let otherUsers
+            
             if (partner_gender == 'both') {
-                otherUsers = await db.getUsers(undefined, `LEFT OUTER JOIN user_career_and_education ON users.id=user_career_and_education.user_id JOIN user_personality_aspects ON users.id=user_personality_aspects.user_id WHERE users.age >= ${partner_age_min} AND users.age <= ${partner_age_max} AND users.id != ${user.id}`)
+                otherUsers = await db.getUsersUnhandled(undefined, `LEFT OUTER JOIN user_career_and_education ON users.id=user_career_and_education.user_id JOIN user_personality_aspects ON users.id=user_personality_aspects.user_id WHERE users.age >= ${partner_age_min} AND users.age <= ${partner_age_max} AND users.id != ${user.id}`)
             } else {
-                otherUsers = await db.getUsers(undefined, `LEFT OUTER JOIN user_career_and_education ON users.id=user_career_and_education.user_id JOIN user_personality_aspects ON users.id=user_personality_aspects.user_id WHERE users.gender = '${partner_gender}' AND users.age >= ${partner_age_min} AND users.age <= ${partner_age_max} AND users.id != ${user.id}`)
+                otherUsers = await db.getUsersUnhandled(undefined, `LEFT OUTER JOIN user_career_and_education ON users.id=user_career_and_education.user_id JOIN user_personality_aspects ON users.id=user_personality_aspects.user_id WHERE users.gender = '${partner_gender}' AND users.age >= ${partner_age_min} AND users.age <= ${partner_age_max} AND users.id != ${user.id}`)
             }
             
             
