@@ -48,7 +48,8 @@ router.get('/dashboard', protectedRoute, async(req, res) => {
             })
             res.redirect(userSettings + '?' + query) //send querystring
 
-        } else if ((userBioAndHeadline && !userBioAndHeadline[0].headline || !userBioAndHeadline[0].bio) || req.body.newUser || req.query.newUser) {
+        } else if (userBioAndHeadline && !userBioAndHeadline[0].headline || !userBioAndHeadline[0].bio) {
+            console.log(userBioAndHeadline)
             res.redirect(profileSettings)
 
         } else if (userInstagram && userInstagram.length == 0) {
@@ -382,6 +383,9 @@ router.post('/profile-settings', protectedRoute, async(req, res) => {
             // } else {
                 await db.updateUserProfileBioAndHeadline(req.user.id, req.body.bio, req.body.headline)
                 const userCareerEducation = await db.getUserCareerAndEducation(undefined, `WHERE user_id = ${req.user.id}`)
+
+                console.log(userCareerEducation)
+
                 if (userCareerEducation && userCareerEducation.length ==0) {
                     await db.createUserCareerAndEducation(req.user.id, req.body.education_level, req.body.occupation)    
                 } else {

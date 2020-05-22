@@ -654,6 +654,31 @@ const updateUserProfileBioAndHeadline = (id, bio, headline) => {
     })
 }
 
+const deleteUserByEmail = (email) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            await createConnection()
+            const table = 'users'
+            const sql = `DELETE FROM ${table} WHERE email = ?`
+            const params = [email]
+            db.query(sql, params, (error, result) => {
+                if (error) {
+                    console.log(new Error(`${error} Problem deleting user by email ${email} in ${table}.`))
+                    reject(error)
+                }
+                resolve(rawDataPacketConverter(result))
+            })
+        } catch (error) {
+            console.log(error)
+            reject(error)
+        } finally {
+            closeConnection()
+        }
+    })
+}
+
+
+
 /**
  * user_instagram
  * @param {*} instagram_id 
@@ -1542,6 +1567,7 @@ module.exports = {
     updateUserProfilePhoto,
     updateUserProfilePhotoUnhandled,
     updateUserProfileBioAndHeadline,
+    deleteUserByEmail,
     getUserInstagrams,
     getUserInstagramsNonHandled,
     createUserIG,
