@@ -155,6 +155,16 @@ router.post('/match-profile', protectedRoute, async(req, res) => {
 router.post('/match-liked', protectedRoute, async(req, res) => {
     try {
         console.log(req.body)
+
+        let matchCarouselPhotos
+        const result = await db.getUserPublicPhotos(undefined, `WHERE user_id = ${req.body.user_id} ORDER BY position`)
+        if (result && result.length > 0) {
+            matchCarouselPhotos = result
+        } else {
+            matchCarouselPhotos = undefined
+        }
+
+
         const liked = await db.getUsersLikes(undefined, `WHERE user_id = ${req.user.id} AND likes_user_id = ${req.body.user_id}`)
         
         if(liked && liked.length == 0) {
@@ -164,7 +174,8 @@ router.post('/match-liked', protectedRoute, async(req, res) => {
         }
 
         res.render('match-profile', {
-            matchProfile: req.body
+            matchProfile: req.body,
+            matchCarouselPhotos: matchCarouselPhotos
         })
     } catch (error) {
         console.log(error)
