@@ -315,9 +315,9 @@ html body {
     font-size: 18px;
   }
 
-  .TitleDiv {
-    max-height: 50px;
-  }
+  /* .TitleDiv {
+    max-height: 100px;
+  } */
 
   .QuestionBox {
     width: 80%;
