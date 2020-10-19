@@ -2,15 +2,24 @@
     font-weight: normal;
 }
 
+.header-text {
+    font-family: 'Roboto', sans-serif;
+}
+
+body {
+    background-color:#FAFAFA;
+    font-family: 'Open Sans', sans-serif;
+}
+
 .main-container {
     height: 100vh;
-    background-color: #FAFAFA;
+    background-color: #3BA3A8;
 }
 
 main {
     padding-top: 8em;
     padding-bottom: 8em;
-    background-color: #FAFAFA;
+    background-color:#3BA3A8;
 }
 
 .messages-container {
@@ -50,7 +59,7 @@ main :first-child {
 .message-card {
     width: 50%;
     background-color: #FAFAFA;
-    box-shadow:rgb(241, 241, 241) 4px 8px 6px;
+    box-shadow:#1E757E 4px 8px 6px;
     border-radius: 30px;
     display: flex;
     justify-content: space-around;
@@ -88,6 +97,21 @@ main :first-child {
 
 }
 
+.message-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-left:0.5em;
+    padding-right: 0.5em;
+    padding-top: 0.1em;
+    padding-bottom: 0.1em;
+    border-radius: 25px;
+    color: #FAFAFA;
+    font-weight: bold;
+    background-color:  #ED2265;
+    width: 50%;
+    border: solid 1px #303030;
+}
 
 @media only screen and (max-width: 500px) {
 

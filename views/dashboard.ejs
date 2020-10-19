@@ -65,11 +65,11 @@
                             <%}%>
 
                             <div class="info-column">
-                                <p class="name"><%=`${first_name} ${last_name}, ${age}`%></p>
+                                <h2 class="name"><%=`${first_name} ${last_name}, ${age}`%></h2>
                                 <p class="distance">Distance: <%=distance_kms%> KMs</p>
                                 <!-- <p class="age">Age: <%=age%></p> -->
                                 <p class="headline">Headline: <%=headline%></p>
-                                <p class="bio">Bio: <%=bio%></p>
+                                <p class="bio"><%=bio%></p>
                                 <div class="card-buttons-container">
                                     <form action="/match-profile" method="POST">
                                         <input class="profile-selected" name="user_id" type="hidden" value="<%=user_id%>">
