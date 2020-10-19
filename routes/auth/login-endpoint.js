@@ -53,7 +53,7 @@ router.post('/', async (req, res) => {
         latitude: currentLatitude,
         longitude: currentLongitude
     }
-
+    
     if(email && password) {
         loginUser(email, password)
             .then(async (user) => {
