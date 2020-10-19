@@ -1,3 +1,14 @@
+body {
+    background-color:#FAFAFA;
+    font-family: 'Open Sans', sans-serif;
+
+}
+
+.header-text {
+    /* font-size: 2em; */
+    font-family: 'Roboto', sans-serif;
+}
+
 h4 {
     font-size: 1.25em;
 }
@@ -14,17 +25,28 @@ h2 {
 .main-container {
     padding-top: 8em;
     padding-bottom: 6em;
+    background-color: #3BA3A8;
+    min-height: 100vh;
+}
+
+main {
+    background-color: #3BA3A8;
 }
 
 .profile-container {
+    background-color:  #FAFAFA;
     margin-left: auto;
     margin-right: auto;
+    border-radius: 30px;
+    padding: 1em;
+    box-shadow:#1E757E 4px 8px 6px;
 }
 
 .profile-container > * {
     max-width: 400px;
     margin-left: auto;
     margin-right: auto;
+    box-shadow: none;
 }
 
 .profile-info-container {
@@ -36,9 +58,15 @@ h2 {
     justify-content: space-evenly;
 }
 
+.profile-picture-carousel {
+    width: 85%;
+}
+
 .profile-photo {
-    width: 80%;
-    border: none;
+    width: 100%;
+    box-shadow: #303030 1px 1px 1px;
+    border-radius: 100%;
+    overflow: hidden;
 }
 
 .name {

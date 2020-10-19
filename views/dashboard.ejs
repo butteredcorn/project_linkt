@@ -38,7 +38,7 @@
                 <%for (let match of matches) { %>
                     <% const { user_id, first_name, last_name, age, current_profile_picture, carousel_photos, headline, bio, job_title, highest_education_type, current_latitude, current_longitude, city_of_residence, distance_kms, likes_user, openess, conscientiousness, extroversion} = match %>
                     <% match.username = `${first_name} ${last_name}` %>
-                    <div class="card-container">
+                    <!-- <div class="card-container"> -->
                         <div class="card">
 
                             <% if (carousel_photos && carousel_photos.length > 0) { %>
@@ -65,11 +65,11 @@
                             <%}%>
 
                             <div class="info-column">
-                                <p class="name"><%=`${first_name} ${last_name}, ${age}`%></p>
+                                <h2 class="name"><%=`${first_name} ${last_name}, ${age}`%></h2>
                                 <p class="distance">Distance: <%=distance_kms%> KMs</p>
                                 <!-- <p class="age">Age: <%=age%></p> -->
                                 <p class="headline">Headline: <%=headline%></p>
-                                <p class="bio">Bio: <%=bio%></p>
+                                <p class="bio"><%=bio%></p>
                                 <div class="card-buttons-container">
                                     <form action="/match-profile" method="POST">
                                         <input class="profile-selected" name="user_id" type="hidden" value="<%=user_id%>">
@@ -100,7 +100,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    <!-- </div> -->
                 <%}%>
                 
                 <!-- card container end -->

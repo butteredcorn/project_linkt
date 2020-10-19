@@ -1,6 +1,21 @@
 * {
     margin: 0;
     padding: 0;
+    font-family: 'Open Sans', sans-serif;
+}
+
+body {
+    background-color:#FAFAFA;
+}
+
+.header-text {
+    text-transform: capitalize;
+    font-family: 'Roboto', sans-serif;
+}
+
+.main-container {
+    background-color: #3BA3A8;
+    min-height: 100vh;
 }
 
 main {
@@ -9,6 +24,7 @@ main {
     padding-bottom: 4em;
     margin-left: auto;
     margin-right: auto;
+    background-color: #3BA3A8;
 }
 
 .profile-photo-thumbnail {
@@ -19,8 +35,18 @@ main {
     margin-bottom: 0.2em;
 }
 
+
 .page {
-    width: 800px;
+    padding-top: 1em;
+    padding-bottom: 1em;
+    background-color: #FAFAFA;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: #303030;
+    box-shadow:#1E757E 4px 8px 6px;
+    border-radius: 30px;
 }
 
 .profile-name, .show-me {
@@ -32,8 +58,6 @@ main {
     flex-direction: column;
     justify-content: center;
     width: 80%;
-    margin-left: auto;
-    margin-right: auto;
 }
 
 .header-ribbon {
@@ -165,6 +189,7 @@ form {
     .page {
         margin-top: 6em;
         margin-bottom: 6em;
+        width: 800px;
     }
 
     h2 {

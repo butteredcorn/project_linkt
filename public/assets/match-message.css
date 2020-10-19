@@ -5,34 +5,41 @@ ul {
 
 .header-text {
     text-transform: capitalize;
+    font-family: 'Roboto', sans-serif;
 }
 
-.main-container {
-    
+body {
+    background-color:#FAFAFA;
 }
-
 .message {
     background-color: #ED2265;
 }
 
 .main-container {
     height: 100vh;
+    padding-top:5.2em;
+    background-color: #3BA3A8;
 }
 
 main {
-    margin-top:5.2em;
     /* margin-bottom: 5.1em; */
-    display: flex;
-    flex-direction: column;
-    justify-content: space-evenly;
     height: 80%;
     margin-left: auto;
     margin-right: auto;
+    background-color: #3BA3A8;
+}
+
+.match {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    background-color: #FAFAFA;
+    padding: 1em;
+    border-radius: 30px;
+    box-shadow:#1E757E 4px 8px 6px;
 }
 
 .match-profile-photo-container {
-    margin-top: 5.2em;
-    padding-top: 1em;
     display: flex;
     justify-content: center;
 }
@@ -46,6 +53,7 @@ main {
     display: flex;
     justify-content: center;
     align-items: center;
+    border-radius: 15px;
 }
 
 .message-box {
@@ -68,8 +76,6 @@ main {
     font-weight: normal;
     padding-left: 0.4em;
     padding-right: 0.4em;
-    margin-bottom: 5.1em;
-
 }
 
 .input-box {
@@ -79,13 +85,22 @@ main {
 
 .socketIOControls {
     display: flex;
-    justify-content: space-around;
+    justify-content: space-evenly;
+}
+
+#messageForm {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .messages {
     width: 100%;
     word-wrap: break-word;
     padding: 1em;
+    overflow: hidden;
+    margin: 0;
+    border-radius: 15px;
 }
 
 .other-message {
@@ -115,6 +130,11 @@ main {
 
 }
 
+.message-submit-button {
+    margin-left: 0.5em;
+}
+
+
 @media only screen and (max-width: 500px) {
     
     * {
@@ -122,20 +142,21 @@ main {
     }
 
     .match-profile-photo-container {
-        margin-top: 4em;
         padding-top: 0;
     }
 
-    .message-submit-button {
-        margin-bottom: 4em;
-    }
     .match-profile-photo {
-        width: 132px;
-        height: 132px;
+        width: 160px;
+        height: 160px;
+    }
+
+    .main-container {
+        min-height: 100vh;
     }
 
     main {
         width: 100vw;
+        padding-top: 6em;
     }
 }
 @media only screen and (min-width: 501px) {
@@ -151,5 +172,8 @@ main {
 
     main {
         max-width: 1000px;
+    }
+
+    .main-container {
     }
 }
