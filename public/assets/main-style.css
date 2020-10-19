@@ -1,8 +1,25 @@
 * {
-    font-family: Helvetica, sans-serif;
+    font-family: 'Open Sans', Helvetica, sans-serif;
     margin: 0;
     padding: 0;
     color: #303030;
+}
+
+h2 {
+    font-family: 'Roboto', sans-serif;
+}
+
+h4 {
+    font-family: 'Roboto', sans-serif;
+}
+
+.name {
+    font-family: 'Roboto', sans-serif;
+}
+
+.header-text {
+    text-transform: capitalize;
+    font-family: 'Roboto', sans-serif;
 }
 
 html {

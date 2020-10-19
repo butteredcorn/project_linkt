@@ -85,6 +85,7 @@ function newMessageComponent(message) {
     className = "other-message"
   } //${message.username}: 
   $(`<li class="message-text ${className}">${message.message}</li>`).appendTo("#messages")
-  $(".message-box").animate({ scrollTop: $('.message-box').prop("scrollHeight")}, 1000);
+  $(".messages").animate({ scrollTop: $('.messages').prop("scrollHeight")}, 1000);
+
 }
 

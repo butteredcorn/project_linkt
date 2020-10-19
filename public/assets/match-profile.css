@@ -1,5 +1,30 @@
 body {
-    background-color: #FAFAFA;
+    background-color:#FAFAFA;
+}
+
+.main-container {
+    background-color: #3BA3A8;
+    height: 100vh;
+    padding-top: 8em;
+    padding-bottom: 6em;
+    margin: 0;
+}
+
+main {
+    background-color: #3BA3A8;
+}
+
+.header-text {
+    /* font-size: 2em; */
+    font-family: 'Roboto', sans-serif;
+}
+
+h4 {
+    font-size: 1.25em;
+}
+
+h2 {
+    font-size: 1.6em;
 }
 
 .profile-container {
@@ -7,16 +32,20 @@ body {
     margin-right: auto;
 }
 
-.profile-container > * {
-    width: 100%;
+.profile-container {
+    background-color:  #FAFAFA;
     margin-left: auto;
     margin-right: auto;
+    border-radius: 30px;
+    padding: 1em;
+    box-shadow:#1E757E 4px 8px 6px;
 }
 
-.profile-info-container {
-    margin: 0;
-    margin-top: 1em;
-    width: 95%;
+.profile-container > * {
+    max-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+    box-shadow: none;
 }
 
 .profile-ribbon-container {
@@ -25,11 +54,15 @@ body {
     justify-content: space-evenly;
 }
 
+.profile-image-container {
+    width: 85%;
+}
+
 .profile-photo {
-    display: flex;
-    justify-content: center;
-    width: 80%;
-    border: none;
+    /* width: 60%; */
+    box-shadow: #303030 1px 1px 1px;
+    border-radius: 100%;
+    overflow: hidden;
 }
 
 .carousel-inner > .carousel-item > img {
@@ -40,8 +73,8 @@ body {
 .profile-ribbon {
     display: flex;
     align-items: center;
-    margin-top: 0.5em;
-    margin-bottom: 0.5em;
+    /* margin-top: 0.5em;
+    margin-bottom: 0.5em; */
 }
 
 .name {
@@ -109,8 +142,7 @@ button {
     }
 
     .main-container {
-        margin-top: 5em;
-        margin-bottom: 5em;
+        height: 100vh;
     }
 
     button {
@@ -132,21 +164,23 @@ button {
     }
 
     main {
+        padding-top: 2em;
+        padding-bottom: 3em;
         width: 100vw;
     }
 }
 @media only screen and (min-width: 501px) {
 
-    .main-container {
+    /* .main-container {
         margin-top: 6em;
         margin-bottom: 6em;
-    }
+    } */
 
-    .profile-container {
+    /* .profile-container {
         margin-top: 2.5em;
         margin-bottom: 2.5em;
         width: 320px;
-    }
+    } */
 
     .profile-photo {
         max-width: 320px;

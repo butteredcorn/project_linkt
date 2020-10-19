@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400&family=Roboto&display=swap" rel="stylesheet">
     <link href="/assets/main-style.css" rel="stylesheet" type="text/css">
     <link href="/assets/user-messages.css" rel="stylesheet" type="text/css">
     <title>Linkt</title>
@@ -33,6 +34,7 @@
                                 <div class="text-column">
                                     <p class="match-username"><%=message.match_username%></p>
                                     <p class="most-recent-message"><%=message.message_text%></p>
+                                    <p><div class="message-button">Message!</div></p>
                                 </div>
                                 <input class="message-selected" name="receiver_user_id" type="hidden" value="<%=message.match_id%>">
                                 <input class="message-selected" name="receiver_username" type="hidden" value="<%=message.match_username%>">
