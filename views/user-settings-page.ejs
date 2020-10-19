@@ -14,13 +14,13 @@
     <div class="header-container">
         <header class="main-header">
             <div class="header-element">
-                <a href="/dashboard"><img class="back-button" src="assets/icons/left-arrow.png" alt="back-button"></a>
+                <a onclick="goBack()"><img class="back-button" src="assets/icons/left-arrow.png" alt="back-button"></a>
             </div>
             <div class="header-element">
                 <p class="header-text">User Settings</p>
             </div>
             <div class="header-element">
-                <img class="header-logo" src="/assets/icons/logo.png" alt="linkt-logo">
+                <a href="/dashboard"><img class="header-logo" src="/assets/icons/logo.png" alt="linkt-logo"></a>
             </div>
         </header>
     </div>
@@ -31,8 +31,8 @@
             <div class="page-container">
             <div class="page">
                 <div class="profile-settings">
-                    <div class="ribbon header-ribbon"><h2 class="profile-settings-header">ACCOUNT SETTINGS</h2><a href="/user-profile">Edit Profile</a></div>
-                    <div class="ribbon"><img class="profile-photo-thumbnail" src="<%=user.current_profile_picture%>" alt="profile thumbnail"><p class="profile-name"><%=`${user.first_name} ${user.last_name}`%></p></div>
+                    <div class="ribbon header-ribbon"><h2 class="profile-settings-header">ACCOUNT SETTINGS</h2><a href="/profile-settings">Edit Profile</a></div>
+                    <div class="ribbon"><a href="/user-profile"><img class="profile-photo-thumbnail" src="<%=user.current_profile_picture%>" alt="profile thumbnail"></a><p class="profile-name"><%=`${user.first_name} ${user.last_name}`%></p></div>
                     <div class="ribbon"><h4>Email</h4><p class="profile-email"><%= user.email%></p></div>
                     <div class="ribbon"><h4>Location</h4><p><%=`Latitude: ${user.current_latitude} Longitude: ${user.current_longitude}`%></p></div>
                     <%if (user.city_of_residence) {%>
@@ -78,12 +78,13 @@
     <div class="footer-container">
         <footer class="main-footer">
             <nav class="footer-navigation-icons">
-                <a class="footer-link" href="/user-profile"><img src="assets/icons/profileIcon.png" alt="profile-icon"></a>
-                <a class="footer-link" href="/user-messages"><img src="assets/icons/messageIcon.png" alt="message-icon"></a>
-                <a class="footer-link" href="/user-settings-page"><img src="assets/icons/settingIcon.png" alt="settings-icon"></a>
+                <a class="footer-link" href="/user-profile"><img class="footer-icon" src="assets/icons/profileIcon.png" alt="profile-icon"><p>Profile</p></a>
+                <a class="footer-link" href="/user-messages"><img class="footer-icon" src="assets/icons/messageIcon.png" alt="message-icon"><p>Messages</p></a>
+                <a class="footer-link" href="/user-settings-page"><img class="footer-icon" src="assets/icons/settingIcon.png" alt="settings-icon"><p>Settings</p></a>
             </nav>
         </footer>
     </div>
 </body>
 <script src="assets/logout.js"></script>
+<script src="assets/back-button.js"></script>
 </html>

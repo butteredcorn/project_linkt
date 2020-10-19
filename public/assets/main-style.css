@@ -152,7 +152,18 @@ footer {
 
 .footer-link {
     display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
+
+.footer-link > * {
+    margin: 0;
+    padding: 0;
+    overflow: auto;
+}
+
+
 
 
 
@@ -164,6 +175,11 @@ footer {
 
     main {
         width: 100vw;
+    }
+
+    .footer-icon {
+        width: 32px;
+        height: 32px;
     }
 }
 @media only screen and (min-width: 501px) {
@@ -183,5 +199,10 @@ footer {
 
     main {
         max-width: 1000px;
+    }
+
+    .footer-icon {
+        width: 48x;
+        height: 48px;
     }
 }

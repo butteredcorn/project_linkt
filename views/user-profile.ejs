@@ -16,12 +16,12 @@
     <!-- header -->
     <div class="header-container">
         <header class="main-header">
-            <a href="/dashboard"><img class="back-button" src="assets/icons/left-arrow.png" alt="back-button"></a>
+            <a onclick="goBack()"><img class="back-button" src="assets/icons/left-arrow.png" alt="back-button"></a>
             <div class="header-element">
                 <p class="header-text">User Profile</p>
             </div>
             <div class="header-element">
-                <img class="header-logo" src="/assets/icons/logo.png" alt="linkt-logo">
+              <a href="/dashboard"><img class="header-logo" src="/assets/icons/logo.png" alt="linkt-logo"></a>
             </div>
         </header>
     </div>
@@ -136,11 +136,11 @@
 
     <div class="footer-container">
         <footer class="main-footer">
-            <nav class="footer-navigation-icons">
-                <a class="footer-link" href="/user-profile"><img src="assets/icons/profileIcon.png" alt="profile-icon"></a>
-                <a class="footer-link" href="/user-messages"><img src="assets/icons/messageIcon.png" alt="message-icon"></a>
-                <a class="footer-link" href="/user-settings-page"><img src="assets/icons/settingIcon.png" alt="settings-icon"></a>
-            </nav>
+          <nav class="footer-navigation-icons">
+            <a class="footer-link" href="/user-profile"><img class="footer-icon" src="assets/icons/profileIcon.png" alt="profile-icon"><p>Profile</p></a>
+            <a class="footer-link" href="/user-messages"><img class="footer-icon" src="assets/icons/messageIcon.png" alt="message-icon"><p>Messages</p></a>
+            <a class="footer-link" href="/user-settings-page"><img class="footer-icon" src="assets/icons/settingIcon.png" alt="settings-icon"><p>Settings</p></a>
+          </nav>
         </footer>
     </div>
 </body>
@@ -149,4 +149,5 @@
 <script src="assets/client-side-google-maps.js"></script>
 <script src="assets/user-profile.js"></script>
 <script src="assets/formatting.js"></script>
+<script src="assets/back-button.js"></script>
 </html>
