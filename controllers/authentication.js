@@ -7,6 +7,7 @@ const protectedRoute = (req, res, next) => {
     if(req.cookies && req.cookies.token) {
         verify(req.cookies.token)
             .then((user) => {
+                console.log(user)
                 //bind user to request object
                 req.user = user
                 next()

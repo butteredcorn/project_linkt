@@ -123,6 +123,10 @@ form {
     background-color: #3BA3A8;
 }
 
+#logout {
+    background-color: #3BA3A8;
+}
+
 .link-to-help-container {
     display: flex;
     justify-content: center;
@@ -159,7 +163,7 @@ form {
     }
 
     .page {
-        width: 100vw;
+        width: 95vw;
         margin-top: 6em;
         margin-bottom: 6em;
     }
@@ -173,6 +177,7 @@ form {
     }
 
     main {
+        padding-top: 4em;
         width: 100vw;
     }
 
